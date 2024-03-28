@@ -1,0 +1,2023 @@
+<mxfile host="app.diagrams.net" modified="2024-03-28T20:16:43.821Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" etag="gcqf0-WJu-DUuPOyouFX" version="24.2.1" type="google" pages="20">
+  <diagram id="HsisBZSl-DrwpaaVvJc8" name="ATM_Login">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="G6gzncWG9lJPmiRZB3Fs-6" value="ATM Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="530" y="140" width="100" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="G6gzncWG9lJPmiRZB3Fs-7" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="G6gzncWG9lJPmiRZB3Fs-6">
+          <mxGeometry x="45" y="50" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="G6gzncWG9lJPmiRZB3Fs-9" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="G6gzncWG9lJPmiRZB3Fs-6">
+          <mxGeometry x="45" y="100" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="G6gzncWG9lJPmiRZB3Fs-11" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="740" y="140" width="100" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="lBjiwBl9eOWROUzAHYQJ-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="G6gzncWG9lJPmiRZB3Fs-11">
+          <mxGeometry x="45" y="201" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lBjiwBl9eOWROUzAHYQJ-2" value="Write Logs" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="G6gzncWG9lJPmiRZB3Fs-11" target="lBjiwBl9eOWROUzAHYQJ-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50" y="181" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80" y="211" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G6gzncWG9lJPmiRZB3Fs-12" value="Login Request with ID and Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="580.19" y="300" as="sourcePoint" />
+            <mxPoint x="789.69" y="300" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G6gzncWG9lJPmiRZB3Fs-13" value="Successfully login in" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="790.19" y="400" as="sourcePoint" />
+            <mxPoint x="580.0003448275861" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G6gzncWG9lJPmiRZB3Fs-14" value="Wrong credential. Login in again!" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="790.09" y="529.5" as="sourcePoint" />
+            <mxPoint x="579.9003448275861" y="529.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G6gzncWG9lJPmiRZB3Fs-15" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="527" y="490" width="300" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="G6gzncWG9lJPmiRZB3Fs-16" value="ATM Login" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="545" y="90" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="m_jJnVmSGBoHtyuqiMIu-1" value="Accounts Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="790.09" y="440" as="sourcePoint" />
+            <mxPoint x="579.9003448275861" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iRJ0wl6M8I4hkKLonkf_-1" value="User" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="330" y="140" width="100" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="iRJ0wl6M8I4hkKLonkf_-5" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="iRJ0wl6M8I4hkKLonkf_-1">
+          <mxGeometry x="45" y="230" width="10" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="G6gzncWG9lJPmiRZB3Fs-8" value="Enter User ID" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1" target="G6gzncWG9lJPmiRZB3Fs-7">
+          <mxGeometry x="-0.3985" y="10" relative="1" as="geometry">
+            <mxPoint x="380" y="210" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="380" y="210" />
+            </Array>
+            <mxPoint x="570" y="200" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G6gzncWG9lJPmiRZB3Fs-10" value="Enter Password" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.3811" y="10" relative="1" as="geometry">
+            <mxPoint x="379.5" y="260" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="480" y="260" />
+              <mxPoint x="480" y="260" />
+            </Array>
+            <mxPoint x="575" y="260" as="targetPoint" />
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="bOoW9jw8iXgRjeqkySRl" name="ATM_Withdraw">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="JUHp-oZTtZq5r288fQW4-1" value="ATM Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="160" width="100" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="JUHp-oZTtZq5r288fQW4-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="JUHp-oZTtZq5r288fQW4-1">
+          <mxGeometry x="45" y="240" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="JUHp-oZTtZq5r288fQW4-4" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="JUHp-oZTtZq5r288fQW4-1">
+          <mxGeometry x="45" y="301" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="JUHp-oZTtZq5r288fQW4-12" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="JUHp-oZTtZq5r288fQW4-1">
+          <mxGeometry x="45" y="361" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dqoEEdgz_jktpdGrDGk9-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="JUHp-oZTtZq5r288fQW4-1">
+          <mxGeometry x="45" y="60" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dqoEEdgz_jktpdGrDGk9-3" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="JUHp-oZTtZq5r288fQW4-1">
+          <mxGeometry x="45" y="110" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="JUHp-oZTtZq5r288fQW4-6" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="160" width="100" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="iaXmNqzv9n8fMj4MJC9E-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="JUHp-oZTtZq5r288fQW4-6">
+          <mxGeometry x="45" y="528" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="iaXmNqzv9n8fMj4MJC9E-2" value="Write Logs" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="JUHp-oZTtZq5r288fQW4-6" target="iaXmNqzv9n8fMj4MJC9E-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50" y="508" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80" y="538" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JUHp-oZTtZq5r288fQW4-7" value="Login Request with ID and Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19000000000005" y="320" as="sourcePoint" />
+            <mxPoint x="529.69" y="320" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JUHp-oZTtZq5r288fQW4-8" value="Successfully login in" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="345" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="345" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JUHp-oZTtZq5r288fQW4-9" value="Wrong Pin / Not enough money. Try again!" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="766" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="766" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JUHp-oZTtZq5r288fQW4-10" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="740" width="300" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="JUHp-oZTtZq5r288fQW4-11" value="ATM Withdraw Money" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="250" y="130" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="JUHp-oZTtZq5r288fQW4-14" value="Accounts Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="371" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="371" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JUHp-oZTtZq5r288fQW4-17" value="Withdraw Request with Account #, money, and Pin" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0472" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19000000000005" y="598" as="sourcePoint" />
+            <mxPoint x="529.69" y="598" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JUHp-oZTtZq5r288fQW4-18" value="Successfully Withdrawal" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="622" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="622" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JUHp-oZTtZq5r288fQW4-19" value="Updated Accounts Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="648" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="648" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zWLCxgNe2DAZ5XRDI0g5-1" value="ATM Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="20" y="210" width="545" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="dqoEEdgz_jktpdGrDGk9-1" value="User" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="60" y="160" width="100" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="dqoEEdgz_jktpdGrDGk9-4" value="Write Logs" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="dqoEEdgz_jktpdGrDGk9-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50" y="270" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Q9Rpqw_GhmGDoNbprf1--1" value="Enter User ID" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1" target="dqoEEdgz_jktpdGrDGk9-2">
+          <mxGeometry x="-0.3985" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="240" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="305" y="240" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="x-9dkClhD9x5QZLn5fHB-1" value="Enter Password" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1" target="dqoEEdgz_jktpdGrDGk9-3">
+          <mxGeometry x="-0.3811" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="290" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="305.5" y="290" as="targetPoint" />
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="x-9dkClhD9x5QZLn5fHB-3" value="Choose Account" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1" target="JUHp-oZTtZq5r288fQW4-2">
+          <mxGeometry x="-0.3811" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="421" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="110" y="422" />
+            </Array>
+            <mxPoint x="305.5" y="421" as="targetPoint" />
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="x-9dkClhD9x5QZLn5fHB-5" value="Enter amount of money to withdraw" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1" target="JUHp-oZTtZq5r288fQW4-4">
+          <mxGeometry x="-0.8977" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="481" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="305.5" y="481" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="x-9dkClhD9x5QZLn5fHB-6" value="Enter Pin" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1" target="JUHp-oZTtZq5r288fQW4-12">
+          <mxGeometry x="-0.3811" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="541" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="305.5" y="541" as="targetPoint" />
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="xo-HAUo0EspPzZiSWT3E" name="ATM_Deposit">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="-wAJFbaCOlqYMovwARcH-1" value="ATM Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="160" width="100" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="-wAJFbaCOlqYMovwARcH-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="-wAJFbaCOlqYMovwARcH-1">
+          <mxGeometry x="45" y="240" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-wAJFbaCOlqYMovwARcH-4" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="-wAJFbaCOlqYMovwARcH-1">
+          <mxGeometry x="45" y="300" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-wAJFbaCOlqYMovwARcH-6" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="-wAJFbaCOlqYMovwARcH-1">
+          <mxGeometry x="45" y="363" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Q1IJuhvdpxftykU1XpHk-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="-wAJFbaCOlqYMovwARcH-1">
+          <mxGeometry x="45" y="60" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Q1IJuhvdpxftykU1XpHk-3" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="-wAJFbaCOlqYMovwARcH-1">
+          <mxGeometry x="45" y="110" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-wAJFbaCOlqYMovwARcH-8" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="160" width="100" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="Eq2tYt8rXyGGKjfz8NGv-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="-wAJFbaCOlqYMovwARcH-8">
+          <mxGeometry x="45" y="513" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Eq2tYt8rXyGGKjfz8NGv-2" value="Write Logs" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="-wAJFbaCOlqYMovwARcH-8" target="Eq2tYt8rXyGGKjfz8NGv-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50" y="493" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80" y="523" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-wAJFbaCOlqYMovwARcH-9" value="Login Request with ID and Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19000000000005" y="318" as="sourcePoint" />
+            <mxPoint x="529.69" y="318" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-wAJFbaCOlqYMovwARcH-10" value="Successfully login in" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="342" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="342" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-wAJFbaCOlqYMovwARcH-11" value="Wrong Pin. Try again!" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="760" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-wAJFbaCOlqYMovwARcH-12" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="720" width="300" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="-wAJFbaCOlqYMovwARcH-13" value="ATM Deposit Money" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="360" y="130" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="-wAJFbaCOlqYMovwARcH-14" value="Accounts Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="368" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="368" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-wAJFbaCOlqYMovwARcH-15" value="Deposit Request with Account #, money, and Pin" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0472" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19000000000005" y="601" as="sourcePoint" />
+            <mxPoint x="529.69" y="601" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-wAJFbaCOlqYMovwARcH-16" value="Successfully Deposit" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="623" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="623" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-wAJFbaCOlqYMovwARcH-17" value="Updated Accounts Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="649" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="649" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_GyBL3BO6eaEYxdBSDQo-1" value="ATM Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="20" y="210" width="545" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="Q1IJuhvdpxftykU1XpHk-1" value="User" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="60" y="160" width="100" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="Q1IJuhvdpxftykU1XpHk-4" value="Write Logs" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="Q1IJuhvdpxftykU1XpHk-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50" y="270" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IycwaxIv0RKKoisqq-Zs-1" value="Enter User ID" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.3985" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="240" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="315" y="240" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8Z9CEScViKaxu9M7IGei-1" value="Enter Password" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.3811" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="290" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="315" y="290" as="targetPoint" />
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HNQNLXThRJ4mlYVGCQBY-1" value="Choose Account" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.3811" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="421" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="110" y="422" />
+            </Array>
+            <mxPoint x="315" y="422" as="targetPoint" />
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HDmDibVb-jQAdruDuHwp-1" value="Enter amount of money to deposit" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.8977" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="481" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="315" y="481" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bDcmuwqkkBiol-X25nox-1" value="Enter Pin" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.3811" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="541" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="315" y="541" as="targetPoint" />
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="JmUZd-IuTbHyuJA3aB-B" name="ATM_Transfer">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="J4buufPf6GNnsP08qyyt-1" value="ATM Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="160" width="100" height="880" as="geometry" />
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="J4buufPf6GNnsP08qyyt-1">
+          <mxGeometry x="45" y="248" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-4" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="J4buufPf6GNnsP08qyyt-1">
+          <mxGeometry x="45" y="310" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-6" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="J4buufPf6GNnsP08qyyt-1">
+          <mxGeometry x="45" y="608" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fHRPBALoILUhg7-qxNTE-3" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="J4buufPf6GNnsP08qyyt-1">
+          <mxGeometry x="45" y="528" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-8" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="160" width="100" height="880" as="geometry" />
+        </mxCell>
+        <mxCell id="6OxNsuqMV3voAOzUFU9U-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="J4buufPf6GNnsP08qyyt-8">
+          <mxGeometry x="45" y="754" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="6OxNsuqMV3voAOzUFU9U-2" value="Write Logs" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="J4buufPf6GNnsP08qyyt-8" target="6OxNsuqMV3voAOzUFU9U-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50" y="734" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80" y="764" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-9" value="Login Request with ID and Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0024" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19000000000005" y="319" as="sourcePoint" />
+            <mxPoint x="529.69" y="319" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-10" value="Successfully login in" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="343" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="343" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-11" value="Wrong Pin / Not enough money. Try again!" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="1006" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="1006" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-12" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="971" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-13" value="ATM Transfer Money" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="250" y="130" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-14" value="Accounts Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="369" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="369" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-15" value="Transfer Request with sender and recipient Account #, money, and Pin" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0453" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19000000000005" y="834" as="sourcePoint" />
+            <mxPoint x="529.69" y="834" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-16" value="Successfully Transfer" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="858" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="858" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-17" value="Updated Accounts Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="884" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="884" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="J4buufPf6GNnsP08qyyt-18" value="ATM Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="20" y="210" width="545" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="fHRPBALoILUhg7-qxNTE-1" value="Recipient Account Lookup Request" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0024" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19000000000005" y="538" as="sourcePoint" />
+            <mxPoint x="529.69" y="538" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fHRPBALoILUhg7-qxNTE-2" value="Recipient Account Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="562" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="562" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Np5xVB2z6SaZUc1P9lWF-1" value="Invalid Recipient Account #. Try again!" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="613" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="613" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Np5xVB2z6SaZUc1P9lWF-2" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="578" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ban27kQ3ZdV3rJaJGtmF-1" value="User" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="60" y="160" width="100" height="880" as="geometry" />
+        </mxCell>
+        <mxCell id="-rGulGLhUZ9CfAkrRsjT-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="315" y="220" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-rGulGLhUZ9CfAkrRsjT-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="315" y="270" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="-rGulGLhUZ9CfAkrRsjT-3" value="Enter User ID" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.3985" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="240" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="315" y="240" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-rGulGLhUZ9CfAkrRsjT-4" value="Enter Password" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.3811" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="290" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="315" y="290" as="targetPoint" />
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rf7FMBFt6D96xZZRapyi-1" value="Choose Account" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.3811" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="421" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="110" y="422" />
+            </Array>
+            <mxPoint x="315" y="422" as="targetPoint" />
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rf7FMBFt6D96xZZRapyi-2" value="Enter Recipient Account #" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.6019" y="11" relative="1" as="geometry">
+            <mxPoint x="110" y="492" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="110" y="493" />
+            </Array>
+            <mxPoint x="315" y="493" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="B88AqtOddRdfrmb0Gn2J-1" value="Enter amount of money to transfer" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.8977" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="710" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="315" y="710" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vEmO8Y1os2_JeuY4eTKv-1" value="Enter Pin" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.3811" y="10" relative="1" as="geometry">
+            <mxPoint x="110" y="790" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="315" y="790" as="targetPoint" />
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="HQlzt33JtFSZlpb0jM5i" name="Teller_Login">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5DrEMJc7h7jNVBtRQK8e-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="390" y="170" width="100" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="5DrEMJc7h7jNVBtRQK8e-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="5DrEMJc7h7jNVBtRQK8e-1">
+          <mxGeometry x="45" y="60" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5DrEMJc7h7jNVBtRQK8e-4" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="5DrEMJc7h7jNVBtRQK8e-1">
+          <mxGeometry x="45" y="140" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="RBJe_LC8mfHUc2vDdrlB-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="5DrEMJc7h7jNVBtRQK8e-1">
+          <mxGeometry x="45" y="220" width="10" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="5DrEMJc7h7jNVBtRQK8e-6" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="600" y="170" width="100" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="5DrEMJc7h7jNVBtRQK8e-7" value="Login Request with ID and Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="5DrEMJc7h7jNVBtRQK8e-6" target="RBJe_LC8mfHUc2vDdrlB-1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="-155" y="200" as="sourcePoint" />
+            <mxPoint x="44.809999999999945" y="200" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RBJe_LC8mfHUc2vDdrlB-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="5DrEMJc7h7jNVBtRQK8e-6">
+          <mxGeometry x="49.81" y="180" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5DrEMJc7h7jNVBtRQK8e-8" value="Successfully login in" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1" target="RBJe_LC8mfHUc2vDdrlB-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650.19" y="404" as="sourcePoint" />
+            <mxPoint x="440.00034482758605" y="404" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5DrEMJc7h7jNVBtRQK8e-9" value="Wrong credential. Login in again!" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650.19" y="495" as="sourcePoint" />
+            <mxPoint x="440.00034482758605" y="495" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5DrEMJc7h7jNVBtRQK8e-10" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="390" y="460" width="300" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="5DrEMJc7h7jNVBtRQK8e-11" value="Teller Login" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="405" y="130" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="5DrEMJc7h7jNVBtRQK8e-12" value="Accounts and Permission Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1" target="RBJe_LC8mfHUc2vDdrlB-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650.19" y="430" as="sourcePoint" />
+            <mxPoint x="450" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zxHzSKGwLXT1ibKOusru-1" value="Teller&amp;nbsp;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="210" y="170" width="100" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="zxHzSKGwLXT1ibKOusru-3" value="Enter Teller ID" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="zxHzSKGwLXT1ibKOusru-1" target="5DrEMJc7h7jNVBtRQK8e-2">
+          <mxGeometry x="-0.4429" y="10" relative="1" as="geometry">
+            <mxPoint x="50" y="80" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="220" y="80" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zxHzSKGwLXT1ibKOusru-5" value="Enter Password" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="zxHzSKGwLXT1ibKOusru-1" target="5DrEMJc7h7jNVBtRQK8e-4">
+          <mxGeometry x="-0.4429" y="10" relative="1" as="geometry">
+            <mxPoint x="50" y="150" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="50" y="160" />
+            </Array>
+            <mxPoint x="220" y="160" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="Teller_Create_New_User" id="cw-xXRzg47S3OpmB3FVQ">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="i4Gw_vKcqXSJEuWGT3pP-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="630" y="150" width="100" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="0gsheQNdBHZUZakMGAOg-6" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="i4Gw_vKcqXSJEuWGT3pP-1">
+          <mxGeometry x="45.5" y="400" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="4zY4JLBqQpWZxEakE9hL-3" value="Enter Name" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="i4Gw_vKcqXSJEuWGT3pP-1" target="0gsheQNdBHZUZakMGAOg-1">
+          <mxGeometry x="-0.4055" y="10" relative="1" as="geometry">
+            <mxPoint x="-149" y="320" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="-149" y="320" />
+            </Array>
+            <mxPoint x="40" y="310" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0gsheQNdBHZUZakMGAOg-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="i4Gw_vKcqXSJEuWGT3pP-1">
+          <mxGeometry x="45.5" y="300" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="4zY4JLBqQpWZxEakE9hL-5" value="Enter Birthday" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="i4Gw_vKcqXSJEuWGT3pP-1" target="0gsheQNdBHZUZakMGAOg-4">
+          <mxGeometry x="-0.395" y="10" relative="1" as="geometry">
+            <mxPoint x="-150.5" y="370" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint x="40" y="370" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0gsheQNdBHZUZakMGAOg-4" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="i4Gw_vKcqXSJEuWGT3pP-1">
+          <mxGeometry x="45.5" y="350" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="JwS-BcAs9bcdahCyYqns-3" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="i4Gw_vKcqXSJEuWGT3pP-1">
+          <mxGeometry x="45.5" y="460" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="JwS-BcAs9bcdahCyYqns-7" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="i4Gw_vKcqXSJEuWGT3pP-1">
+          <mxGeometry x="45" y="60" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="i4Gw_vKcqXSJEuWGT3pP-2" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="840" y="150" width="100" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="JwS-BcAs9bcdahCyYqns-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="i4Gw_vKcqXSJEuWGT3pP-2">
+          <mxGeometry x="45" y="440" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="1Jx54gLXay1ujhpUx-s3-1" value="Teller Create New User" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="610" y="110" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="hTPr_qPO5QVaE9uwCoLS-1" value="Login Request with ID and Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;entryPerimeter=0;" edge="1" parent="1" target="JwS-BcAs9bcdahCyYqns-4">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="685" y="270" as="sourcePoint" />
+            <mxPoint x="850" y="275" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hTPr_qPO5QVaE9uwCoLS-2" value="Successfully login in" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1" target="JwS-BcAs9bcdahCyYqns-8">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="890.19" y="320" as="sourcePoint" />
+            <mxPoint x="690" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hTPr_qPO5QVaE9uwCoLS-3" value="Accounts and Permission Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1" target="JwS-BcAs9bcdahCyYqns-8">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="895" y="340" as="sourcePoint" />
+            <mxPoint x="704.81" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="obbQcbuTmBa7hY4MWzib-1" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="440" y="200" width="490" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="4zY4JLBqQpWZxEakE9hL-1" value="Teller" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="430" y="150" width="100" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="4zY4JLBqQpWZxEakE9hL-7" value="Enter Password" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1" target="0gsheQNdBHZUZakMGAOg-6">
+          <mxGeometry x="-0.402" y="10" relative="1" as="geometry">
+            <mxPoint x="480.5" y="570" as="sourcePoint" />
+            <Array as="points" />
+            <mxPoint as="offset" />
+            <mxPoint x="670" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4zY4JLBqQpWZxEakE9hL-8" value="Register New User" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="680" y="600" as="sourcePoint" />
+            <mxPoint x="885" y="600" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1p2pKZ5vJPMJe8mc24j--2" value="return new user id" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1" target="JwS-BcAs9bcdahCyYqns-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="885.69" y="620" as="sourcePoint" />
+            <mxPoint x="690" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4zY4JLBqQpWZxEakE9hL-9" value="return new user id" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="675.09" y="640" as="sourcePoint" />
+            <mxPoint x="480" y="640" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JwS-BcAs9bcdahCyYqns-4" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="885" y="265" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="JwS-BcAs9bcdahCyYqns-5" value="Enter ID" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="480" y="255" as="sourcePoint" />
+            <mxPoint x="675" y="255" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JwS-BcAs9bcdahCyYqns-6" value="Enter Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="480" y="275" as="sourcePoint" />
+            <mxPoint x="675" y="275" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="JwS-BcAs9bcdahCyYqns-8" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="675" y="310" width="10" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="KyPZFrNjrmvEZ_0RxBl9" name="Teller_Login_to_User">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="dvNshdgkZpKpvf39ccG--1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="100" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="dvNshdgkZpKpvf39ccG--2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="dvNshdgkZpKpvf39ccG--1">
+          <mxGeometry x="45.5" y="200" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dvNshdgkZpKpvf39ccG--3" value="Enter User ID" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="dvNshdgkZpKpvf39ccG--1" target="dvNshdgkZpKpvf39ccG--2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50.5" y="180" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="210" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dvNshdgkZpKpvf39ccG--8" value="Login Request with User ID" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="dvNshdgkZpKpvf39ccG--1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="50.19" y="270" as="sourcePoint" />
+            <mxPoint x="259.69" y="270" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dvNshdgkZpKpvf39ccG--10" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="100" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="dvNshdgkZpKpvf39ccG--11" value="Teller Login to User" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="330" y="210" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dvNshdgkZpKpvf39ccG--12" value="Login Request with ID and Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19" y="330" as="sourcePoint" />
+            <mxPoint x="529.69" y="330" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dvNshdgkZpKpvf39ccG--13" value="Successfully login in" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="354" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="354" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dvNshdgkZpKpvf39ccG--14" value="Accounts and Permission Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="380" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dvNshdgkZpKpvf39ccG--15" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="300" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="6yqyR6hD2Wt4kGQ9ujD0-1" value="Recipient Account Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="540" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VrnNY5Qmgr-mQHb601ab-1" value="Invalid User ID. Try again!" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="605" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="605" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VrnNY5Qmgr-mQHb601ab-2" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="270" y="570" width="300" height="55" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="R0Vq7otGN9Z6gEzik-nZ" name="Teller_Reset_User_Password">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="jmXvARQrwnk7wevXdEHa-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="100" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="wJNdeEdYUZRRfLH4bM3j-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="jmXvARQrwnk7wevXdEHa-1">
+          <mxGeometry x="45.5" y="280" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="wJNdeEdYUZRRfLH4bM3j-2" value="Enter New Password" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="jmXvARQrwnk7wevXdEHa-1" target="wJNdeEdYUZRRfLH4bM3j-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50.5" y="260" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jmXvARQrwnk7wevXdEHa-10" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="100" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="jmXvARQrwnk7wevXdEHa-11" value="Teller Reset User Password" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="300" y="210" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="jmXvARQrwnk7wevXdEHa-12" value="Login Request with ID and Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19" y="330" as="sourcePoint" />
+            <mxPoint x="529.69" y="330" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jmXvARQrwnk7wevXdEHa-13" value="Successfully login in" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="354" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="354" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jmXvARQrwnk7wevXdEHa-14" value="Accounts and Permission Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="380" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jmXvARQrwnk7wevXdEHa-15" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="300" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="6DD7NhNWNti9nmYg7wFk-1" value="Login Request with User ID" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19" y="440" as="sourcePoint" />
+            <mxPoint x="529.69" y="440" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6DD7NhNWNti9nmYg7wFk-2" value="Recipient Account Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="470" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6DD7NhNWNti9nmYg7wFk-3" value="Teller Login to User" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="260" y="410" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="jmXvARQrwnk7wevXdEHa-8" value="Request to reset new password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19" y="590" as="sourcePoint" />
+            <mxPoint x="529.69" y="590" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="jmXvARQrwnk7wevXdEHa-9" value="Successfully Reset Password" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="614" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="614" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="66iqqbu8kj_cJpS3y_GV" name="Teller_Create_Account">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="100" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="FZenF-FrdSqiBXgyFa0L-1">
+          <mxGeometry x="45.5" y="280" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-3" value="Choose Account Type" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="FZenF-FrdSqiBXgyFa0L-1" target="FZenF-FrdSqiBXgyFa0L-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50.5" y="260" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tDeYGVTfv37lIW-bkVLx-1" value="Enter New Pin" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="FZenF-FrdSqiBXgyFa0L-1" target="tDeYGVTfv37lIW-bkVLx-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50.5" y="390" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tDeYGVTfv37lIW-bkVLx-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="FZenF-FrdSqiBXgyFa0L-1">
+          <mxGeometry x="45.5" y="410" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="tDeYGVTfv37lIW-bkVLx-3" value="Request to Change Pin" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="FZenF-FrdSqiBXgyFa0L-1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="50" y="470" as="sourcePoint" />
+            <mxPoint x="259.5" y="470" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tDeYGVTfv37lIW-bkVLx-4" value="Successfully Changed Pin" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="FZenF-FrdSqiBXgyFa0L-1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="260.19000000000005" y="490" as="sourcePoint" />
+            <mxPoint x="50.00034482758605" y="490" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-4" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="100" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-5" value="Teller Create Account" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-6" value="Login Request with ID and Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19" y="330" as="sourcePoint" />
+            <mxPoint x="529.69" y="330" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-7" value="Successfully login in" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="354" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="354" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-8" value="Accounts and Permission Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="380" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-9" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="300" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-10" value="Login Request with User ID" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19" y="440" as="sourcePoint" />
+            <mxPoint x="529.69" y="440" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-11" value="Recipient Account Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="470" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-12" value="Teller Login to User" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="260" y="410" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-13" value="Request to Create a new account" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320" y="580" as="sourcePoint" />
+            <mxPoint x="529.5" y="580" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FZenF-FrdSqiBXgyFa0L-14" value="Return Account #, randomly generated Pin" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="600" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="600" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tDeYGVTfv37lIW-bkVLx-5" value="Change Pin (Optional)" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="250" y="610" width="300" height="140" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="yRinhJXKheai9HR8oUpO" name="Teller_Change_Pin">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="100" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="WSy6m6GiDgRIV4vuur-0-1">
+          <mxGeometry x="45.5" y="280" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-3" value="Choose an account" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="WSy6m6GiDgRIV4vuur-0-1" target="WSy6m6GiDgRIV4vuur-0-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50.5" y="260" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-5" value="Enter New Pin" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="WSy6m6GiDgRIV4vuur-0-1" target="WSy6m6GiDgRIV4vuur-0-4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50.5" y="340" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-4" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="WSy6m6GiDgRIV4vuur-0-1">
+          <mxGeometry x="45.5" y="360" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-17" value="Request to Change Pin" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="WSy6m6GiDgRIV4vuur-0-1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="50" y="420" as="sourcePoint" />
+            <mxPoint x="259.5" y="420" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-18" value="Successfully Changed Pin" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="WSy6m6GiDgRIV4vuur-0-1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="260.19000000000005" y="440" as="sourcePoint" />
+            <mxPoint x="50.00034482758605" y="440" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-6" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="100" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-7" value="Teller Change Pin" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-8" value="Login Request with ID and Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19" y="330" as="sourcePoint" />
+            <mxPoint x="529.69" y="330" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-9" value="Successfully login in" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="354" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="354" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-10" value="Accounts and Permission Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="380" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-11" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="300" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-12" value="Login Request with User ID" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19" y="440" as="sourcePoint" />
+            <mxPoint x="529.69" y="440" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-13" value="Recipient Account Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="470" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WSy6m6GiDgRIV4vuur-0-14" value="Teller Login to User" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="260" y="410" width="300" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="s-pmIqAxtdHCkvJA1Rvb" name="Teller_Withdraw">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="8YQs_P-WqMT7ZfdRfkvm-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="100" height="670" as="geometry" />
+        </mxCell>
+        <mxCell id="8YQs_P-WqMT7ZfdRfkvm-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="8YQs_P-WqMT7ZfdRfkvm-1">
+          <mxGeometry x="45.5" y="280" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="8YQs_P-WqMT7ZfdRfkvm-3" value="Choose Account" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="8YQs_P-WqMT7ZfdRfkvm-1" target="8YQs_P-WqMT7ZfdRfkvm-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50.5" y="260" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="keALlt2co1g5YakEDBlY-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="8YQs_P-WqMT7ZfdRfkvm-1">
+          <mxGeometry x="45" y="350" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="keALlt2co1g5YakEDBlY-2" value="Enter amount of money to withdraw" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="8YQs_P-WqMT7ZfdRfkvm-1" target="keALlt2co1g5YakEDBlY-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50" y="330" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="keALlt2co1g5YakEDBlY-3" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="8YQs_P-WqMT7ZfdRfkvm-1">
+          <mxGeometry x="45" y="420" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="keALlt2co1g5YakEDBlY-4" value="Enter Pin" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="8YQs_P-WqMT7ZfdRfkvm-1" target="keALlt2co1g5YakEDBlY-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50" y="400" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="keALlt2co1g5YakEDBlY-7" value="Withdraw Request with Account #, money, and Pin" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="8YQs_P-WqMT7ZfdRfkvm-1">
+          <mxGeometry x="-0.0472" width="80" relative="1" as="geometry">
+            <mxPoint x="50.190000000000055" y="490" as="sourcePoint" />
+            <mxPoint x="259.69000000000005" y="490" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="keALlt2co1g5YakEDBlY-8" value="Successfully Withdrawal" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="8YQs_P-WqMT7ZfdRfkvm-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="260.19000000000005" y="514" as="sourcePoint" />
+            <mxPoint x="50.000344827586105" y="514" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="keALlt2co1g5YakEDBlY-9" value="Updated Accounts Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="8YQs_P-WqMT7ZfdRfkvm-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="260.19000000000005" y="540" as="sourcePoint" />
+            <mxPoint x="50.000344827586105" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8YQs_P-WqMT7ZfdRfkvm-8" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="100" height="670" as="geometry" />
+        </mxCell>
+        <mxCell id="8YQs_P-WqMT7ZfdRfkvm-9" value="Teller Withdraw" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="8YQs_P-WqMT7ZfdRfkvm-10" value="Login Request with ID and Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19" y="330" as="sourcePoint" />
+            <mxPoint x="529.69" y="330" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8YQs_P-WqMT7ZfdRfkvm-11" value="Successfully login in" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="354" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="354" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8YQs_P-WqMT7ZfdRfkvm-12" value="Accounts and Permission Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="380" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8YQs_P-WqMT7ZfdRfkvm-13" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="300" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="8YQs_P-WqMT7ZfdRfkvm-14" value="Login Request with User ID" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19" y="440" as="sourcePoint" />
+            <mxPoint x="529.69" y="440" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8YQs_P-WqMT7ZfdRfkvm-15" value="Recipient Account Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="470" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8YQs_P-WqMT7ZfdRfkvm-16" value="Teller Login to User" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="260" y="410" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="keALlt2co1g5YakEDBlY-6" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="810" width="300" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="keALlt2co1g5YakEDBlY-5" value="Wrong Pin / Not enough money. Try again!" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="845" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="845" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="P0VeSYuAb1wie6dQHRMc" name="Teller_Deposit">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="100" height="670" as="geometry" />
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="p3fW-Vz3PGmcwI_fyA35-1">
+          <mxGeometry x="45.5" y="280" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-3" value="Choose Account" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="p3fW-Vz3PGmcwI_fyA35-1" target="p3fW-Vz3PGmcwI_fyA35-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50.5" y="260" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-4" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="p3fW-Vz3PGmcwI_fyA35-1">
+          <mxGeometry x="45" y="350" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-5" value="Enter amount of money to deposit" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="p3fW-Vz3PGmcwI_fyA35-1" target="p3fW-Vz3PGmcwI_fyA35-4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50" y="330" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-6" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="p3fW-Vz3PGmcwI_fyA35-1">
+          <mxGeometry x="45" y="420" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-7" value="Enter Pin" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="p3fW-Vz3PGmcwI_fyA35-1" target="p3fW-Vz3PGmcwI_fyA35-6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50" y="400" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-8" value="Deposit Request with Account #, money, and Pin" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="p3fW-Vz3PGmcwI_fyA35-1">
+          <mxGeometry x="-0.0472" width="80" relative="1" as="geometry">
+            <mxPoint x="50.190000000000055" y="490" as="sourcePoint" />
+            <mxPoint x="259.69000000000005" y="490" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-9" value="Successfully Deposit Confirmation" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="p3fW-Vz3PGmcwI_fyA35-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="260.19000000000005" y="514" as="sourcePoint" />
+            <mxPoint x="50.000344827586105" y="514" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-10" value="Updated Accounts Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="p3fW-Vz3PGmcwI_fyA35-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="260.19000000000005" y="540" as="sourcePoint" />
+            <mxPoint x="50.000344827586105" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-11" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="100" height="670" as="geometry" />
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-12" value="Teller Deposit" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-13" value="Login Request with ID and Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19" y="330" as="sourcePoint" />
+            <mxPoint x="529.69" y="330" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-14" value="Successfully login in" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="354" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="354" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-15" value="Accounts and Permission Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="380" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-16" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="300" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-17" value="Login Request with User ID" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19" y="440" as="sourcePoint" />
+            <mxPoint x="529.69" y="440" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-18" value="Recipient Account Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="470" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-19" value="Teller Login to User" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="260" y="410" width="300" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-20" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="810" width="300" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p3fW-Vz3PGmcwI_fyA35-21" value="Wrong Pin. Try again!" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="845" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="845" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="niw-JpJ0CrZ59dQtR-fh" name="Teller_Transfer">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="K08cIGYnxSQa5lmbKwp1-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="340" y="240" width="120" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="K08cIGYnxSQa5lmbKwp1-11" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="560" y="240" width="100" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="K08cIGYnxSQa5lmbKwp1-12" value="Teller Transfer" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="410" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rsuK91o8ZuqL_0o9KJGl-1" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="345" y="290" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rsuK91o8ZuqL_0o9KJGl-2" value="Teller Login to User" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="345" y="340" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="395" y="400" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-2" value="Choose Account" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1" target="Xv8ekvB4hCqZ0nCHdsRY-1">
+          <mxGeometry x="0.0118" relative="1" as="geometry">
+            <mxPoint x="400" y="380" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="430" y="410" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-3" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="395" y="470" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-4" value="Enter Recipient Account #" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1" target="Xv8ekvB4hCqZ0nCHdsRY-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="450" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="430" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-5" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="395" y="760" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-6" value="Enter Pin" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1" target="Xv8ekvB4hCqZ0nCHdsRY-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="740" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="430" y="770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-7" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="395" y="680" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-8" value="Enter amount of money to transfer" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1" target="Xv8ekvB4hCqZ0nCHdsRY-7">
+          <mxGeometry x="0.0118" relative="1" as="geometry">
+            <mxPoint x="400" y="660" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="430" y="690" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-11" value="Transfer Request with sender and recipient Account #, money, and Pin" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0453" width="80" relative="1" as="geometry">
+            <mxPoint x="400.19000000000005" y="840" as="sourcePoint" />
+            <mxPoint x="609.69" y="840" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-12" value="Successfully Transfer" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="610.19" y="864" as="sourcePoint" />
+            <mxPoint x="400.0003448275861" y="864" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-13" value="Updated Account Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="610.19" y="890" as="sourcePoint" />
+            <mxPoint x="400.0003448275861" y="890" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-14" value="Recipient Account Lookup Request" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0024" width="80" relative="1" as="geometry">
+            <mxPoint x="400.19000000000005" y="530" as="sourcePoint" />
+            <mxPoint x="609.69" y="530" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-15" value="Recipient Account Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="610.19" y="554" as="sourcePoint" />
+            <mxPoint x="400.0003448275861" y="554" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-16" value="Invalid Recipient Account #. Try again!" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="610.19" y="605" as="sourcePoint" />
+            <mxPoint x="400.0003448275861" y="605" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-17" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="340" y="570" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-10" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="340" y="910" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Xv8ekvB4hCqZ0nCHdsRY-9" value="Wrong Pin / Not enough money. Try again!" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="610.19" y="945" as="sourcePoint" />
+            <mxPoint x="400.0003448275861" y="945" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="d4Z30ywQ9MTFx96B_7Av" name="Teller_Add_User_to_Account">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="iVdUBgYcAJBy5N-KUG7I-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="100" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="iVdUBgYcAJBy5N-KUG7I-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="iVdUBgYcAJBy5N-KUG7I-1">
+          <mxGeometry x="45.5" y="160" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="iVdUBgYcAJBy5N-KUG7I-3" value="Choose Account" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="iVdUBgYcAJBy5N-KUG7I-1" target="iVdUBgYcAJBy5N-KUG7I-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50.5" y="140" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="170" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iVdUBgYcAJBy5N-KUG7I-4" value="Enter ID of the user to be added" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="iVdUBgYcAJBy5N-KUG7I-1" target="iVdUBgYcAJBy5N-KUG7I-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50.5" y="220" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iVdUBgYcAJBy5N-KUG7I-5" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="iVdUBgYcAJBy5N-KUG7I-1">
+          <mxGeometry x="45.5" y="240" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="iVdUBgYcAJBy5N-KUG7I-8" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="100" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="ci8pq2XwCumGZNAsdIH5-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="iVdUBgYcAJBy5N-KUG7I-8">
+          <mxGeometry x="45" y="550" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ci8pq2XwCumGZNAsdIH5-2" value="Write Logs" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="iVdUBgYcAJBy5N-KUG7I-8" target="ci8pq2XwCumGZNAsdIH5-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50" y="530" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80" y="560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iVdUBgYcAJBy5N-KUG7I-9" value="Teller Add User to Account" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="iVdUBgYcAJBy5N-KUG7I-17" value="Request to add new user to account" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0024" width="80" relative="1" as="geometry">
+            <mxPoint x="320" y="740" as="sourcePoint" />
+            <mxPoint x="529.5" y="740" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iVdUBgYcAJBy5N-KUG7I-18" value="Return confirmation message and updated account information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="760" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="760" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vjt0XX0qTednUrGQrCW5-1" value="User ID Lookup Request" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0024" width="80" relative="1" as="geometry">
+            <mxPoint x="320.19000000000005" y="550" as="sourcePoint" />
+            <mxPoint x="529.69" y="550" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vjt0XX0qTednUrGQrCW5-2" value="User Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="574" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="574" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AagOyALhdR6S1dU2pPWC-1" value="Invalid User ID. Try again!" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="625" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="625" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AagOyALhdR6S1dU2pPWC-2" value="Alternative 1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=80;height=20;" vertex="1" parent="1">
+          <mxGeometry x="260" y="590" width="300" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="AagOyALhdR6S1dU2pPWC-3" value="User already exists in the account. Try again!" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="685" as="sourcePoint" />
+            <mxPoint x="320.0003448275861" y="685" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AagOyALhdR6S1dU2pPWC-4" value="Alternative 2" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=110;height=20;" vertex="1" parent="1">
+          <mxGeometry x="260" y="650" width="300" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="_d139lR8H5WQslDYnZ8U-1" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="270" y="290" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_d139lR8H5WQslDYnZ8U-2" value="Teller Login to User" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="270" y="340" width="300" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="3URcFrhcvVsc4cJhiBhX" name="Teller_Delete_Account">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ozoOuUdB1uTnQFm3E9ys-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="100" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="ozoOuUdB1uTnQFm3E9ys-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="ozoOuUdB1uTnQFm3E9ys-1">
+          <mxGeometry x="45.5" y="185" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ozoOuUdB1uTnQFm3E9ys-3" value="Choose Account to Delete" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="ozoOuUdB1uTnQFm3E9ys-1" target="ozoOuUdB1uTnQFm3E9ys-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50.5" y="165" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="195" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ozoOuUdB1uTnQFm3E9ys-8" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="100" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="ozoOuUdB1uTnQFm3E9ys-9" value="Teller Delete Account" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ozoOuUdB1uTnQFm3E9ys-17" value="Request to Delete an account" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320" y="675" as="sourcePoint" />
+            <mxPoint x="529.5" y="675" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ozoOuUdB1uTnQFm3E9ys-18" value="Successfully Deleted an account and return updated account info" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="695" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="695" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ozoOuUdB1uTnQFm3E9ys-20" value="While account balance &amp;gt; 0" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=100;height=30;" vertex="1" parent="1">
+          <mxGeometry x="240" y="475" width="330" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="ozoOuUdB1uTnQFm3E9ys-21" value="Teller Withdraw" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="260" y="515" width="300" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ozoOuUdB1uTnQFm3E9ys-22" value="Teller Transfer" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="260" y="585" width="300" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hSRa78w5tGy3XuOLilJL-1" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="270" y="300" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="hSRa78w5tGy3XuOLilJL-2" value="Teller Login to User" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="270" y="350" width="300" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="hnToKDYibFw6iPDuvIds" name="Teller_Remove_User_from_Account">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="zxPZd_cpUzEP2lw-6qvw-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="100" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="zxPZd_cpUzEP2lw-6qvw-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="zxPZd_cpUzEP2lw-6qvw-1">
+          <mxGeometry x="45.5" y="160" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zxPZd_cpUzEP2lw-6qvw-3" value="Choose an Admin Account" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="zxPZd_cpUzEP2lw-6qvw-1" target="zxPZd_cpUzEP2lw-6qvw-2">
+          <mxGeometry x="0.0118" relative="1" as="geometry">
+            <mxPoint x="50.5" y="140" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="170" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zxPZd_cpUzEP2lw-6qvw-4" value="Choose the user to remove" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="zxPZd_cpUzEP2lw-6qvw-1" target="zxPZd_cpUzEP2lw-6qvw-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50.5" y="210" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zxPZd_cpUzEP2lw-6qvw-5" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="zxPZd_cpUzEP2lw-6qvw-1">
+          <mxGeometry x="45.5" y="230" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zxPZd_cpUzEP2lw-6qvw-6" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="100" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="AnNcRsmrNrqz7PNwnlJz-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="zxPZd_cpUzEP2lw-6qvw-6">
+          <mxGeometry x="45" y="450" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="AnNcRsmrNrqz7PNwnlJz-2" value="Write Logs" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="zxPZd_cpUzEP2lw-6qvw-6" target="AnNcRsmrNrqz7PNwnlJz-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50" y="430" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80" y="460" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zxPZd_cpUzEP2lw-6qvw-7" value="Teller Remove User from Account" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zxPZd_cpUzEP2lw-6qvw-8" value="Request to remove a user from account" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0024" width="80" relative="1" as="geometry">
+            <mxPoint x="320" y="550" as="sourcePoint" />
+            <mxPoint x="529.5" y="550" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zxPZd_cpUzEP2lw-6qvw-9" value="Return confirmation message and updated account information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="570" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="570" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zxPZd_cpUzEP2lw-6qvw-16" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="270" y="290" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zxPZd_cpUzEP2lw-6qvw-17" value="Teller Login to User" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="270" y="340" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pK-R1WHLBozWteN-f-A8-2" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="275" y="590" width="305" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pK-R1WHLBozWteN-f-A8-3" value="Error: User to remove does not Exist." style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="640" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="640" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="wpLoj-8Y4goUvJY-8scT" name="Teller_Transfer_Admin">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="CHx08-20aO_D4dyAk7Xb-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="100" height="560" as="geometry" />
+        </mxCell>
+        <mxCell id="CHx08-20aO_D4dyAk7Xb-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="CHx08-20aO_D4dyAk7Xb-1">
+          <mxGeometry x="45.5" y="160" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="CHx08-20aO_D4dyAk7Xb-3" value="Choose an Admin Account" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="CHx08-20aO_D4dyAk7Xb-1" target="CHx08-20aO_D4dyAk7Xb-2">
+          <mxGeometry x="0.0118" relative="1" as="geometry">
+            <mxPoint x="50.5" y="140" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="170" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CHx08-20aO_D4dyAk7Xb-4" value="Choose the user to transfer to" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="CHx08-20aO_D4dyAk7Xb-1" target="CHx08-20aO_D4dyAk7Xb-5">
+          <mxGeometry x="0.0118" relative="1" as="geometry">
+            <mxPoint x="50.5" y="220" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="250" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CHx08-20aO_D4dyAk7Xb-5" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="CHx08-20aO_D4dyAk7Xb-1">
+          <mxGeometry x="45.5" y="240" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="CHx08-20aO_D4dyAk7Xb-6" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="100" height="560" as="geometry" />
+        </mxCell>
+        <mxCell id="wrM33eeWR51H9qCLiJsG-4" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="CHx08-20aO_D4dyAk7Xb-6">
+          <mxGeometry x="44" y="340" width="10" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="wrM33eeWR51H9qCLiJsG-5" value="Validate Request" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="CHx08-20aO_D4dyAk7Xb-6" target="wrM33eeWR51H9qCLiJsG-4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="49" y="320" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="79" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CHx08-20aO_D4dyAk7Xb-9" value="Teller Transfer User Account Admin to Another" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CHx08-20aO_D4dyAk7Xb-10" value="Request to transfer admin to the user" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0024" width="80" relative="1" as="geometry">
+            <mxPoint x="320" y="550" as="sourcePoint" />
+            <mxPoint x="529.5" y="550" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CHx08-20aO_D4dyAk7Xb-11" value="Return confirmation message and updated account information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="640" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="640" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CHx08-20aO_D4dyAk7Xb-12" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="270" y="290" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="CHx08-20aO_D4dyAk7Xb-13" value="Teller Login to User" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=70;height=30;" vertex="1" parent="1">
+          <mxGeometry x="270" y="340" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="wrM33eeWR51H9qCLiJsG-1" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=55;height=20;" vertex="1" parent="1">
+          <mxGeometry x="275" y="650" width="305" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="wrM33eeWR51H9qCLiJsG-2" value="Invalid transfer account admin request" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="680" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="680" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CHx08-20aO_D4dyAk7Xb-7" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="525" y="730" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="CHx08-20aO_D4dyAk7Xb-8" value="Write Logs" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1" target="CHx08-20aO_D4dyAk7Xb-7">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530" y="710" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="560" y="740" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="L23piuGKgXj4jGcx6l4G" name="Teller_Admin_Add_Teller">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HUaHZvyn9yf3XIOQ8cZr-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="100" height="560" as="geometry" />
+        </mxCell>
+        <mxCell id="kp2pesigd1U19EjMHjMe-2" value="Enter new password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="HUaHZvyn9yf3XIOQ8cZr-1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="-150" y="385" as="sourcePoint" />
+            <mxPoint x="45" y="385" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hIIzOuGzTeUPbFhJCqA9-10" value="Enter new teller&#39;s name" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="HUaHZvyn9yf3XIOQ8cZr-1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="-150" y="365" as="sourcePoint" />
+            <mxPoint x="45" y="365" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HUaHZvyn9yf3XIOQ8cZr-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="HUaHZvyn9yf3XIOQ8cZr-1">
+          <mxGeometry x="45" y="350" width="10" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="HUaHZvyn9yf3XIOQ8cZr-6" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="100" height="560" as="geometry" />
+        </mxCell>
+        <mxCell id="HUaHZvyn9yf3XIOQ8cZr-9" value="Teller Admin Add Teller" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="250" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="aKQWpWzVsM82M9Qi0eu1-1" value="Teller" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="70" y="240" width="100" height="560" as="geometry" />
+        </mxCell>
+        <mxCell id="hIIzOuGzTeUPbFhJCqA9-2" value="Login Request with ID and Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="325" y="374.5" as="sourcePoint" />
+            <mxPoint x="525" y="374.5" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hIIzOuGzTeUPbFhJCqA9-3" value="Successfully login in" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1" target="hIIzOuGzTeUPbFhJCqA9-9">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530.19" y="410" as="sourcePoint" />
+            <mxPoint x="330" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hIIzOuGzTeUPbFhJCqA9-4" value="Accounts and Permission Information" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1" target="hIIzOuGzTeUPbFhJCqA9-9">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="535" y="430" as="sourcePoint" />
+            <mxPoint x="344.80999999999995" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hIIzOuGzTeUPbFhJCqA9-5" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="290" width="490" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="hIIzOuGzTeUPbFhJCqA9-6" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="525" y="355" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="hIIzOuGzTeUPbFhJCqA9-7" value="Enter ID" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="120.5" y="330" as="sourcePoint" />
+            <mxPoint x="315.5" y="330" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hIIzOuGzTeUPbFhJCqA9-8" value="Enter Password" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="120.5" y="355" as="sourcePoint" />
+            <mxPoint x="315.5" y="355" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="hIIzOuGzTeUPbFhJCqA9-9" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="315" y="400" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="HUaHZvyn9yf3XIOQ8cZr-7" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="525" y="750" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="HUaHZvyn9yf3XIOQ8cZr-8" value="Write Logs" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="1" target="HUaHZvyn9yf3XIOQ8cZr-7">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530" y="730" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="560" y="760" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pSQaKa_GJp9BQlKKgj-V-3" value="Request to confirm new teller info" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320" y="680" as="sourcePoint" />
+            <mxPoint x="529.5" y="680" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pSQaKa_GJp9BQlKKgj-V-4" value="Successfully added new teller and return updated teller list info" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="720" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="720" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pSQaKa_GJp9BQlKKgj-V-6" value="Request to Add a new Teller" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320" y="510" as="sourcePoint" />
+            <mxPoint x="529.5" y="510" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pSQaKa_GJp9BQlKKgj-V-7" value="Return New Teller ID (incremented)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="549" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="549" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kp2pesigd1U19EjMHjMe-1" value="Push add teller button" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="120" y="470" as="sourcePoint" />
+            <mxPoint x="315" y="470" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="feHKxavUMHO9oR1Fa79_" name="Teller_Admin_Remove_Teller">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="EvZbEqDy7_VBjDFJkTLg-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="100" height="470" as="geometry" />
+        </mxCell>
+        <mxCell id="EvZbEqDy7_VBjDFJkTLg-2" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="EvZbEqDy7_VBjDFJkTLg-1">
+          <mxGeometry x="45.5" y="170" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="EvZbEqDy7_VBjDFJkTLg-3" value="Choose a Teller to remove" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="EvZbEqDy7_VBjDFJkTLg-1" target="EvZbEqDy7_VBjDFJkTLg-2">
+          <mxGeometry x="0.0118" relative="1" as="geometry">
+            <mxPoint x="50.5" y="150" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80.5" y="180" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EvZbEqDy7_VBjDFJkTLg-4" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="100" height="470" as="geometry" />
+        </mxCell>
+        <mxCell id="EvZbEqDy7_VBjDFJkTLg-5" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="EvZbEqDy7_VBjDFJkTLg-4">
+          <mxGeometry x="45" y="410" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="EvZbEqDy7_VBjDFJkTLg-6" value="Write Logs" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" edge="1" parent="EvZbEqDy7_VBjDFJkTLg-4" target="EvZbEqDy7_VBjDFJkTLg-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="50" y="390" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="80" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EvZbEqDy7_VBjDFJkTLg-7" value="Teller Admin Remove Teller" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="EvZbEqDy7_VBjDFJkTLg-8" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="270" y="290" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="EvZbEqDy7_VBjDFJkTLg-12" value="Request to remove a teller" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320" y="480" as="sourcePoint" />
+            <mxPoint x="529.5" y="480" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EvZbEqDy7_VBjDFJkTLg-13" value="Successfully remove a teller and return updated teller list info" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="500" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="500" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oAfeInToMXhN73XoJLYk-1" value="Alternative" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=55;height=20;" vertex="1" parent="1">
+          <mxGeometry x="273" y="530" width="305" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="oAfeInToMXhN73XoJLYk-2" value="Error: Invalid remove teller request." style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="528.19" y="560" as="sourcePoint" />
+            <mxPoint x="318.00034482758605" y="560" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="YEtlkoOlFZ-TfglkX4ac" name="Teller_Admin_View_Logs">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="kWaF6VoDJPOdLpwhxMxY-1" value="Teller Application" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="100" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="kWaF6VoDJPOdLpwhxMxY-4" value="Server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="100" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="kWaF6VoDJPOdLpwhxMxY-7" value="Teller Admin View Logs" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="340" y="210" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="kWaF6VoDJPOdLpwhxMxY-8" value="Teller Login" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="270" y="290" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="kWaF6VoDJPOdLpwhxMxY-10" value="Request to view logs" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="0.0007" width="80" relative="1" as="geometry">
+            <mxPoint x="320" y="400" as="sourcePoint" />
+            <mxPoint x="529.5" y="400" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kWaF6VoDJPOdLpwhxMxY-11" value="Return All logs" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" edge="1" parent="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="530.19" y="439.5" as="sourcePoint" />
+            <mxPoint x="320.00034482758605" y="439.5" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

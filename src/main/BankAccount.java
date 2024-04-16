@@ -1,3 +1,6 @@
+package main;
+import message.Status;
+
 
 public class BankAccount {
 	private int accountNumber;

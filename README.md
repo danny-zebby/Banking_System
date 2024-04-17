@@ -1,3 +1,3 @@
 # Banking_System
 
-This is our bamking system
+This is our banking system

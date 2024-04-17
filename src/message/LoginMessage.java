@@ -1,6 +1,7 @@
 package message;
+import java.io.Serializable;
 
-public class LoginMessage implements MessageInterface {
+public class LoginMessage implements MessageInterface, Serializable {
 
 	@Override
 	public int getID() {

@@ -1,6 +1,7 @@
 package message;
+import java.io.Serializable;
 
-public class WithDrawMessage implements MessageInterface{
+public class WithdrawMessage implements MessageInterface, Serializable{
 
 	@Override
 	public int getID() {

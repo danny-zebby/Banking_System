@@ -40,14 +40,39 @@ public class ATMClient {
 	}
 	
 	public void go() {
-		// start client
-		setUpConnection();
 		
-		// codes go here...
+		try {
+			// start client
+			setUpConnection();
+			
+			// handshake with server: ATM client hello
+			int id = 0;
+			// public HelloMessage(int id, String text, String to, String from, MessageType type, Status status)
+			HelloMessage clientHello = new HelloMessage(id, "ATM Client Hello", "Server", "ATM",
+									MessageType.HELLO, Status.ONGOING);
+			writer.writeObject(clientHello);
+			HelloMessage serverHello = (HelloMessage) reader.readObject();
+			if (serverHello.getID() == ++id && serverHello.getStatus() == Status.SUCCESS) {
+				System.out.println("client-server handshake successfully");
+			}
+			
+			
+			// codes go here...
+			// while loop
+				// two options: ATM Login, exit
+				
+				// exit
+			
+				// ATM login: while loop
+					// Four options: deposit, withdraw, transfer, logout
+			
+			// close client
+			closeConnection();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		
-		// close client
-		closeConnection();
 	}
 	
 	public static void main(String[] args) {

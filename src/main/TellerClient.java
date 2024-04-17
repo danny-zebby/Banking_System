@@ -131,14 +131,33 @@ public class TellerClient {
 	}
 	
 	public void go() {
-		// start client
-		setUpConnection();
+		try {
+			// start client
+			setUpConnection();
+			
+			// handshake with server: Teller client hello
+			int id = 0;
+			// public HelloMessage(int id, String text, String to, String from, MessageType type, Status status)
+			HelloMessage clientHello = new HelloMessage(id, "Teller Client Hello", "Server", "Teller",
+									MessageType.HELLO, Status.ONGOING);
+			writer.writeObject(clientHello);
+			HelloMessage serverHello = (HelloMessage) reader.readObject();
+			if (serverHello.getID() == ++id && serverHello.getStatus() == Status.SUCCESS) {
+				System.out.println("client-server handshake successfully");
+			}
+			
+			
+			// codes go here...
+			
+			
+			
+			// close client
+			closeConnection();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		// codes go here...
-		
-		
-		// close client
-		closeConnection();
 	}
 	
 	// Driver

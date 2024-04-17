@@ -105,8 +105,8 @@ public class TellerClient {
 			sock = new Socket("127.0.0.1", 50000);
 			System.out.println("Connected to 127.0.0.1:50000.");
 			// set up reader and writer
-			reader = new ObjectInputStream(sock.getInputStream());
 			writer = new ObjectOutputStream(sock.getOutputStream());
+			reader = new ObjectInputStream(sock.getInputStream());
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Fail to connect to 127.0.0.1:50000.");

@@ -16,6 +16,7 @@ public class BankUser implements Comparable<BankUser> {
 		this.birthday = birthday;
 		this.password = password;
 		this.id = ++count;
+		this.cash = 0;
 		accounts = new ArrayList<BankAccount>();
 	}
 	
@@ -24,7 +25,7 @@ public class BankUser implements Comparable<BankUser> {
 	}
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public void setName(String name) {
@@ -32,7 +33,7 @@ public class BankUser implements Comparable<BankUser> {
 	}
 
 	public String getBirthday() {
-		return this.birthday;
+		return birthday;
 	}
 
 	public void setBirthday(String birthday) {
@@ -40,7 +41,7 @@ public class BankUser implements Comparable<BankUser> {
 	}
 
 	public String getPassword() {
-		return this.password;
+		return password;
 	}
 
 	public void setPassword(String password) {
@@ -48,7 +49,7 @@ public class BankUser implements Comparable<BankUser> {
 	}
 
 	public double getCash() {
-		return this.cash;
+		return cash;
 	}
 
 	public void setCash(double cash) {
@@ -56,11 +57,13 @@ public class BankUser implements Comparable<BankUser> {
 	}
 
 	public List<BankAccount> getAccounts() {
-		return this.accounts;
+		Collections.sort(accounts);
+		return accounts;
 	}
 
 	public void addAccount(BankAccount account) {
 		this.accounts.add(account);
+		account.addUser(this);
 	}
 	
 	public boolean deleteAccount(BankAccount account) {
@@ -69,7 +72,7 @@ public class BankUser implements Comparable<BankUser> {
 	}
 
 	public int getId() {
-		return this.id;
+		return id;
 	}
 	
 	

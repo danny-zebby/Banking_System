@@ -72,5 +72,4 @@ public class BankUser implements Comparable<BankUser> {
 		return this.id;
 	}
 	
-	
 }

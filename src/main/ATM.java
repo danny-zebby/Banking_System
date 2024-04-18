@@ -32,6 +32,7 @@ public class ATM {
 	
 	public void deposit(float money) {
 		money += account;
+		// insert code here
 	}
 	
 	public void withdraw() {

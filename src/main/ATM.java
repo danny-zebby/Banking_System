@@ -35,10 +35,10 @@ public class ATM {
 	}
 	
 	public void withdraw() {
-		
+		// insert code here
 	}
 	
 	public void transfer() {
-		
+		// insert code here
 	}
 }

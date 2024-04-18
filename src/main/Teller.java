@@ -40,11 +40,11 @@ public class Teller implements Comparable<Teller>{
 	}
 
 	public boolean getAdmin() {
-		return this.admin
+		return this.admin;
 	}
   
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
-	}
+//	public void setAdmin(boolean admin) {
+//		this.admin = admin;
+//	}
 	
 }

@@ -3,11 +3,13 @@ package main;
 import java.net.*;
 import java.io.*;
 import message.*;
+import java.util.Scanner;
 
 public class ATMClient {
 	Socket sock = null;
 	ObjectInputStream reader = null;
 	ObjectOutputStream writer = null;
+	Scanner scanner = null;
 	
 	private boolean setUpConnection() {
 		try {
@@ -48,13 +50,37 @@ public class ATMClient {
 			// handshake with server: ATM client hello
 			int id = 0;
 			// public HelloMessage(int id, String text, String to, String from, MessageType type, Status status)
-			HelloMessage clientHello = new HelloMessage(id, "ATM Client Hello", "Server", "ATM",
-									MessageType.HELLO, Status.ONGOING);
+			HelloMessage clientHello = new HelloMessage(id, "ATM Client Hello", "Server", "ATM", Status.ONGOING);
 			writer.writeObject(clientHello);
 			HelloMessage serverHello = (HelloMessage) reader.readObject();
 			if (serverHello.getID() == ++id && serverHello.getStatus() == Status.SUCCESS) {
 				System.out.println("client-server handshake successfully");
 			}
+			
+			// ATM login
+			while (true) {
+				// create new login message
+				LoginMessage loginMessage = loginRequest(++id);
+				// send login message to server
+				writer.writeObject(loginMessage);
+				
+				// wait for loginMessage from server
+				LoginMessage loginReceipt = (LoginMessage) reader.readObject();
+				if ((loginReceipt.getStatus() == Status.SUCCESS)) { // if success, break while loop
+					break;
+				}
+				
+				System.out.println("Wrong user id or password. Please try again.\n");
+			} 
+			
+			// wait for bankuser object from server
+			BankUser user = (BankUser) reader.readObject();
+			// print out user object
+			System.out.println("current user: ");
+			System.out.println(user);
+			
+			
+			// request info from all accounts of current user
 			
 			
 			// codes go here...
@@ -72,6 +98,27 @@ public class ATMClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+	}
+	
+	public LoginMessage loginRequest(int id) {
+		scanner = new Scanner(System.in);
+		int userId;
+		while (true) { // get valid user id from user
+			System.out.println("Enter user id: ");
+			try {
+				userId = Integer.parseInt(scanner.nextLine());
+				break;
+			} catch (Exception e) {
+				System.out.println("Invalid user id. User id only contains digits. Please try again. \n");
+			}
+		}
+		
+		System.out.println("Enter your password: ");
+		String password = scanner.nextLine();
+		
+		//LoginMessage(int id, String to, String from, Status status, int userId, String password)
+		return new LoginMessage(id, "Server", "ATM", Status.ONGOING, userId, password);
 		
 	}
 	

@@ -6,7 +6,6 @@ public interface MessageInterface {
 	public String getText();
 	public String getTo();
 	public String getFrom();
-	public MessageType getType();
 	public Status getStatus();
 	public String toString();
 	

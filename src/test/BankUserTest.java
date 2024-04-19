@@ -148,19 +148,4 @@ class BankUserTest {
 		assertEquals(250.75,BU.getCash());
 	}
 	
-	@Test
-	@Order(11)
-	@DisplayName("Compare")
-	void test11() {
-		String n = "BOB";
-		String b = "01/23/45";
-		String p = "abcd1234";
-		BankUser BU = new BankUser(n,b,p);
-		assertEquals(0,BU.compareTo(BU));
-		
-		BankUser BU2 = new BankUser(n,b,p);
-		assertEquals(0,BU2.compareTo(BU2));
-		assertEquals(-1,BU.compareTo(BU2));
-		assertEquals(1,BU2.compareTo(BU));
-	}
 }

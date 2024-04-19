@@ -1,15 +1,16 @@
 package main;
 import message.AccountType;
 import java.util.*;
+import java.io.Serializable;
 
-public class BankAccount implements Comparable<BankAccount>{
+public class BankAccount implements Serializable{
 	private static int count = 0;
 	
 	private final int accountNumber;
 	private final AccountType accountType;
 	private int accountPin;
 	private double balance;
-	private List<BankUser> users;
+	private List<Integer> users;
 	private int adminID; // the user id of the admin user
 	
 	// Constructor
@@ -18,7 +19,7 @@ public class BankAccount implements Comparable<BankAccount>{
 		this.accountPin = accountPin;
 		this.balance = 0;
 		this.accountType = accountType;
-		this.users = new ArrayList<BankUser>();
+		this.users = new ArrayList<Integer>();
 		this.adminID = adminID;
 	}
 	
@@ -47,16 +48,15 @@ public class BankAccount implements Comparable<BankAccount>{
 	}
 	
 	public void addUser(BankUser user) {
-		this.users.add(user);
+		this.users.add(user.getId());
 	}
 	
-	public List<BankUser> getUsers() {
-		Collections.sort(users);
+	public List<Integer> getUsers() {
 		return this.users;
 	}
 	
 	public boolean deleteUser(BankUser user) {
-		this.users.remove(user);
+		this.users.remove(user.getId());
 		return true;
 	}
 	
@@ -68,8 +68,11 @@ public class BankAccount implements Comparable<BankAccount>{
 		this.adminID = adminID;
 	}
 	
-	public int compareTo(BankAccount other) {
-		return this.accountNumber - other.accountNumber;
+	public String toString() {
+		return "BankUser info:\n" +
+				"accountNum: " + this.accountNumber + "\n" + 
+				"accountType: " + this.accountType + "\n" + 
+				"balance: " + String.format("%.2f", this.balance) + "\n" + 
+				"users: " + this.users + "\n";
 	}
-	
 }

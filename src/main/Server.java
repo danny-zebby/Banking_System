@@ -151,7 +151,7 @@ public class Server {
 					HelloMessage clientHello = (HelloMessage) obj;
 					System.out.println(clientHello.toString());
 					HelloMessage serverHello = new HelloMessage(clientHello.getID() + 1, "Server Hello", clientHello.getFrom(), 
-												clientHello.getTo(), MessageType.HELLO, Status.SUCCESS);
+												clientHello.getTo(), Status.SUCCESS);
 					writer.writeObject(serverHello);
 					
 					if (clientHello.getFrom().equals("ATM")) { // if it's from ATM, hand it to ATM handler

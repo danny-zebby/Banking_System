@@ -1,6 +1,7 @@
 package main;
 
 import java.io.*;
+import java.util.*;
 import java.net.*;
 import message.*;
 
@@ -12,6 +13,8 @@ public class TellerClient {
 	Socket sock = null;
 	ObjectInputStream reader = null;
 	ObjectOutputStream writer = null;
+	
+	Scanner scan;
 	
 	// Getters & Setters
 	public String getPort() {
@@ -56,41 +59,77 @@ public class TellerClient {
 	}
 	// Teller functions
 	public void addTeller() {
+		scan = new Scanner(System.in);
+		System.out.println("Enter name: ");
+		String name = scan.nextLine();
 		
+		scan = new Scanner(System.in);
+		System.out.println("Enter password: ");
+		String pw = scan.nextLine();
 	}
 	public void deleteTeller() {
-		
+		// no inputs are required from Teller
 	}
 	public void createUser() {
+		scan = new Scanner(System.in);
+		System.out.println("Enter name: ");
+		String name = scan.nextLine();
 		
+		scan = new Scanner(System.in);
+		System.out.println("Enter birthday: ");
+		String bday = scan.nextLine();
+		
+		scan = new Scanner(System.in);
+		System.out.println("Enter password: ");
+		String pw = scan.nextLine();
 	}
 	public void openLogs() {
-		
+		// no inputs are required from Teller
 	}
 	public void loginUserAccount() {
-		
+		scan = new Scanner(System.in);
+		System.out.println("Enter username: ");
+		String userId = scan.nextLine();
 	}
 	// !
 	public void checkTeller() {
-		
+		// needs clarification
 	}
 	
 	public void createAccount() {
-		
+		// no inputs are required from Teller
 	}
 	public void deleteAccount() {
+		scan = new Scanner(System.in);
+		System.out.println("Enter user id: ");
+		String userId = scan.nextLine();
 		
 	}
 	public void addUser() {
+		scan = new Scanner(System.in);
+		System.out.println("Enter user id: ");
+		String userId = scan.nextLine();
 		
 	}
 	public void deleteUser() {
+		scan = new Scanner(System.in);
+		System.out.println("Enter user id: ");
+		String userId = scan.nextLine();
 		
 	}
 	public void forgetPassword() {
+		scan = new Scanner(System.in);
+		System.out.println("Enter birthday: ");
+		String bd = scan.nextLine();
+		
+		System.out.println("Enter new password: ");
+		String pd = scan.nextLine();
 		
 	}
 	public void changePin() {
+		scan = new Scanner(System.in);
+		System.out.println("Enter new pin: ");
+		int num = scan.nextInt();
 		
 	}
 	public void transferAdmin() {

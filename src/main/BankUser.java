@@ -1,7 +1,8 @@
 package main;
 import java.util.*;
+import java.io.Serializable;
 
-public class BankUser implements Comparable<BankUser> {
+public class BankUser implements Serializable {
 	private static int count = 0;
 	
 	private String name;
@@ -9,7 +10,7 @@ public class BankUser implements Comparable<BankUser> {
 	private String password;
 	private final int id;
 	private double cash;
-	private List<BankAccount> accounts;
+	private List<Integer> accounts;
 	
 	public BankUser(String name, String birthday, String password) {
 		this.name = name;
@@ -17,11 +18,7 @@ public class BankUser implements Comparable<BankUser> {
 		this.password = password;
 		this.id = ++count;
 		this.cash = 0;
-		accounts = new ArrayList<BankAccount>();
-	}
-	
-	public int compareTo(BankUser one) {
-		return this.id - one.id;
+		accounts = new ArrayList<Integer>();
 	}
 
 	public String getName() {
@@ -49,25 +46,25 @@ public class BankUser implements Comparable<BankUser> {
 	}
 
 	public double getCash() {
-		return cash;
+		return this.cash;
 	}
 
 	public void setCash(double cash) {
 		this.cash = cash;
 	}
 
-	public List<BankAccount> getAccounts() {
+	public List<Integer> getAccounts() {
 		Collections.sort(accounts);
 		return accounts;
 	}
 
 	public void addAccount(BankAccount account) {
-		this.accounts.add(account);
+		this.accounts.add(account.getAccountNumber());
 		account.addUser(this);
 	}
 	
 	public boolean deleteAccount(BankAccount account) {
-		this.accounts.remove(account);
+		this.accounts.remove(account.getAccountNumber());
 		return true;
 	}
 
@@ -75,4 +72,20 @@ public class BankUser implements Comparable<BankUser> {
 		return id;
 	}
 	
+	public String toString() {
+		return "BankUser info:\n" +
+				"name: " + this.name + "\n" + 
+				"birthday: " + this.birthday + "\n" + 
+				"user id: " + this.id + "\n" + 
+				"cash: " + String.format("%.2f", this.cash) + "\n" + 
+				"accounts: " + this.accounts + "\n";
+	}
+	
+	public static void main(String[] args) {
+		String n1 = "BOB";
+		String b1 = "01/23/45";
+		String p1 = "abcd1234";
+		BankUser BU1 = new BankUser(n1,b1,p1);
+		System.out.println(BU1);
+	}
 }

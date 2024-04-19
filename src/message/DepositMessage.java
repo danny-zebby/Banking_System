@@ -28,12 +28,6 @@ public class DepositMessage implements MessageInterface, Serializable {
 	}
 
 	@Override
-	public MessageType getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Status getStatus() {
 		// TODO Auto-generated method stub
 		return null;

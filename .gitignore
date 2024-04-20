@@ -4,3 +4,12 @@
 .DS_Store
 .settings/
 /src/module-info.java
+.breakpoints
+.replit
+Main.class
+pom.xml
+replit.nix
+/target
+src/main/*.class
+src/message/*.class
+src/test/*.class

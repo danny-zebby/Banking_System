@@ -69,7 +69,7 @@ public class BankAccount implements Serializable{
 	}
 	
 	public String toString() {
-		return "BankUser info:\n" +
+		return "BankAccount info:\n" +
 				"accountNum: " + this.accountNumber + "\n" + 
 				"accountType: " + this.accountType + "\n" + 
 				"balance: " + String.format("%.2f", this.balance) + "\n" + 

@@ -177,7 +177,7 @@ public class TellerClient {
 			// handshake with server: Teller client hello
 			int id = 0;
 			// public HelloMessage(int id, String text, String to, String from, MessageType type, Status status)
-			HelloMessage clientHello = new HelloMessage(id, "Teller Client Hello", "Server", "Teller", Status.ONGOING);
+			HelloMessage clientHello = new HelloMessage(id, "Teller", Status.ONGOING);
 			writer.writeObject(clientHello);
 			HelloMessage serverHello = (HelloMessage) reader.readObject();
 			if (serverHello.getID() == ++id && serverHello.getStatus() == Status.SUCCESS) {

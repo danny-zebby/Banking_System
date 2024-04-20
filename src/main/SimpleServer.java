@@ -34,7 +34,7 @@ public class SimpleServer {
 		new SimpleServer().go();
 	}
 	
-	public void go() {
+	public void hardCodeSetUp() {
 		String name = "Donny";
 		String birthday = "04/23/2000";
 		String password = "letmein";
@@ -44,11 +44,11 @@ public class SimpleServer {
 		BankAccount acc2 = addAccount(1234, AccountType.SAVING, user1);
 		BankAccount acc3 = addAccount(3333, AccountType.CHECKING, user2);
 		BankAccount acc4 = addAccount(4444, AccountType.CHECKING, user2);
+	}
+	
+	public void go() {
 		
-//		System.out.println("Userlist: " + this.getUserList() + "\n");
-//		System.out.println("accountList: " + this.getAccountList() + "\n");
-//		System.out.println("activeUsers: " + this.getActiveUsers() + "\n");
-//		System.out.println("activeAccounts: " + this.getActiveAccounts() + "\n");
+		hardCodeSetUp();
 		
 		// set up thread pool
 		ExecutorService threadPool = Executors.newFixedThreadPool(20);
@@ -127,57 +127,74 @@ public class SimpleServer {
 					// if user exists and password is correct, return success message, user info and break
 					if ( userLogin(userId, password) ) {
 						//  LoginMessage(int id, String to, String from, Status status, String text)
-						loginReceipt = new LoginMessage(msgId + 1, loginMessage.getFrom(), loginMessage.getTo(), Status.SUCCESS, "Login in successfully");
+						loginReceipt = new LoginMessage(msgId + 1, Status.SUCCESS);
 						writer.writeObject(loginReceipt); // send loginReceipt
 						writer.writeObject(userList.get(userId)); // send BankUser object to client
 						System.out.println("ATM client logged in with user: " + userList.get(userId).getName());
 						break;
 					} else { // fail to login
 						// return error message
-						loginReceipt = new LoginMessage(msgId + 1, loginMessage.getFrom(), loginMessage.getTo(), Status.ERROR, "Fail to login");
+						loginReceipt = new LoginMessage(msgId + 1, Status.ERROR);
 						writer.writeObject(loginReceipt); // send loginReceipt
 					}
 				}
 				
 				
 				// Wait for Account Message
-				
-				
-				
-//				// handle remaining messages
-//				while ( (obj = reader.readObject()) != null ) {
-//					
-//					if (obj instanceof LoginMessage) {
-//						LoginMessage msg = (LoginMessage) obj;
-//						// ignore this message
-//						
-//					} else if (obj instanceof LogoutMessage) {
-//						LogoutMessage msg = (LogoutMessage) obj;
-//						// code goes here
-//						
-//					} else if (obj instanceof DepositMessage) {
-//						DepositMessage msg = (DepositMessage) obj;
-//						// code goes here
-//						
-//					} else if (obj instanceof WithdrawMessage) {
-//						WithdrawMessage msg = (WithdrawMessage) obj;
-//						// code goes here
-//						
-//					} else if (obj instanceof TransferMessage) {
-//						TransferMessage msg = (TransferMessage) obj;
-//						// code goes here
-//						
-//					} else {
-//						// ignore this message
-//					}
-//					
-//				} // end while loop
+				while ( (obj = reader.readObject()) != null ) {
+					
+					if (obj instanceof LoginMessage) {
+						LoginMessage msg = (LoginMessage) obj;
+						// ignore this message
+						
+					} else if (obj instanceof LogoutMessage) {
+						LogoutMessage msg = (LogoutMessage) obj;
+						// code goes here
+						
+					} else if (obj instanceof DepositMessage) {
+						DepositMessage msg = (DepositMessage) obj;
+						// code goes here
+						
+					} else if (obj instanceof WithdrawMessage) {
+						WithdrawMessage msg = (WithdrawMessage) obj;
+						// code goes here
+						
+					} else if (obj instanceof TransferMessage) {
+						TransferMessage msg = (TransferMessage) obj;
+						// code goes here
+						
+					} else if (obj instanceof AccountMessage) {
+						AccountMessage msg = (AccountMessage) obj;
+						// code goes here
+						int currUserId = msg.getCurrUserId();
+						int accountNumber = msg.getAccountNumber();
+						int id = msg.getID() + 1;
+						synchronized (activeAccounts) {
+							if (accountList.get(accountNumber).getUsers().contains(currUserId) && activeAccounts.get(accountNumber) == false) {
+								activeAccounts.replace(accountNumber, true);
+								// int id, int currUserId, int accountNumber, Status status
+								AccountMessage msgReceipt = new AccountMessage(id, currUserId, accountNumber, Status.SUCCESS);
+								writer.writeObject(msgReceipt);
+								writer.writeObject(accountList.get(accountNumber));
+							} else { // Invalid request
+								AccountMessage msgReceipt = new AccountMessage(id, currUserId, accountNumber, Status.ERROR);
+								writer.writeObject(msgReceipt);
+							}
+						}
+						
+						
+					} else {
+						// ignore the message
+					}
+					
+				} // end while loop
 				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
 		} // end method atmHandler
+		
 		
 		
 		private void tellerHandler() {
@@ -226,6 +243,27 @@ public class SimpleServer {
 			
 		} // end method tellerHandler
 		
+		
+		private HelloMessage handshake() {
+			Object obj = null;
+			HelloMessage clientHello = null;
+			try {
+				// receive hello messages and recognize which client (ATM/Teller) it's connected to
+				obj = reader.readObject();
+				if (obj instanceof HelloMessage) {
+					clientHello = (HelloMessage) obj;
+					System.out.println(clientHello.toString());
+					HelloMessage serverHello = new HelloMessage(clientHello.getID() + 1, "Server", Status.SUCCESS);
+					writer.writeObject(serverHello);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return clientHello;
+			
+		}
+		
+		
 		public void run() {
 			// print out connection info
 			System.out.println("A client is connected: " + this.sock);
@@ -234,27 +272,16 @@ public class SimpleServer {
 			try {
 				reader = new ObjectInputStream(sock.getInputStream());
 				writer = new ObjectOutputStream(sock.getOutputStream());
-				Object obj;
 				
-				// receive hello messages and recognize which client (ATM/Teller) it's connected to
-				obj = reader.readObject();
-				if (obj instanceof HelloMessage) {
-					HelloMessage clientHello = (HelloMessage) obj;
-					System.out.println(clientHello.toString());
-					HelloMessage serverHello = new HelloMessage(clientHello.getID() + 1, "Server Hello", clientHello.getFrom(), 
-												clientHello.getTo(), Status.SUCCESS);
-					writer.writeObject(serverHello);
-					
-					if (clientHello.getFrom().equals("ATM")) { // if it's from ATM, hand it to ATM handler
-						System.out.println("An ATM is connected: " + this.sock);
-						atmHandler();
-					} else { // if it's from Teller, hand it to Teller handler
-						System.out.println("A Teller is connected: " + this.sock);
-						tellerHandler();
-					}
+				HelloMessage clientHello = handshake(); // handshake with client
+				
+				if (clientHello.getFrom().equals("ATM")) { // if it's from ATM, hand it to ATM handler
+					System.out.println("An ATM is connected: " + this.sock);
+					atmHandler();
+				} else { // if it's from Teller, hand it to Teller handler
+					System.out.println("A Teller is connected: " + this.sock);
+					tellerHandler();
 				}
-				
-				
 				
 				// after sending logout messages to client
 				// close reader

@@ -138,6 +138,17 @@ public class ATMClient {
         System.out.println("Enter recipient account number: ");
         int toAccountNumber = scanner.nextInt();
         scanner.nextLine();
+        
+        // verify from server the recipient's info
+        // send an account message to the server
+        // expected an SUCCESS status of accountmsg
+        // expected a BankAccount obj
+        // for each user of this account, send user info msg to server
+        	// expected SUCCESS of user info msg
+        	// expected bank-user obj
+        // show the confirmation msg with all the user names and amount of money
+        
+        
         System.out.println("Enter the amount to transfer: ");
         double amount = scanner.nextDouble();
         scanner.nextLine();

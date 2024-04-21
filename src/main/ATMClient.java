@@ -143,6 +143,7 @@ public class ATMClient {
         // send an account message to the server
         // expected an SUCCESS status of accountmsg
         // expected a BankAccount obj
+        // init list of string to store user names
         // for each user of this account, send user info msg to server
         	// expected SUCCESS of user info msg
         	// expected bank-user obj

@@ -117,13 +117,17 @@ public class SimpleServer {
         }
 
         private int withdraw(int id, int accountNumber, double amount) {
+        	// calculating a new balance
             double newBalance = accountList.get(accountNumber).getBalance() - amount;
+            // create new account obj
             BankAccount account = accountList.get(accountNumber);
+            // set the new balance to the new account obj
             account.setBalance(newBalance);
             // print
             System.out.println("new account info: " + account);
             try {
                 // send new account object to client
+            	writer.reset();
                 writer.writeObject(account);
             } catch (Exception e) {
                 e.printStackTrace();

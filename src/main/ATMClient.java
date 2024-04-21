@@ -60,10 +60,11 @@ public class ATMClient {
             // int id, Status status, int accountNumber, double withdrawAmount, int pin
             WithdrawMessage msg = new WithdrawMessage(id, Status.ONGOING, accountNumber, amount, accountPin);
             // send message to server
+            writer.reset();
             writer.writeObject(msg);
-
             // wait for withdraw message receipt
             WithdrawMessage msgReceipt = (WithdrawMessage) reader.readObject();
+            
             if (msgReceipt.getStatus() == Status.SUCCESS) {
                 // expect a new Account object
                 BankAccount newAccount = (BankAccount) reader.readObject();
@@ -73,6 +74,7 @@ public class ATMClient {
                 System.out.println("new Account: " + newAccount);
                 // show updated accounts
                 System.out.println("Updated accounts: " + accounts);
+                
             } else {
                 System.out.println("Fail to withdraw $" + amount + " from account " + accountNumber);
             }
@@ -84,7 +86,7 @@ public class ATMClient {
         return ++id;
     } // end method withdraw
 
-    public void deposit(int id) {
+    public int deposit(int id) {
     try {
     // get inputs: acc#, amount, pin
     scanner = new Scanner(System.in);
@@ -100,13 +102,13 @@ public class ATMClient {
 
     // create a deposit message
     // int id, Status status, int accountNumber, double depositAmount, int pin
-    depositMessage msg = new depositMessage(id, Status.ONGOING, accountNumber, amount,
+    DepositMessage msg = new DepositMessage(id, Status.ONGOING, accountNumber, amount,
     accountPin);
     // send a message to server
     writer.writeObject(msg);
 
     // wait for a deposit message receipt
-    depositMessage msgReceipt = (depositMessage) reader.readObject();
+    DepositMessage msgReceipt = (DepositMessage) reader.readObject();
 
     if (msgReceipt.getStatus() == Status.SUCCESS) {
     // expect a new Account object
@@ -118,7 +120,7 @@ public class ATMClient {
       System.out.println("Fail to deposit $" + amount + " to account " +
     accountNumber);
     }
-    } catch (expection e) {
+    } catch (Exception e) {
     e.printStackTrace();
     }
 
@@ -126,7 +128,7 @@ public class ATMClient {
 
     } // end method deposit
 
-    public void transfer(int id) {
+    public int transfer(int id) {
       try {
         // get inputs: acc#, amount, pin
         scanner = new Scanner(System.in);
@@ -142,18 +144,21 @@ public class ATMClient {
         System.out.println("Enter the account pin: ");
         int accountPin = scanner.nextInt();
         scanner.nextLine();
+        
         // create a transfer message
         // int id, Status status, int accountNumber, double transferAmount, int pin
-        transferMessage msg = new transferMessage(id, Status.ONGOING, fromAccountNumber, toAccountNumber, amount, pin);
+        TransferMessage msg = new TransferMessage(id, Status.ONGOING, fromAccountNumber, toAccountNumber, amount, accountPin);
         // send a message to server
-        TransferMessage msgReceipt = (TransferMessage) reader.readObject();
+        writer.writeObject(msg);
+        
         // wait for a transfer message receipt
-        TransferMessage msgReceipt = (TransferMessage) reader.readobject();
+        TransferMessage msgReceipt = (TransferMessage) reader.readObject();
+        
         if (msgReceipt.getStatus() == Status.SUCCESS) {
           // expeect a new Account object
           BankAccount newAccount = (BankAccount) reader.readObject();
           // update accounts
-          accounts.put(accountNumber, newAccount);
+          accounts.put(fromAccountNumber, newAccount);
           // print out newAccount
           System.out.println("new Account: " + newAccount);
           // show updated accounts
@@ -167,7 +172,7 @@ public class ATMClient {
       }
 
       return ++id;
-    } // eend method transfer
+    } // end method transfer
 
     public void go() {
 

@@ -59,7 +59,8 @@ public class ATMClient {
             // create a withdraw message
             // int id, Status status, int accountNumber, double withdrawAmount, int pin
             WithdrawMessage msg = new WithdrawMessage(id, Status.ONGOING, accountNumber, amount, accountPin);
-            writer.writeObject(msg); // send message to server
+            // send message to server
+            writer.writeObject(msg);
 
             // wait for withdraw message receipt
             WithdrawMessage msgReceipt = (WithdrawMessage) reader.readObject();
@@ -83,46 +84,90 @@ public class ATMClient {
         return ++id;
     } // end method withdraw
 
-    // public void deposit(int id) {
-    // try {
-    // // get inputs: acc#, amount, pin
-    // scanner = new Scanner(System.in);
-    // System.out.println("Enter the account number: ");
-    // int accountNumber = scanner.nextInt();
-    // scanner.nextLine();
-    // System.out.println("Enter the amount to deposit: ");
-    // double amount = scanner.nextDouble();
-    // scanner.nextLine();
-    // System.out.println("Enter the account pin: ");
-    // int accountPin = scanner.nextInt();
-    // scanner.nextLine();
+    public void deposit(int id) {
+    try {
+    // get inputs: acc#, amount, pin
+    scanner = new Scanner(System.in);
+    System.out.println("Enter the account number: ");
+    int accountNumber = scanner.nextInt();
+    scanner.nextLine();
+    System.out.println("Enter the amount to deposit: ");
+    double amount = scanner.nextDouble();
+    scanner.nextLine();
+    System.out.println("Enter the account pin: ");
+    int accountPin = scanner.nextInt();
+    scanner.nextLine();
 
-    // // create a deposit message
-    // // int id, Status status, int accountNumber, double depositAmount, int pin
-    // depositMessage msg = new depositMessage(id, accountNumber, amount,
-    // accountPin);
-    // // send a message to server
-    // writer.writeObject(msg);
+    // create a deposit message
+    // int id, Status status, int accountNumber, double depositAmount, int pin
+    depositMessage msg = new depositMessage(id, Status.ONGOING, accountNumber, amount,
+    accountPin);
+    // send a message to server
+    writer.writeObject(msg);
 
-    // // wait for a deposit message receipt
-    // depositMessage msgReceipt = (depositMessage) reader.readObject();
+    // wait for a deposit message receipt
+    depositMessage msgReceipt = (depositMessage) reader.readObject();
 
-    // if (msgReceipt.getStatus() == Status.SUCCESS) {
-    // // expect a new Account object
-    // BankAccount newAccount = (BankAccount) reader.readObject();
-    // // update accounts
-    // accounts.replace(accountNumber, newAccount);
-    // } else {
-    // System.out.println("Fail to deposit $" + amount + " to account " +
-    // accountNumber);
-    // }
-    // } catch (expection e) {
-    // e.printStackTrace();
-    // }
+    if (msgReceipt.getStatus() == Status.SUCCESS) {
+    // expect a new Account object
+    BankAccount newAccount = (BankAccount) reader.readObject();
+    // update accounts
+    accounts.replace(accountNumber, newAccount);
+    } else {
+  
+      System.out.println("Fail to deposit $" + amount + " to account " +
+    accountNumber);
+    }
+    } catch (expection e) {
+    e.printStackTrace();
+    }
 
-    // return ++id;
+    return ++id;
 
-    // } // end method deposit
+    } // end method deposit
+
+    public void transfer(int id) {
+      try {
+        // get inputs: acc#, amount, pin
+        scanner = new Scanner(System.in);
+        System.out.println("Enter your account number: ");
+        int fromAccountNumber = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter recipient account number: ");
+        int toAccountNumber = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter the amount to transfer: ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
+        System.out.println("Enter the account pin: ");
+        int accountPin = scanner.nextInt();
+        scanner.nextLine();
+        // create a transfer message
+        // int id, Status status, int accountNumber, double transferAmount, int pin
+        transferMessage msg = new transferMessage(id, Status.ONGOING, fromAccountNumber, toAccountNumber, amount, pin);
+        // send a message to server
+        TransferMessage msgReceipt = (TransferMessage) reader.readObject();
+        // wait for a transfer message receipt
+        TransferMessage msgReceipt = (TransferMessage) reader.readobject();
+        if (msgReceipt.getStatus() == Status.SUCCESS) {
+          // expeect a new Account object
+          BankAccount newAccount = (BankAccount) reader.readObject();
+          // update accounts
+          accounts.put(accountNumber, newAccount);
+          // print out newAccount
+          System.out.println("new Account: " + newAccount);
+          // show updated accounts
+          System.out.println("Updated accounts: " + accounts);
+        } else {
+          System.out.println("Fail to transfer $" + amount + " from account " + fromAccountNumber + " to account " + toAccountNumber);
+        }
+        
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+
+      return ++id;
+    } // eend method transfer
 
     public void go() {
 

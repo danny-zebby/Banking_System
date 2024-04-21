@@ -1,42 +1,44 @@
 package message;
+
 import java.io.Serializable;
 
 public class LoginMessage implements MessageInterface, Serializable {
+  final int id;
+  final Status status;
+  final int userId;
+  final String password;
 
-	@Override
-	public int getID() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+  // constructors
+  public LoginMessage(int id, Status status, int userId, String password) {
+    this.id = id;
+    this.status = status;
+    this.userId = userId;
+    this.password = password;
+  }
 
-	@Override
-	public String getText() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  public LoginMessage(int id, Status status) {
+    this.id = id;
+    this.status = status;
+    this.userId = 0;
+    this.password = null;
+  }
 
-	@Override
-	public String getTo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  // getters
+  @Override
+  public int getID() {
+    return this.id;
+  }
 
-	@Override
-	public String getFrom() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Override
+  public Status getStatus() {
+    return this.status;
+  }
 
-	@Override
-	public MessageType getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  public int getUserId() {
+    return this.userId;
+  }
 
-	@Override
-	public Status getStatus() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+  public String getPassword() {
+    return this.password;
+  }
 }

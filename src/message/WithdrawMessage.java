@@ -1,42 +1,45 @@
 package message;
+
 import java.io.Serializable;
 
-public class WithdrawMessage implements MessageInterface, Serializable{
+public class WithdrawMessage implements MessageInterface, Serializable {
+    final int id;
+    final Status status;
+    final int accountNumber;
+    final double withdrawAmount;
+    final int pin;
 
-	@Override
-	public int getID() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    public WithdrawMessage(int id, Status status, int accountNumber, double withdrawAmount, int pin) {
+        this.id = id;
+        this.status = status;
+        this.accountNumber = accountNumber;
+        this.withdrawAmount = withdrawAmount;
+        this.pin = pin;
+    }
 
-	@Override
-	public String getText() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public WithdrawMessage(int id, Status status) {
+        this(id, status, -1, -1, -1);
+    }
 
-	@Override
-	public String getTo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public int getID() {
+        return this.id;
+    }
 
-	@Override
-	public String getFrom() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Status getStatus() {
+        return this.status;
+    }
 
-	@Override
-	public MessageType getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public int getAccountNumber() {
+        return this.accountNumber;
+    }
 
-	@Override
-	public Status getStatus() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
+    public double getWithdrawAmount() {
+        return this.withdrawAmount;
+    }
+
+    public int getPin() {
+        return this.pin;
+    }
 }

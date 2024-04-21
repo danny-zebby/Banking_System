@@ -2,41 +2,44 @@ package message;
 import java.io.Serializable;
 
 public class DepositMessage implements MessageInterface, Serializable {
+  final int id;
+  final Status status;
+  final int accountNumner;
+  final double depositAmount;
+  final int pin;
+
+  public DepositMessage(int id, Status status, int account, double depositAmount, int pin) {
+    this.id = id;
+    this.status = status;
+    this.accountNumner = account;
+    this.depositAmount = depositAmount;
+    this.pin = pin;
+  }
+
+  public DepositMessage(int id, Status status) {
+    this(id, status, -1, -1, -1);
+  }
 
 	@Override
 	public int getID() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public String getText() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getTo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getFrom() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public MessageType getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.id;
 	}
 
 	@Override
 	public Status getStatus() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.status;
 	}
+
+  public int getAccountNumner() {
+    return this.accountNumner;
+  }
+
+  public double getDepositAmount() {
+    return this.depositAmount;
+  }
+  
+  public int getPin() {
+    return this.pin;
+  }
 
 }

@@ -113,11 +113,12 @@ public class SimpleServer {
             // check if it is available to withdraw
             // - accountNumber and pin matches
             // - amount < balance
-            return (accountList.containsKey(accountNumber) && accountList.get(accountNumber).getAccountPin() == pin);
+            return (accountList.containsKey(accountNumber) && accountList.get(accountNumber).getAccountPin() == pin
+                    && accountList.get(accountNumber).getBalance() >= amount);
         }
 
         private int withdraw(int id, int accountNumber, double amount) {
-        	// calculating a new balance
+            // calculating a new balance
             double newBalance = accountList.get(accountNumber).getBalance() - amount;
             // create new account obj
             BankAccount account = accountList.get(accountNumber);
@@ -127,13 +128,71 @@ public class SimpleServer {
             System.out.println("new account info: " + account);
             try {
                 // send new account object to client
-            	writer.reset();
+                writer.reset();
                 writer.writeObject(account);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             return ++id;
+        }
+
+        // deposit
+        // deposit
+        public boolean checkDeposit(int accountNumber, double amount, int pin) {
+            // check if it is available to withdraw
+            // - accountNumber and pin matches
+            // - amount < balance
+            return (accountList.containsKey(accountNumber) && accountList.get(accountNumber).getAccountPin() == pin);
+        }
+
+        private int deposit(int id, int accountNumber, double amount) {
+            // calculating a new balance
+            double newBalance = accountList.get(accountNumber).getBalance() + amount;
+            // create new account obj
+            BankAccount account = accountList.get(accountNumber);
+            // set the new balance to the new account obj
+            account.setBalance(newBalance);
+            // print
+            System.out.println("new account info: " + account);
+            try {
+                // send new account object to client
+                writer.writeUnshared(account);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return ++id;
+        }
+
+        public boolean checkTransfer(int fromAccountNumber, double amount, int pin) {
+            // if account number and pin matches and amount <= balance
+            return (accountList.containsKey(fromAccountNumber)
+                    && accountList.get(fromAccountNumber).getAccountPin() == pin
+                    && accountList.get(fromAccountNumber).getBalance() >= amount);
+        }
+
+        private int transfer(int id, int fromAccountNumber, int toAccountNumber, double amount) {
+            BankAccount account = accountList.get(fromAccountNumber);
+            double newBalance = account.getBalance() - amount;
+            account.setBalance(newBalance);
+            // print
+            System.out.println("new account info: " + account);
+            try {
+                // send new account object to client
+                writer.reset();
+                writer.writeObject(account);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // update recipient account
+            BankAccount recipientAccount = accountList.get(toAccountNumber);
+            double recipientNewBalance = recipientAccount.getBalance() + amount;
+            recipientAccount.setBalance(recipientNewBalance);
+            System.out.println("new recipient account info: " + recipientAccount);
+            return id++;
         }
 
         private void atmHandler() {
@@ -175,11 +234,26 @@ public class SimpleServer {
 
                     } else if (obj instanceof LogoutMessage) {
                         LogoutMessage msg = (LogoutMessage) obj;
-                        // code goes here
+                        LogoutMessage logoutReceipt = new LogoutMessage(msg.getID() + 1, Status.SUCCESS);
+                        writer.writeObject(logoutReceipt);
+                        atmHandler();
 
                     } else if (obj instanceof DepositMessage) {
-                        DepositMessage msg = (DepositMessage) obj;
                         // code goes here
+                        DepositMessage msg = (DepositMessage) obj;
+                        int accountNumber = msg.getAccountNumner();
+                        double amount = msg.getDepositAmount();
+                        int pin = msg.getPin();
+                        int id = msg.getID();
+                        // if it is available to deposit
+                        if (checkDeposit(accountNumber, amount, pin)) {
+                            writer.writeObject(new DepositMessage(msg.getID(), Status.SUCCESS));
+                            // deposit
+                            deposit(++id, accountNumber, amount);
+                        } else { // is it is not available to deposit
+                            // return error message
+                            writer.writeObject(new DepositMessage(msg.getID(), Status.ERROR));
+                        }
 
                     } else if (obj instanceof WithdrawMessage) {
                         WithdrawMessage msg = (WithdrawMessage) obj;
@@ -200,7 +274,27 @@ public class SimpleServer {
 
                     } else if (obj instanceof TransferMessage) {
                         TransferMessage msg = (TransferMessage) obj;
-                        // code goes here
+                        int id = msg.getID() + 1;
+                        int fromAccountNumber = msg.getFromAccountNumber();
+                        int toAccountNumber = msg.getToAccountNumber();
+                        double transferAmount = msg.getTransferAmount();
+                        int pin = msg.getPin();
+
+                        TransferMessage msgReceipt;
+                        if (msg.getStatus() == Status.ONGOING
+                                && checkTransfer(fromAccountNumber, transferAmount, pin)) {
+                            msgReceipt = new TransferMessage(id, Status.SUCCESS, fromAccountNumber, toAccountNumber,
+                                    transferAmount);
+                            id++;
+                            writer.writeUnshared(msgReceipt);
+
+                            id = transfer(id, fromAccountNumber, toAccountNumber, transferAmount);
+                        } else {
+                            msgReceipt = new TransferMessage(id, Status.ERROR, fromAccountNumber, toAccountNumber,
+                                    transferAmount);
+                            id++;
+                            writer.writeUnshared(msgReceipt);
+                        }
 
                     } else if (obj instanceof AccountMessage) {
                         AccountMessage msg = (AccountMessage) obj;
@@ -225,23 +319,31 @@ public class SimpleServer {
                         }
 
                     } else if (obj instanceof AccountInfoMessage) {
-                    	AccountInfoMessage msg = (AccountInfoMessage) obj;
-                    	int id = msg.getID() + 1;
-                    	int accountNumber = msg.getAccountNumber();
-                    	AccountInfoMessage msgReceipt;
-                    	if (msg.getStatus() == Status.ONGOING && accountList.containsKey(accountNumber)) {
-                    		msgReceipt = new AccountInfoMessage(id, Status.SUCCESS, accountNumber, accountList.get(accountNumber).getUsers());
-                    	} else {
-                    		msgReceipt = new AccountInfoMessage(id, Status.ERROR, accountNumber);
-                    	}
-                    	writer.writeUnshared(msgReceipt);
-                    	
-                    	
+                        AccountInfoMessage msg = (AccountInfoMessage) obj;
+                        int id = msg.getID() + 1;
+                        int accountNumber = msg.getAccountNumber();
+                        AccountInfoMessage msgReceipt;
+                        if (msg.getStatus() == Status.ONGOING && accountList.containsKey(accountNumber)) {
+                            msgReceipt = new AccountInfoMessage(id, Status.SUCCESS, accountNumber,
+                                    accountList.get(accountNumber).getUsers());
+                        } else {
+                            msgReceipt = new AccountInfoMessage(id, Status.ERROR, accountNumber);
+                        }
+                        writer.writeUnshared(msgReceipt);
+
                     } else if (obj instanceof UserInfoMessage) {
-                    	UserInfoMessage msg = (UserInfoMessage) obj;
-                    	// do sth
-                    }
-                    else {
+                        UserInfoMessage msg = (UserInfoMessage) obj;
+                        int id = msg.getID() + 1;
+                        int userId = msg.getUserID();
+                        UserInfoMessage msgReceipt;
+                        if (msg.getStatus() == Status.ONGOING && userList.containsKey(userId)) {
+                            msgReceipt = new UserInfoMessage(id, Status.SUCCESS, userId,
+                                    userList.get(userId).getName());
+                        } else {
+                            msgReceipt = new UserInfoMessage(id, Status.ERROR, userId);
+                        }
+                        writer.writeUnshared(msgReceipt);
+                    } else {
                         // ignore the message
                     }
 

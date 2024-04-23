@@ -105,7 +105,7 @@ public class ATMClient {
     		DepositMessage msg = new DepositMessage(id, Status.ONGOING, accountNumber, amount,
     				accountPin);
     		// send a message to server
-    		writer.writeObject(msg);
+    		writer.writeUnshared(msg);
 
     		// wait for a deposit message receipt
     		DepositMessage msgReceipt = (DepositMessage) reader.readObject();
@@ -115,6 +115,7 @@ public class ATMClient {
     			BankAccount newAccount = (BankAccount) reader.readObject();
     			// update accounts
     			accounts.replace(accountNumber, newAccount);
+          System.out.println("new Account: " + newAccount);
     		} else {
 
     			System.out.println("Fail to deposit $" + amount + " to account " +
@@ -176,11 +177,11 @@ public class ATMClient {
 
     				}
     				// show the confirmation msg with all the user names and amount of money
-    				System.out.printf("You are transferring $%f to account %d, which has users %s.\n", amount, toAccountNumber, recipentNames);
+    				System.out.printf("You are transferring $%.2f to account %d, which has users %s.\n", amount, toAccountNumber, recipentNames);
     				System.out.println("Please enter yes to confirm.");
     				String userInput = scanner.nextLine();
     				if (userInput.equalsIgnoreCase("YES")) {
-    					break;
+    					break; // if user confirms, break the while loop
     				} else {
     					continue;
     				}
@@ -188,9 +189,6 @@ public class ATMClient {
 
 
     		} // end while loop
-
-
-
 
 
     		System.out.println("Enter the account pin: ");
@@ -279,13 +277,29 @@ public class ATMClient {
             id = getAccountsInfo(id);
             // print out all accounts
             System.out.println("accounts: " + accounts);
-
-            // ATM withdraw
-            id = withdraw(id);
-            System.out.println("finish withdraw");
-            
-            // ATM transfer
-            id = transfer(id);
+          
+          // ATM functions
+            while(true) {
+              System.out.println("0-Withdraw\n1-Deposit\n2-Transfer\n3-LogOut");
+              int choice = scanner.nextInt();
+              switch (choice) {
+                case 0: id = withdraw(id); break;
+                case 1: id = deposit(id); break;
+                case 2: id = transfer(id); break;
+                case 3: 
+                  LogoutMessage msg = logoutRequest(id);
+                  writer.writeUnshared(msg);
+                  LogoutMessage msgBack = (LogoutMessage) reader.readObject();
+                  if (msgBack.getStatus() == Status.SUCCESS) {
+                    System.out.println("Logout was a success\nReturning to Login Screen:");
+                    id = newSession(1); break;
+                  }
+                  else {
+                    System.out.println("Logout failed contiune as User ID:" + user.getId());
+                    break;
+                  }
+              }
+            }
             
             
             // codes go here...
@@ -380,6 +394,12 @@ public class ATMClient {
         return new LoginMessage(id, Status.ONGOING, userId, password);
 
     }
+  
+  public LogoutMessage logoutRequest(int id) {
+
+      return new LogoutMessage(id, Status.ONGOING);
+
+  }
 
     public static void main(String[] args) {
         ATMClient client = new ATMClient();

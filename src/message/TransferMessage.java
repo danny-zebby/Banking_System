@@ -1,47 +1,58 @@
 package message;
+
 import java.io.Serializable;
 
-public class TransferMessage implements MessageInterface, Serializable{
-  final int id;
-  final Status status;
-  final int fromAccountNumber;
-  final int toAccountNumber;
-  final double transferAmount;
-  final int pin;
+public class TransferMessage implements MessageInterface, Serializable {
+    final int id;
+    final Status status;
+    final int fromAccountNumber;
+    final int toAccountNumber;
+    final double transferAmount;
+    final int pin;
 
-  public TransferMessage(int id, Status status, int fromAccountNumber, int toAccountNumber, double transferAmount, int pin) {
-    this.id = id;
-    this.status = status;
-    this.fromAccountNumber = fromAccountNumber;
-    this.toAccountNumber = toAccountNumber;
-    this.transferAmount = transferAmount;
-    this.pin = pin;
-  }
+    public TransferMessage(int id, Status status, int fromAccountNumber, int toAccountNumber, double transferAmount,
+            int pin) {
+        this.id = id;
+        this.status = status;
+        this.fromAccountNumber = fromAccountNumber;
+        this.toAccountNumber = toAccountNumber;
+        this.transferAmount = transferAmount;
+        this.pin = pin;
+    }
 
-	@Override
-	public int getID() {
-		return this.id;
-	}
+    public TransferMessage(int id, Status status, int fromAccountNumber, int toAccountNumber, double transferAmount) {
+        this.id = id;
+        this.status = status;
+        this.fromAccountNumber = fromAccountNumber;
+        this.toAccountNumber = toAccountNumber;
+        this.transferAmount = transferAmount;
+        this.pin = -1;
+    }
 
-	@Override
-	public Status getStatus() {
-		return this.status;
-	}
+    @Override
+    public int getID() {
+        return this.id;
+    }
 
-  public int getFromAccountNumber() {
-    return this.fromAccountNumber;
-  }
+    @Override
+    public Status getStatus() {
+        return this.status;
+    }
 
-  public int getToAccountNumber() {
-    return this.toAccountNumber;
-  }
+    public int getFromAccountNumber() {
+        return this.fromAccountNumber;
+    }
 
-  public double getTransferAmount() {
-    return this.transferAmount;
-  }
+    public int getToAccountNumber() {
+        return this.toAccountNumber;
+    }
 
-  public int getPin() {
-    return this.pin;
-  }
+    public double getTransferAmount() {
+        return this.transferAmount;
+    }
+
+    public int getPin() {
+        return this.pin;
+    }
 
 }

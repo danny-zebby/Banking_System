@@ -224,7 +224,24 @@ public class SimpleServer {
                             }
                         }
 
-                    } else {
+                    } else if (obj instanceof AccountInfoMessage) {
+                    	AccountInfoMessage msg = (AccountInfoMessage) obj;
+                    	int id = msg.getID() + 1;
+                    	int accountNumber = msg.getAccountNumber();
+                    	AccountInfoMessage msgReceipt;
+                    	if (msg.getStatus() == Status.ONGOING && accountList.containsKey(accountNumber)) {
+                    		msgReceipt = new AccountInfoMessage(id, Status.SUCCESS, accountNumber, accountList.get(accountNumber).getUsers());
+                    	} else {
+                    		msgReceipt = new AccountInfoMessage(id, Status.ERROR, accountNumber);
+                    	}
+                    	writer.writeUnshared(msgReceipt);
+                    	
+                    	
+                    } else if (obj instanceof UserInfoMessage) {
+                    	UserInfoMessage msg = (UserInfoMessage) obj;
+                    	// do sth
+                    }
+                    else {
                         // ignore the message
                     }
 

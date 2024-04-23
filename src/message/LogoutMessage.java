@@ -3,16 +3,24 @@ import java.io.Serializable;
 
 public class LogoutMessage implements MessageInterface, Serializable {
 
-	@Override
-	public int getID() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    final int id;
+    final Status status;
 
-	@Override
-	public Status getStatus() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    // constructors
+    public LogoutMessage(int id, Status status) {
+      this.id = id;
+      this.status = status;
+    }
+
+    // getters
+    @Override
+    public int getID() {
+      return this.id;
+    }
+
+    @Override
+    public Status getStatus() {
+      return this.status;
+    }
 
 }

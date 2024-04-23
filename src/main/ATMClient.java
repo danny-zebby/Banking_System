@@ -82,108 +82,146 @@ public class ATMClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        
         return ++id;
     } // end method withdraw
 
     public int deposit(int id) {
-    try {
-    // get inputs: acc#, amount, pin
-    scanner = new Scanner(System.in);
-    System.out.println("Enter the account number: ");
-    int accountNumber = scanner.nextInt();
-    scanner.nextLine();
-    System.out.println("Enter the amount to deposit: ");
-    double amount = scanner.nextDouble();
-    scanner.nextLine();
-    System.out.println("Enter the account pin: ");
-    int accountPin = scanner.nextInt();
-    scanner.nextLine();
+    	try {
+    		// get inputs: acc#, amount, pin
+    		scanner = new Scanner(System.in);
+    		System.out.println("Enter the account number: ");
+    		int accountNumber = scanner.nextInt();
+    		scanner.nextLine();
+    		System.out.println("Enter the amount to deposit: ");
+    		double amount = scanner.nextDouble();
+    		scanner.nextLine();
+    		System.out.println("Enter the account pin: ");
+    		int accountPin = scanner.nextInt();
+    		scanner.nextLine();
 
-    // create a deposit message
-    // int id, Status status, int accountNumber, double depositAmount, int pin
-    DepositMessage msg = new DepositMessage(id, Status.ONGOING, accountNumber, amount,
-    accountPin);
-    // send a message to server
-    writer.writeObject(msg);
+    		// create a deposit message
+    		// int id, Status status, int accountNumber, double depositAmount, int pin
+    		DepositMessage msg = new DepositMessage(id, Status.ONGOING, accountNumber, amount,
+    				accountPin);
+    		// send a message to server
+    		writer.writeUnshared(msg);
 
-    // wait for a deposit message receipt
-    DepositMessage msgReceipt = (DepositMessage) reader.readObject();
+    		// wait for a deposit message receipt
+    		DepositMessage msgReceipt = (DepositMessage) reader.readObject();
 
-    if (msgReceipt.getStatus() == Status.SUCCESS) {
-    // expect a new Account object
-    BankAccount newAccount = (BankAccount) reader.readObject();
-    // update accounts
-    accounts.replace(accountNumber, newAccount);
-    } else {
-  
-      System.out.println("Fail to deposit $" + amount + " to account " +
-    accountNumber);
-    }
-    } catch (Exception e) {
-    e.printStackTrace();
-    }
+    		if (msgReceipt.getStatus() == Status.SUCCESS) {
+    			// expect a new Account object
+    			BankAccount newAccount = (BankAccount) reader.readObject();
+    			// update accounts
+    			accounts.replace(accountNumber, newAccount);
+          System.out.println("new Account: " + newAccount);
+    		} else {
 
-    return ++id;
+    			System.out.println("Fail to deposit $" + amount + " to account " +
+    					accountNumber);
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+
+    	return ++id;
 
     } // end method deposit
 
     public int transfer(int id) {
-      try {
-        // get inputs: acc#, amount, pin
-        scanner = new Scanner(System.in);
-        System.out.println("Enter your account number: ");
-        int fromAccountNumber = scanner.nextInt();
-        scanner.nextLine();
-        System.out.println("Enter recipient account number: ");
-        int toAccountNumber = scanner.nextInt();
-        scanner.nextLine();
-        
-        // verify from server the recipient's info
-        // send an account message to the server
-        // expected an SUCCESS status of accountmsg
-        // expected a BankAccount obj
-        // init list of string to store user names
-        // for each user of this account, send user info msg to server
-        	// expected SUCCESS of user info msg
-        	// expected bank-user obj
-        // show the confirmation msg with all the user names and amount of money
-        
-        
-        System.out.println("Enter the amount to transfer: ");
-        double amount = scanner.nextDouble();
-        scanner.nextLine();
-        System.out.println("Enter the account pin: ");
-        int accountPin = scanner.nextInt();
-        scanner.nextLine();
-        
-        // create a transfer message
-        // int id, Status status, int accountNumber, double transferAmount, int pin
-        TransferMessage msg = new TransferMessage(id, Status.ONGOING, fromAccountNumber, toAccountNumber, amount, accountPin);
-        // send a message to server
-        writer.writeObject(msg);
-        
-        // wait for a transfer message receipt
-        TransferMessage msgReceipt = (TransferMessage) reader.readObject();
-        
-        if (msgReceipt.getStatus() == Status.SUCCESS) {
-          // expeect a new Account object
-          BankAccount newAccount = (BankAccount) reader.readObject();
-          // update accounts
-          accounts.put(fromAccountNumber, newAccount);
-          // print out newAccount
-          System.out.println("new Account: " + newAccount);
-          // show updated accounts
-          System.out.println("Updated accounts: " + accounts);
-        } else {
-          System.out.println("Fail to transfer $" + amount + " from account " + fromAccountNumber + " to account " + toAccountNumber);
-        }
-        
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+    	try {
+    		// get inputs: acc#, amount, pin
+    		scanner = new Scanner(System.in);
+    		System.out.println("Enter your account number: ");
+    		int fromAccountNumber;
+    		fromAccountNumber = scanner.nextInt();
+    		scanner.nextLine();
+    		
+    		int toAccountNumber;
+    		double amount;
+    		
+    		while (true) {
+    			System.out.println("Enter recipient account number: ");
+    			toAccountNumber = scanner.nextInt();
+    			scanner.nextLine();
+    			System.out.println("Enter the amount to transfer: ");
+    			amount = scanner.nextDouble();
+    			scanner.nextLine();
 
-      return ++id;
+    			// verify from server the recipient's info
+    			// send an account info message to the server: int id, int currUserId, int accountNumber, Status status
+    			AccountInfoMessage msg = new AccountInfoMessage(id, Status.ONGOING, toAccountNumber);
+    			writer.writeUnshared(msg);
+    			// expected an SUCCESS status of account info msg, containing all users linked to this recipent's account
+    			AccountInfoMessage msgReceipt = (AccountInfoMessage) reader.readObject();
+    			id = msgReceipt.getID() + 1;
+    			System.out.println("Received Account Info Message with users: " + msgReceipt.getUsers());
+    			
+    			
+    			// init list of string to store user names
+    			ArrayList<String> recipentNames = new ArrayList<>();
+
+    			if (msgReceipt.getStatus() == Status.SUCCESS) {
+    				// for each user of this account
+    				for (int userId : msgReceipt.getUsers()) {
+    					// send user info msg to server
+    					UserInfoMessage uiMsg = new UserInfoMessage(id, Status.ONGOING, userId);
+    					writer.writeUnshared(uiMsg);
+    					// expected SUCCESS of user info msg, which contains user name
+    					UserInfoMessage uiMsgReceipt = (UserInfoMessage) reader.readObject();
+    					id = uiMsgReceipt.getID() + 1;
+    					if (uiMsgReceipt.getStatus() == Status.SUCCESS) {
+    						recipentNames.add(uiMsgReceipt.getUserName()); // add user name to list
+    					}
+
+    				}
+    				// show the confirmation msg with all the user names and amount of money
+    				System.out.printf("You are transferring $%.2f to account %d, which has users %s.\n", amount, toAccountNumber, recipentNames);
+    				System.out.println("Please enter yes to confirm.");
+    				String userInput = scanner.nextLine();
+    				if (userInput.equalsIgnoreCase("YES")) {
+    					break; // if user confirms, break the while loop
+    				} else {
+    					continue;
+    				}
+    			}
+
+
+    		} // end while loop
+
+
+    		System.out.println("Enter the account pin: ");
+    		int accountPin = scanner.nextInt();
+    		scanner.nextLine();
+
+    		// create a transfer message
+    		// int id, Status status, int accountNumber, double transferAmount, int pin
+    		TransferMessage txMsg = new TransferMessage(id, Status.ONGOING, fromAccountNumber, toAccountNumber, amount, accountPin);
+    		// send a message to server
+    		writer.writeUnshared(txMsg);
+
+    		// wait for a transfer message receipt
+    		TransferMessage txMsgReceipt = (TransferMessage) reader.readObject();
+
+    		if (txMsgReceipt.getStatus() == Status.SUCCESS) {
+    			// expeect a new Account object
+    			BankAccount newAccount = (BankAccount) reader.readObject();
+    			// update accounts
+    			accounts.put(fromAccountNumber, newAccount);
+    			// print out newAccount
+    			System.out.println("new Account: " + newAccount);
+    			// show updated accounts
+    			System.out.println("Updated accounts: " + accounts);
+    		} else {
+    			System.out.println("Fail to transfer $" + amount + " from account " + fromAccountNumber + " to account " + toAccountNumber);
+    		}
+
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return ++id;
     } // end method transfer
 
     public void go() {
@@ -239,10 +277,31 @@ public class ATMClient {
             id = getAccountsInfo(id);
             // print out all accounts
             System.out.println("accounts: " + accounts);
-
-            // ATM withdraw
-            id = withdraw(id);
-
+          
+          // ATM functions
+            while(true) {
+              System.out.println("0-Withdraw\n1-Deposit\n2-Transfer\n3-LogOut");
+              int choice = scanner.nextInt();
+              switch (choice) {
+                case 0: id = withdraw(id); break;
+                case 1: id = deposit(id); break;
+                case 2: id = transfer(id); break;
+                case 3: 
+                  LogoutMessage msg = logoutRequest(id);
+                  writer.writeUnshared(msg);
+                  LogoutMessage msgBack = (LogoutMessage) reader.readObject();
+                  if (msgBack.getStatus() == Status.SUCCESS) {
+                    System.out.println("Logout was a success\nReturning to Login Screen:");
+                    id = newSession(1); break;
+                  }
+                  else {
+                    System.out.println("Logout failed contiune as User ID:" + user.getId());
+                    break;
+                  }
+              }
+            }
+            
+            
             // codes go here...
             // while loop
             // two options: ATM Login, exit
@@ -329,12 +388,18 @@ public class ATMClient {
 
         System.out.println("Enter your password: ");
         String password = scanner.nextLine();
-
+        
         // LoginMessage(int id, String to, String from, Status status, int userId,
         // String password)
         return new LoginMessage(id, Status.ONGOING, userId, password);
 
     }
+  
+  public LogoutMessage logoutRequest(int id) {
+
+      return new LogoutMessage(id, Status.ONGOING);
+
+  }
 
     public static void main(String[] args) {
         ATMClient client = new ATMClient();

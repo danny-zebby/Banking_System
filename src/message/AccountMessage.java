@@ -8,7 +8,7 @@ public class AccountMessage implements MessageInterface, Serializable {
 	final AccountMessageType type;
 	final HashMap<String, String> info;
 
-	
+
 	public AccountMessage(Status status, int accountNumber, int currUserId, int pin, AccountMessageType type) {
 		this.status = status;
 		this.type = type;
@@ -17,11 +17,11 @@ public class AccountMessage implements MessageInterface, Serializable {
 		this.info.put("currUserId", Integer.toString(currUserId));
 		this.info.put("pin", Integer.toString(pin));
 	}
-	
+
 	public AccountMessage(int currUserId, int accountNumber, Status status) {
 		this(status, accountNumber, currUserId, accountNumber, AccountMessageType.ACCOUNT_INFO);
 	}
-	
+
 	public AccountMessage(Status status, String name, String birthday, String password) {
 		this.status = status;
 		this.type = AccountMessageType.ADD_USER;
@@ -30,7 +30,7 @@ public class AccountMessage implements MessageInterface, Serializable {
 		this.info.put("birthday", birthday);
 		this.info.put("password", password);
 	}
-	
+
 	public AccountMessage(Status status, AccountMessageType type) {
 		this.status = status;
 		this.type = type;
@@ -45,11 +45,11 @@ public class AccountMessage implements MessageInterface, Serializable {
 	public Map<String, String> getInfo() {
 		return this.info;
 	}
-	
+
 	public AccountMessageType getType() {
 		return this.type;
 	}
-	
+
 	public int getAccountNumber() {
 		try {
 			return Integer.parseInt(info.get("accountNumber"));
@@ -82,8 +82,8 @@ public class AccountMessage implements MessageInterface, Serializable {
 		}
 	}
 
-	
 
-	
-	
+
+
+
 }

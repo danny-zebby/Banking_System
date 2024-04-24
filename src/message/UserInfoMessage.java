@@ -4,28 +4,20 @@ import java.io.Serializable;
 
 public class UserInfoMessage implements MessageInterface, Serializable {
 
-	private int id;
-	private Status status;
-	private int userId;
-	private String userName;
+	private final Status status;
+	private final int userId;
+	private final String userName;
 	
-	public UserInfoMessage(int id, Status status, int userId, String userName) {
-		this.id = id;
+	public UserInfoMessage(Status status, int userId, String userName) {
 		this.status = status;
 		this.userId = userId;
 		this.userName = userName;
 	}
 	
-	public UserInfoMessage(int id, Status status, int userId) {
-		this.id = id;
+	public UserInfoMessage(Status status, int userId) {
 		this.status = status;
 		this.userId = userId;
 		this.userName = "";
-	}
-	
-	@Override
-	public int getID() {
-		return id;
 	}
 
 	@Override

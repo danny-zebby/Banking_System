@@ -1,4 +1,4 @@
-package ATM;
+package gui.ATM;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,6 +1,8 @@
 package main;
 
-public class Teller implements Comparable<Teller>{
+import java.io.Serializable;
+
+public class Teller implements Comparable<Teller>, Serializable{
 	private static int count = 0;
   
   	private String name;
@@ -42,9 +44,11 @@ public class Teller implements Comparable<Teller>{
 	public boolean getAdmin() {
 		return this.admin;
 	}
-  
-//	public void setAdmin(boolean admin) {
-//		this.admin = admin;
-//	}
-	
+
+	public String toString() {
+		return "Teller info:\n" +
+		        "teller id: " + this.id + "\n" +
+		        "name: " + this.name + "\n" +
+		        "Is admin: " + this.admin + "\n"; 
+	}
 }

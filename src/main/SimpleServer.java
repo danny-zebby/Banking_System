@@ -43,6 +43,9 @@ public class SimpleServer {
         BankAccount acc2 = addAccount(1234, AccountType.SAVING, user1, 10000);
         BankAccount acc3 = addAccount(3333, AccountType.CHECKING, user2, 10000);
         BankAccount acc4 = addAccount(4444, AccountType.CHECKING, user2, 10000);
+        Teller tel1 = addTeller("Alice", "letmein", true); // this is the admin
+        Teller tel2 = addTeller("BOB", "plsletmein", false);
+        Teller tel3 = addTeller("BOB", "letmeinin", false);
     }
 
     public void go() {
@@ -94,9 +97,23 @@ public class SimpleServer {
         user.addAccount(account);
         return account;
     }
-
+    
+    public Teller addTeller(String name, String password, boolean admin) {
+    	// String name, String password, boolean admin
+    	Teller teller = new Teller(name, password, admin);
+    	// add to HashMap tellerList
+    	tellerList.put(teller.getId(), teller);
+    	// add to HashMap activeTellers
+    	activeTellers.put(teller.getId(), false);
+    	return teller;
+    }
+    
     public boolean userLogin(int userId, String password) {
         return (userList.containsKey(userId) && userList.get(userId).getPassword().equals(password));
+    }
+    
+    public boolean tellerLogin(int tellerId, String password) {
+        return (tellerList.containsKey(tellerId) && tellerList.get(tellerId).getPassword().equals(password));
     }
 
     // class clientHandler
@@ -359,7 +376,32 @@ public class SimpleServer {
             Object obj;
 
             try {
+            	
+            	// handle Teller login
+                while (true) {
+                    obj = reader.readObject();
+                    LoginMessage loginMessage = (LoginMessage) obj;
+                    LoginMessage loginReceipt;
+                    int tellerId = loginMessage.getUserId();
+                    String password = loginMessage.getPassword();
+                    int id = loginMessage.getID() + 1;
 
+                    // if user exists and password is correct, return success message, user info and
+                    // break
+                    if (tellerLogin(tellerId, password)) {
+                        // LoginMessage(int id, String to, String from, Status status, String text)
+                        loginReceipt = new LoginMessage(id, Status.SUCCESS);
+                        writer.writeUnshared(loginReceipt); // send loginReceipt
+                        writer.writeUnshared(tellerList.get(tellerId)); // send BankUser object to client
+                        System.out.println("Teller client logged in with teller: " + tellerList.get(tellerId).getName());
+                        break;
+                    } else { // fail to login
+                        // return error message
+                        loginReceipt = new LoginMessage(id, Status.ERROR);
+                        writer.writeUnshared(loginReceipt); // send loginReceipt
+                    }
+                }
+            	
                 // handle remaining messages
                 while ((obj = reader.readObject()) != null) {
 

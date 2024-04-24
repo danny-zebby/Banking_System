@@ -17,7 +17,7 @@ public class TellerClient {
 
     // ATM Functions
     // Withdraw
-    public int withdraw(int id) {
+    public void withdraw() {
         try {
             // get input acc #, amount, pin
             scanner = new Scanner(System.in);
@@ -32,7 +32,7 @@ public class TellerClient {
             scanner.nextLine();
 
             // create a withdraw message
-            WithdrawMessage msg = new WithdrawMessage(id, Status.ONGOING, accountNumber, amount, accountPin);
+            WithdrawMessage msg = new WithdrawMessage(Status.ONGOING, accountNumber, amount, accountPin);
             // send msg to server
             writer.writeUnshared(msg);
             // wait for withdraw msg receipt
@@ -55,11 +55,11 @@ public class TellerClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ++id;
+
     }
 
     // Deposit
-    public int deposit(int id) {
+    public void deposit() {
         try {
             // get inputs: acc#, amount, pin
             scanner = new Scanner(System.in);
@@ -75,7 +75,7 @@ public class TellerClient {
 
             // create a deposit message
             // int id, Status status, int accountNumber, double depositAmount, int pin
-            DepositMessage msg = new DepositMessage(id, Status.ONGOING, accountNumber, amount,
+            DepositMessage msg = new DepositMessage(Status.ONGOING, accountNumber, amount,
                     accountPin);
             // send a message to server
             writer.writeUnshared(msg);
@@ -97,17 +97,17 @@ public class TellerClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ++id;
+
     }
 
     // Transfer
-    public int transfer(int id) {
+    public void transfer() {
         try {
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ++id;
+
     }
 
     // Teller functions
@@ -251,24 +251,23 @@ public class TellerClient {
         return (sock == null);
     }
 
-    public int handshake(int id) {
+    public void handshake() {
         try {
             // public HelloMessage(int id, String text, String to, String from, MessageType
             // type, Status status)
-            HelloMessage clientHello = new HelloMessage(id, "Teller", Status.ONGOING);
+            HelloMessage clientHello = new HelloMessage("Teller", Status.ONGOING);
             writer.writeObject(clientHello);
             HelloMessage serverHello = (HelloMessage) reader.readObject();
-            if (serverHello.getID() == ++id && serverHello.getStatus() == Status.SUCCESS) {
+            if (serverHello.getStatus() == Status.SUCCESS) {
                 System.out.println("client-server handshake successfully");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return id++;
     }
 
-    public int tellerLogin(int id) {
+    public void tellerLogin() {
         scanner = new Scanner(System.in);
         int tellerId;
         String password;
@@ -288,7 +287,7 @@ public class TellerClient {
             password = scanner.nextLine();
 
             // create LoginMessage
-            LoginMessage msg = new LoginMessage(id, Status.ONGOING, tellerId, password);
+            LoginMessage msg = new LoginMessage(Status.ONGOING, tellerId, password);
 
             try {
                 // send LoginMessage to server
@@ -296,7 +295,6 @@ public class TellerClient {
 
                 // expect a success LoginMessage returned from the server
                 LoginMessage msgReceipt = (LoginMessage) reader.readObject();
-                id = msgReceipt.getID() + 1;
 
                 if (msgReceipt.getStatus() == Status.SUCCESS) {
                     // wait for Teller object
@@ -313,12 +311,11 @@ public class TellerClient {
 
         }
 
-        return id++;
     }
 
-    public int newSession(int id) {
+    public void newSession() {
 
-        id = tellerLogin(id);
+        tellerLogin();
         scanner = new Scanner(System.in);
 
         if (teller.getAdmin()) { // if this is an admin teller
@@ -335,9 +332,9 @@ public class TellerClient {
 //					case 2: id = ; break; // logout
                 }
             }
-
+        }    
         // switch statement
-        return id++;
+            
     }
 
     public void go() {
@@ -347,9 +344,9 @@ public class TellerClient {
 
             int id = 0;
             // handshake with server: Teller client hello
-            id = handshake(id);
+            handshake();
 
-            id = newSession(id);
+            newSession();
 
             // close client
             closeConnection();

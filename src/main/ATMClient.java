@@ -43,7 +43,7 @@ public class ATMClient {
     return (sock == null);
   }
 
-  public int withdraw(int id) {
+  public void withdraw() {
     try {
       scanner = new Scanner(System.in);
       System.out.println("Enter the account number: ");
@@ -58,7 +58,7 @@ public class ATMClient {
 
       // create a withdraw message
       // int id, Status status, int accountNumber, double withdrawAmount, int pin
-      WithdrawMessage msg = new WithdrawMessage(id, Status.ONGOING, accountNumber, amount, accountPin);
+      WithdrawMessage msg = new WithdrawMessage(Status.ONGOING, accountNumber, amount, accountPin);
       // send message to server
       writer.writeUnshared(msg);
       // wait for withdraw message receipt
@@ -82,10 +82,9 @@ public class ATMClient {
       e.printStackTrace();
     }
 
-    return ++id;
   } // end method withdraw
 
-  public int deposit(int id) {
+  public void deposit() {
     try {
       // get inputs: acc#, amount, pin
       scanner = new Scanner(System.in);
@@ -101,7 +100,7 @@ public class ATMClient {
 
       // create a deposit message
       // int id, Status status, int accountNumber, double depositAmount, int pin
-      DepositMessage msg = new DepositMessage(id, Status.ONGOING, accountNumber, amount, accountPin);
+      DepositMessage msg = new DepositMessage(Status.ONGOING, accountNumber, amount, accountPin);
       // send a message to server
       writer.writeUnshared(msg);
 
@@ -122,11 +121,10 @@ public class ATMClient {
       e.printStackTrace();
     }
 
-    return ++id;
 
   } // end method deposit
 
-  public int transfer(int id) {
+  public void transfer() {
     try {
       // get inputs: acc#, amount, pin
       scanner = new Scanner(System.in);
@@ -149,12 +147,12 @@ public class ATMClient {
         // verify from server the recipient's info
         // send an account info message to the server: int id, int currUserId, int
         // accountNumber, Status status
-        AccountInfoMessage msg = new AccountInfoMessage(id, Status.ONGOING, toAccountNumber);
+        AccountInfoMessage msg = new AccountInfoMessage(Status.ONGOING, toAccountNumber);
         writer.writeUnshared(msg);
         // expected an SUCCESS status of account info msg, containing all users linked
         // to this recipent's account
         AccountInfoMessage msgReceipt = (AccountInfoMessage) reader.readObject();
-        id = msgReceipt.getID() + 1;
+        
         System.out.println("Received Account Info Message with users: " + msgReceipt.getUsers());
 
         // init list of string to store user names
@@ -164,11 +162,11 @@ public class ATMClient {
           // for each user of this account
           for (int userId : msgReceipt.getUsers()) {
             // send user info msg to server
-            UserInfoMessage uiMsg = new UserInfoMessage(id, Status.ONGOING, userId);
+            UserInfoMessage uiMsg = new UserInfoMessage(Status.ONGOING, userId);
             writer.writeUnshared(uiMsg);
             // expected SUCCESS of user info msg, which contains user name
             UserInfoMessage uiMsgReceipt = (UserInfoMessage) reader.readObject();
-            id = uiMsgReceipt.getID() + 1;
+          
             if (uiMsgReceipt.getStatus() == Status.SUCCESS) {
               recipentNames.add(uiMsgReceipt.getUserName()); // add user name to list
             }
@@ -194,7 +192,7 @@ public class ATMClient {
 
       // create a transfer message
       // int id, Status status, int accountNumber, double transferAmount, int pin
-      TransferMessage txMsg = new TransferMessage(id, Status.ONGOING, fromAccountNumber, toAccountNumber, amount,
+      TransferMessage txMsg = new TransferMessage(Status.ONGOING, fromAccountNumber, toAccountNumber, amount,
           accountPin);
       // send a message to server
       writer.writeUnshared(txMsg);
@@ -203,7 +201,7 @@ public class ATMClient {
       TransferMessage txMsgReceipt = (TransferMessage) reader.readObject();
 
       if (txMsgReceipt.getStatus() == Status.SUCCESS) {
-        // expeect a new Account object
+        // expect a new Account object
         BankAccount newAccount = (BankAccount) reader.readObject();
         // update accounts
         accounts.put(fromAccountNumber, newAccount);
@@ -220,7 +218,6 @@ public class ATMClient {
       e.printStackTrace();
     }
 
-    return ++id;
   } // end method transfer
 
   public void go() {
@@ -228,10 +225,9 @@ public class ATMClient {
     try {
       // start client
       setUpConnection();
-      int id = 0; // initialize message id
-      id = handshake(id); // handshake with server
+      handshake(); // handshake with server
 
-      id = newSession(id);
+      newSession();
 
       // close client
       closeConnection();
@@ -242,7 +238,7 @@ public class ATMClient {
 
   }
 
-  public int newSession(int id) {
+  public void newSession() {
     // reset variables
     user = null;
     accounts = new HashMap<Integer, BankAccount>();
@@ -252,13 +248,12 @@ public class ATMClient {
       // ATM login
       while (true) {
         // create new login message
-        LoginMessage loginMessage = loginRequest(++id);
+        LoginMessage loginMessage = loginRequest();
         // send login message to server
         writer.writeUnshared(loginMessage);
 
         // wait for loginMessage from server
         LoginMessage loginReceipt = (LoginMessage) reader.readObject();
-        id++;
         if ((loginReceipt.getStatus() == Status.SUCCESS)) { // if success, break while loop
           break;
         }
@@ -268,12 +263,11 @@ public class ATMClient {
 
       // wait for bankuser object from server
       user = (BankUser) reader.readObject();
-      id++;
       // print out user object
       System.out.println("current user: ");
       System.out.println(user);
 
-      id = getAccountsInfo(id);
+      getAccountsInfo();
       // print out all accounts
       System.out.println("accounts: " + accounts);
 
@@ -283,21 +277,21 @@ public class ATMClient {
         int choice = scanner.nextInt();
         switch (choice) {
         case 0:
-          id = withdraw(id);
+          withdraw();
           break;
         case 1:
-          id = deposit(id);
+          deposit();
           break;
         case 2:
-          id = transfer(id);
+          transfer();
           break;
         case 3:
-          LogoutMessage msg = logoutRequest(id);
+          LogoutMessage msg = logoutRequest();
           writer.writeUnshared(msg);
           LogoutMessage msgBack = (LogoutMessage) reader.readObject();
           if (msgBack.getStatus() == Status.SUCCESS) {
             System.out.println("Logout was a success\nReturning to Login Screen:");
-            id = newSession(1);
+            newSession();
             break;
           } else {
             System.out.println("Logout failed contiune as User ID:" + user.getId());
@@ -319,10 +313,9 @@ public class ATMClient {
       e.printStackTrace();
     }
 
-    return ++id;
   }
 
-  public int getAccountsInfo(int id) {
+  public void getAccountsInfo() {
     try {
       // request info from all accounts of current user
       for (int accountNumber : user.getAccounts()) {
@@ -331,7 +324,7 @@ public class ATMClient {
           // create new AccountMessage requesting account info
           // int id, Status status, int accountNumber, int currUserId, int pin,
           // AccountMessageType type
-          AccountMessage msg = new AccountMessage(++id, Status.ONGOING, accountNumber, user.getId(), -1,
+          AccountMessage msg = new AccountMessage(Status.ONGOING, accountNumber, user.getId(), -1,
               AccountMessageType.ACCOUNT_INFO);
           // send message
           writer.writeObject(msg);
@@ -353,31 +346,29 @@ public class ATMClient {
       e.printStackTrace();
     }
 
-    return id++;
 
   } // end method getAccountsInfo
 
-  public int handshake(int id) {
+  public void handshake() {
     // handshake with server: ATM client hello
     // public HelloMessage(int id, String text, String to, String from, MessageType
     // type, Status status)
-    HelloMessage clientHello = new HelloMessage(id, "ATM", Status.ONGOING);
+    HelloMessage clientHello = new HelloMessage("ATM", Status.ONGOING);
     try {
       // send message
       writer.writeObject(clientHello);
       // wait for message receipt
       HelloMessage serverHello = (HelloMessage) reader.readObject();
-      if (serverHello.getID() == ++id && serverHello.getStatus() == Status.SUCCESS) {
+      if (serverHello.getStatus() == Status.SUCCESS) {
         System.out.println("client-server handshake successfully");
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-    return id++;
   } // end method handshake
 
-  public LoginMessage loginRequest(int id) {
+  public LoginMessage loginRequest() {
     scanner = new Scanner(System.in);
     int userId;
     while (true) { // get valid user id from user
@@ -395,13 +386,13 @@ public class ATMClient {
 
     // LoginMessage(int id, String to, String from, Status status, int userId,
     // String password)
-    return new LoginMessage(id, Status.ONGOING, userId, password);
+    return new LoginMessage(Status.ONGOING, userId, password);
 
   }
 
-  public LogoutMessage logoutRequest(int id) {
+  public LogoutMessage logoutRequest() {
 
-    return new LogoutMessage(id, Status.ONGOING);
+    return new LogoutMessage(Status.ONGOING);
 
   }
 

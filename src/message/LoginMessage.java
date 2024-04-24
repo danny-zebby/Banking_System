@@ -3,30 +3,21 @@ package message;
 import java.io.Serializable;
 
 public class LoginMessage implements MessageInterface, Serializable {
-  final int id;
   final Status status;
   final int userId;
   final String password;
 
   // constructors
-  public LoginMessage(int id, Status status, int userId, String password) {
-    this.id = id;
+  public LoginMessage(Status status, int userId, String password) {
     this.status = status;
     this.userId = userId;
     this.password = password;
   }
 
-  public LoginMessage(int id, Status status) {
-    this.id = id;
+  public LoginMessage(Status status) {
     this.status = status;
     this.userId = 0;
     this.password = null;
-  }
-
-  // getters
-  @Override
-  public int getID() {
-    return this.id;
   }
 
   @Override

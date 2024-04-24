@@ -3,16 +3,14 @@ package message;
 import java.io.Serializable;
 
 public class TransferMessage implements MessageInterface, Serializable {
-    final int id;
     final Status status;
     final int fromAccountNumber;
     final int toAccountNumber;
     final double transferAmount;
     final int pin;
 
-    public TransferMessage(int id, Status status, int fromAccountNumber, int toAccountNumber, double transferAmount,
+    public TransferMessage(Status status, int fromAccountNumber, int toAccountNumber, double transferAmount,
             int pin) {
-        this.id = id;
         this.status = status;
         this.fromAccountNumber = fromAccountNumber;
         this.toAccountNumber = toAccountNumber;
@@ -20,18 +18,12 @@ public class TransferMessage implements MessageInterface, Serializable {
         this.pin = pin;
     }
 
-    public TransferMessage(int id, Status status, int fromAccountNumber, int toAccountNumber, double transferAmount) {
-        this.id = id;
+    public TransferMessage(Status status, int fromAccountNumber, int toAccountNumber, double transferAmount) {
         this.status = status;
         this.fromAccountNumber = fromAccountNumber;
         this.toAccountNumber = toAccountNumber;
         this.transferAmount = transferAmount;
         this.pin = -1;
-    }
-
-    @Override
-    public int getID() {
-        return this.id;
     }
 
     @Override

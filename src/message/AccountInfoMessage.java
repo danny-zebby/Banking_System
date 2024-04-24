@@ -5,30 +5,22 @@ import java.util.List;
 
 public class AccountInfoMessage implements MessageInterface, Serializable {
 
-	private int id;
 	private Status status;
 	private int accountNumber;
 	private List<Integer> users;
 	
-	public AccountInfoMessage(int id, Status status, int accountNumber, List<Integer> users) {
-		this.id = id;
+	public AccountInfoMessage(Status status, int accountNumber, List<Integer> users) {
 		this.status = status;
 		this.accountNumber = accountNumber;
 		this.users = users;
 	}
 	
-	public AccountInfoMessage(int id, Status status, int accountNumber) {
-		this.id = id;
+	public AccountInfoMessage(Status status, int accountNumber) {
 		this.status = status;
 		this.accountNumber = accountNumber;
 		this.users = null;
 	}
 	
-	
-	@Override
-	public int getID() {
-		return this.id;
-	}
 
 	@Override
 	public Status getStatus() {

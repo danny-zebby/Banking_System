@@ -97,21 +97,21 @@ public class SimpleServer {
         user.addAccount(account);
         return account;
     }
-    
+
     public Teller addTeller(String name, String password, boolean admin) {
-    	// String name, String password, boolean admin
-    	Teller teller = new Teller(name, password, admin);
-    	// add to HashMap tellerList
-    	tellerList.put(teller.getId(), teller);
-    	// add to HashMap activeTellers
-    	activeTellers.put(teller.getId(), false);
-    	return teller;
+      // String name, String password, boolean admin
+      Teller teller = new Teller(name, password, admin);
+      // add to HashMap tellerList
+      tellerList.put(teller.getId(), teller);
+      // add to HashMap activeTellers
+      activeTellers.put(teller.getId(), false);
+      return teller;
     }
-    
+
     public boolean userLogin(int userId, String password) {
         return (userList.containsKey(userId) && userList.get(userId).getPassword().equals(password));
     }
-    
+
     public boolean tellerLogin(int tellerId, String password) {
         return (tellerList.containsKey(tellerId) && tellerList.get(tellerId).getPassword().equals(password));
     }
@@ -376,8 +376,8 @@ public class SimpleServer {
             Object obj;
 
             try {
-            	
-            	// handle Teller login
+
+              // handle Teller login
                 while (true) {
                     obj = reader.readObject();
                     LoginMessage loginMessage = (LoginMessage) obj;
@@ -401,7 +401,7 @@ public class SimpleServer {
                         writer.writeUnshared(loginReceipt); // send loginReceipt
                     }
                 }
-            	
+
                 // handle remaining messages
                 while ((obj = reader.readObject()) != null) {
 
@@ -416,10 +416,36 @@ public class SimpleServer {
                     } else if (obj instanceof DepositMessage) {
                         DepositMessage msg = (DepositMessage) obj;
                         // code goes here
+                        int accountNumber = msg.getAccountNumner();
+                        double amount = msg.getDepositAmount();
+                        int pin = msg.getPin();
+                        int id = msg.getID();
+                        // if it is available to deposit
+                        if (checkDeposit(accountNumber, amount, pin)) {
+                            writer.writeObject(new DepositMessage(msg.getID(), Status.SUCCESS));
+                            // deposit
+                            deposit(++id, accountNumber, amount);
+                        } else { // is it is not available to deposit
+                            // return error message
+                            writer.writeObject(new DepositMessage(msg.getID(), Status.ERROR));
+                        }
 
                     } else if (obj instanceof WithdrawMessage) {
                         WithdrawMessage msg = (WithdrawMessage) obj;
                         // code goes here
+                        int accountNumber = msg.getAccountNumber();
+                        double amount = msg.getWithdrawAmount();
+                        int pin = msg.getPin();
+                        int id = msg.getID();
+                        if (checkWithdraw(accountNumber, amount, pin)) { // if it is available to withdraw
+                            // send back success message
+                            writer.writeObject(new WithdrawMessage(msg.getID(), Status.SUCCESS));
+                            // withdraw
+                            withdraw(++id, accountNumber, amount);
+                        } else { // if it is not available to withdraw
+                            // return error message
+                            writer.writeObject(new WithdrawMessage(msg.getID(), Status.ERROR));
+                        }
 
                     } else if (obj instanceof TransferMessage) {
                         TransferMessage msg = (TransferMessage) obj;

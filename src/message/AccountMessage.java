@@ -36,6 +36,14 @@ public class AccountMessage implements MessageInterface, Serializable {
 		this.type = type;
 		this.info = null;
 	}
+	
+	// use for teller client login user account
+	public AccountMessage(Status status, int userId) {
+		this.status = status;
+		this.type = AccountMessageType.USER_INFO;
+		this.info = new HashMap<>();
+		info.put("userId", Integer.toString(userId));
+	}
 
 	@Override
 	public Status getStatus() {

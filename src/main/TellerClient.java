@@ -223,13 +223,13 @@ public class TellerClient {
 						+ "6-Forget-Password\n7-Withdraw\n8-Deposit\n9-Transfer\n10-Back");
 				int choice = scanner.nextInt();
 				switch (choice) {
-					case 0: break;
-					case 1: break;
-					case 2: break;
-					case 3: break;
-					case 4: break;
-					case 5: break;
-					case 6: break;
+					case 0: createAccount(); break; // create new account
+					case 1: break; // remove account
+					case 2: break; // add user to account
+					case 3: break; // remove user from account
+					case 4: break; // transfer admin
+					case 5: break; // change pin
+					case 6: break; // forget password
 					case 7: withdraw(); break; // withdraw
 					case 8: deposit(); break; // deposit
 					case 9: transfer(); break; // transfer
@@ -257,7 +257,7 @@ public class TellerClient {
 					AccountMessage msg = new AccountMessage(Status.ONGOING, accountNumber, user.getId(), -1,
 							AccountMessageType.ACCOUNT_INFO);
 					// send message
-					writer.writeObject(msg);
+					writer.writeUnshared(msg);
 					// wait for message receipt
 					AccountMessage msgReceipt = (AccountMessage) reader.readObject();
 					if (msgReceipt.getStatus() == Status.SUCCESS) {
@@ -284,8 +284,85 @@ public class TellerClient {
 	}
 
 	public void createAccount() {
-		// no inputs are required from Teller
-	}
+		scanner = new Scanner(System.in);
+		int choice;
+		AccountType accountType;
+		int pin;
+
+		while (true) {
+			// prompt the user to choose account type
+			while (true) {
+				System.out.println("Choose an account type or enter 2 to cancel: \n0-checking\n1-saving");
+				try {
+					choice = scanner.nextInt();
+					scanner.nextLine();
+					if (choice == 0) { // checking account
+						accountType = AccountType.CHECKING;
+						break; // break the while loop
+					} else if (choice == 1) {
+						accountType = AccountType.SAVING;
+						break;
+					} else if (choice == 2) { // quit createAccount method
+						return;
+					}
+				} catch (Exception e) {} // do nothing
+				
+				System.out.println("Invalid input. Please enter 0 or 1.");
+				
+			} // end while loop
+			
+			
+			// enter pin
+			while (true) {
+				System.out.println("Enter pin (only digits): ");
+				try {
+					pin = scanner.nextInt();
+					scanner.nextLine();
+					if (pin > 0) {
+						break;
+					}
+				} catch (Exception e) {}
+				System.out.println("Invalid pin. Please try again.");
+			} // end while loop
+			
+			// confirm
+			System.out.printf("You are creating a %s account with pin %d.\n", accountType, pin);
+			System.out.println("Please enter yes to confirm.");
+			String userInput = scanner.nextLine();
+			if (userInput.equalsIgnoreCase("YES")) {
+				break; // if user confirms, break outer while loop
+			} else {
+				continue;
+			}
+		} // end outer while loop
+		
+		
+		try {
+			// send AccountMessage of to server: Status status, AccountType accountType, int pin
+			AccountMessage msg = new AccountMessage(Status.ONGOING, accountType, pin);
+			writer.writeUnshared(msg);
+			
+			// wait for success status and new Bank Account number
+			AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+			
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				int accountNumber = Integer.parseInt(msgReceipt.getInfo().get("accountNumber"));
+				user.getAccounts().add(accountNumber);
+				
+				// getAccountsInfo to get the newly created account to accounts
+				getAccountsInfo();
+				System.out.println("updated accounts: " + accounts);
+				
+			} else {
+				System.out.printf("Fail to create a new %s account.\n", accountType);
+				return;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	} // end method createAccount
 
 	public void deleteAccount() {
 		scanner = new Scanner(System.in);
@@ -443,7 +520,6 @@ public class TellerClient {
 			}
 		}
 		   
-		// switch statement
 
 	}
 

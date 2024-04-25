@@ -6,7 +6,7 @@ import java.util.Map;
 public class AccountMessage implements MessageInterface, Serializable {
 	final Status status;
 	final AccountMessageType type;
-	final HashMap<String, String> info;
+	final Map<String, String> info;
 
 
 	public AccountMessage(Status status, int accountNumber, int currUserId, int pin, AccountMessageType type) {
@@ -37,12 +37,27 @@ public class AccountMessage implements MessageInterface, Serializable {
 		this.info = null;
 	}
 	
+	public AccountMessage(Status status, AccountMessageType type, Map<String, String> info) {
+		this.status = status;
+		this.type = type;
+		this.info = info;
+	}
+	
 	// use for teller client login user account
 	public AccountMessage(Status status, int userId) {
 		this.status = status;
 		this.type = AccountMessageType.USER_INFO;
 		this.info = new HashMap<>();
 		info.put("userId", Integer.toString(userId));
+	}
+	
+	// use for create new account in teller client
+	public AccountMessage(Status status, AccountType accountType, int pin) {
+		this.status = status;
+		this.type = AccountMessageType.ADD_ACCOUNT;
+		this.info = new HashMap<>();
+		info.put("accountType", accountType.toString());
+		info.put("pin", Integer.toString(pin));
 	}
 
 	@Override

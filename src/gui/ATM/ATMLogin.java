@@ -37,6 +37,7 @@ public class ATMLogin {
 			public void actionPerformed(ActionEvent e) {
 				String id = textField.getText();
 				String password = textField2.getText();
+				//if either id or password are blank, a frame opens up and asks for input.
 				if (id.contentEquals("") || password.contentEquals("")) {
 					JOptionPane.showMessageDialog(frame, "Please type in ID or password.");
 				} else {
@@ -71,7 +72,7 @@ public class ATMLogin {
 	
 	private static void mainpage(final JFrame frame){
 		//opens Mainpage.java
-		//ATMMain.ATMMain();
+		//MainPage.go();
 	}
 	
 }

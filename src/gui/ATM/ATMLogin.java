@@ -37,9 +37,15 @@ public class ATMLogin {
 			public void actionPerformed(ActionEvent e) {
 				String id = textField.getText();
 				String password = textField2.getText();
-				// testing purposes
-				JOptionPane.showMessageDialog(frame, id);
-				JOptionPane.showMessageDialog(frame, password);
+				if (id.contentEquals("") || password.contentEquals("")) {
+					JOptionPane.showMessageDialog(frame, "Please type in ID or password.");
+				} else {
+					// testing purposes
+					JOptionPane.showMessageDialog(frame, id);
+					JOptionPane.showMessageDialog(frame, password);
+				}
+			}
+		});
 			
 			}
 		});

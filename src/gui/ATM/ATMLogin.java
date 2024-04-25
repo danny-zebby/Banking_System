@@ -47,9 +47,6 @@ public class ATMLogin {
 				}
 			}
 		});
-			
-			}
-		});
 		
 		exitButton.addActionListener(new ActionListener() {
 	          public void actionPerformed(ActionEvent e) {

@@ -497,7 +497,7 @@ public class Server {
 						AccountMessageType type = msg.getType();
 						AccountMessage msgReceipt;
 						switch (type) {
-							case ADD_USER:
+							case ADD_USER: {
 								// reply with success status
 								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.ADD_USER);
 								// send back to client
@@ -508,26 +508,15 @@ public class Server {
 								String name = info.get("name");
 								String birthday = info.get("birthday");
 								String password = info .get("password");
-								BankUser newUser = new BankUser(name, birthday, password);
-								userId = newUser.getId();
-								synchronized (userList) {
-									// add to userList and activeUsers
-									userList.put(userId, newUser);
-								}
-								
-								synchronized (activeUsers) {
-									// since Teller client will automatically login this user account 
-									// and redirect to teller main page, set this user to active
-									activeUsers.put(userId, true);									
-								}
-								
+								BankUser newUser = addUser(name, birthday, password);
 								System.out.println("new user created: " + newUser);
 								
 								// send BankUser to client
 								writer.writeUnshared(newUser);
 								
 								break;
-							case USER_INFO:
+							}
+							case USER_INFO: {
 								// check if user id is valid
 								userId = Integer.parseInt( msg.getInfo().get("userId"));
 								if (checkUserId(userId)) {
@@ -543,9 +532,13 @@ public class Server {
 								}
 								
 								break;
-							case ACCOUNT_INFO:
+							}
+							case ACCOUNT_INFO:{
 								
 								int accountNumber = msg.getAccountNumber();
+								// debugging
+								System.out.println("Requesting account " + accountNumber);
+								
 								synchronized (activeAccounts) {
 									if (accountList.get(accountNumber).getUsers().contains(userId)
 											&& activeAccounts.get(accountNumber) == false) {
@@ -553,14 +546,38 @@ public class Server {
 										// int id, int currUserId, int accountNumber, Status status
 										msgReceipt = new AccountMessage(userId, accountNumber,
 												Status.SUCCESS);
-										writer.writeObject(msgReceipt);
-										writer.writeObject(accountList.get(accountNumber));
+										writer.writeUnshared(msgReceipt);
+										writer.writeUnshared(accountList.get(accountNumber));
 									} else { // Invalid request
 										msgReceipt = new AccountMessage(userId, accountNumber, Status.ERROR);
-										writer.writeObject(msgReceipt);
+										writer.writeUnshared(msgReceipt);
 									}
 								}
 								break;
+							}
+							case ADD_ACCOUNT: {
+								Map<String, String> info = msg.getInfo();
+								AccountType accountType = AccountType.valueOf(info.get("accountType"));
+								int pin = Integer.parseInt(info.get("pin"));
+								
+								BankAccount bankAccount = new BankAccount(pin, accountType, userId);
+								int accountNumber = bankAccount.getAccountNumber();
+								synchronized (accountList) {
+									accountList.put(accountNumber, bankAccount);
+								}
+								synchronized (activeAccounts) {
+									activeAccounts.put(accountNumber, false);
+								}
+								userList.get(userId).addAccount(bankAccount);
+								
+								// reply with success status with new accountNumber
+								Map<String, String> newInfo = new HashMap<>();
+								newInfo.put("accountNumber", Integer.toString(accountNumber));
+								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.ADD_ACCOUNT, newInfo);
+								writer.writeUnshared(msgReceipt);
+								
+								break;
+							}
 							default: break;
 						}
 

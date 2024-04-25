@@ -43,47 +43,6 @@ public class ATMClient {
 		return (sock == null);
 	}
 
-	public void withdraw() {
-		try {
-			scanner = new Scanner(System.in);
-			System.out.println("Enter the account number: ");
-			int accountNumber = scanner.nextInt();
-			scanner.nextLine();
-			System.out.println("Enter the amount to withdraw: ");
-			double amount = scanner.nextDouble();
-			scanner.nextLine();
-			System.out.println("Enter the account pin: ");
-			int accountPin = scanner.nextInt();
-			scanner.nextLine();
-
-			// create a withdraw message
-			// int id, Status status, int accountNumber, double withdrawAmount, int pin
-			WithdrawMessage msg = new WithdrawMessage(Status.ONGOING, accountNumber, amount, accountPin);
-			// send message to server
-			writer.writeUnshared(msg);
-			// wait for withdraw message receipt
-			WithdrawMessage msgReceipt = (WithdrawMessage) reader.readObject();
-
-			if (msgReceipt.getStatus() == Status.SUCCESS) {
-				// expect a new Account object
-				BankAccount newAccount = (BankAccount) reader.readObject();
-				// update accounts
-				accounts.put(accountNumber, newAccount);
-				// print out newAccount
-				System.out.println("new Account: " + newAccount);
-				// show updated accounts
-				System.out.println("Updated accounts: " + accounts);
-
-			} else {
-				System.out.println("Fail to withdraw $" + amount + " from account " + accountNumber);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	} // end method withdraw
-
 	public void deposit() {
 		try {
 			// get inputs: acc#, amount, pin
@@ -123,6 +82,47 @@ public class ATMClient {
 
 
 	} // end method deposit
+
+	public void withdraw() {
+		try {
+			scanner = new Scanner(System.in);
+			System.out.println("Enter the account number: ");
+			int accountNumber = scanner.nextInt();
+			scanner.nextLine();
+			System.out.println("Enter the amount to withdraw: ");
+			double amount = scanner.nextDouble();
+			scanner.nextLine();
+			System.out.println("Enter the account pin: ");
+			int accountPin = scanner.nextInt();
+			scanner.nextLine();
+	
+			// create a withdraw message
+			// int id, Status status, int accountNumber, double withdrawAmount, int pin
+			WithdrawMessage msg = new WithdrawMessage(Status.ONGOING, accountNumber, amount, accountPin);
+			// send message to server
+			writer.writeUnshared(msg);
+			// wait for withdraw message receipt
+			WithdrawMessage msgReceipt = (WithdrawMessage) reader.readObject();
+	
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				// expect a new Account object
+				BankAccount newAccount = (BankAccount) reader.readObject();
+				// update accounts
+				accounts.put(accountNumber, newAccount);
+				// print out newAccount
+				System.out.println("new Account: " + newAccount);
+				// show updated accounts
+				System.out.println("Updated accounts: " + accounts);
+	
+			} else {
+				System.out.println("Fail to withdraw $" + amount + " from account " + accountNumber);
+			}
+	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+	} // end method withdraw
 
 	public void transfer() {
 		try {

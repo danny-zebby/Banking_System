@@ -578,6 +578,40 @@ public class Server {
 								
 								break;
 							}
+							case REM_ACCOUNT: {
+								Map<String, String> info = msg.getInfo();
+								int accountNumber = Integer.parseInt(info.get("accountNumber"));
+								
+								// check if it is ready to remove account
+								// - if this user belongs to this account
+								// - if this account has balance of zero
+								// - if this user is the admin of this account
+								if (accountList.get(accountNumber).getUsers().contains(userId)
+									&& accountList.get(accountNumber).getBalance() == 0
+									&& accountList.get(accountNumber).getAdminID() == userId) {
+									
+									// update BankUser in userList, 
+									userList.get(userId).getAccounts().remove(Integer.valueOf(accountNumber));
+									
+									// update activeAccounts, accountList
+									synchronized (activeAccounts) {
+										activeAccounts.remove(accountNumber);
+									}
+									accountList.remove(accountNumber);
+									
+									// send back msgReceipt
+									msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.REM_ACCOUNT);
+									// send back msgReceipt
+									writer.writeUnshared(msgReceipt);
+									
+								} else { // not able to remove
+									msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.REM_ACCOUNT);
+									// send back msgReceipt
+									writer.writeUnshared(msgReceipt);
+								}
+								
+								break;
+							}									
 							default: break;
 						}
 

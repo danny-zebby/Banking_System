@@ -126,48 +126,113 @@ public class TellerClient {
 	}
 
 	public void createUser() {
-		while (true) {
-
-			scanner = new Scanner(System.in);
-			System.out.println("Enter name: ");
-			String name = scanner.nextLine();
-
-			scanner = new Scanner(System.in);
-			System.out.println("Enter birthday: ");
-			String birthday = scanner.nextLine();
-
-			scanner = new Scanner(System.in);
-			System.out.println("Enter password: ");
-			String password = scanner.nextLine();
-
-			System.out.println("Please type yes to confirm your information below.");
-			System.out.printf("Name: %s\nDOB: %s\nPassword: %s\n", name, birthday, password);
-
-			String userConfirm = scanner.nextLine();
-
-			if (userConfirm.equalsIgnoreCase("YES")) {
-				// send Account Message to server with type ADD_USER
-				// wait for success status
-				// wait for BankUser object
-
-				// add to userList and activeUsers
-
-				// redirect to login in as user page
-				// codes go here... #######
-				break;
-			}
+		try {
+			
+			while (true) {
+				
+				scanner = new Scanner(System.in);
+				System.out.println("Enter name: ");
+				String name = scanner.nextLine();
+				
+				scanner = new Scanner(System.in);
+				System.out.println("Enter birthday: ");
+				String birthday = scanner.nextLine();
+				
+				scanner = new Scanner(System.in);
+				System.out.println("Enter password: ");
+				String password = scanner.nextLine();
+				
+				System.out.println("Please type yes to confirm your information below.");
+				System.out.printf("Name: %s\nDOB: %s\nPassword: %s\n", name, birthday, password);
+				
+				String userConfirm = scanner.nextLine();
+				
+				if (userConfirm.equalsIgnoreCase("YES")) {
+					// send Account Message to server with type ADD_USER
+					AccountMessage msg = new AccountMessage(Status.ONGOING, name, birthday, password);
+					writer.writeUnshared(msg);
+					// wait for success status
+					AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+					if (msgReceipt.getStatus() == Status.SUCCESS) {
+						// wait for BankUser object
+						user = (BankUser) reader.readObject();
+						System.out.println("new User info: \n" + user);
+					} else {
+						System.out.println("Fail to create a new user. Please try again.");
+						continue;
+					}
+					
+					// redirect to login in as user page
+					loginUserAccount(user.getId());
+					
+					break; // break while loop
+				}
+			} // end while loop
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
-	}
+	} // end method createUser
 
 	public void openLogs() {
 		// no inputs are required from Teller
 	}
 
 	public void loginUserAccount() {
-		scanner = new Scanner(System.in);
-		System.out.println("Enter username: ");
-		String userId = scanner.nextLine();
+		try {
+			int userId;
+			while (true) {
+				
+				scanner = new Scanner(System.in);
+				System.out.println("Enter user id: ");
+				userId = scanner.nextInt();
+				scanner.nextLine();
+				
+				// send AccountMessage with type USER_INFO to get BankUser object
+				AccountMessage msg = new AccountMessage(Status.ONGOING, userId);
+				writer.writeUnshared(msg);
+				// wait for success status
+				AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+				if (msgReceipt.getStatus() == Status.SUCCESS) {
+					// wait for BankUser obj
+					user = (BankUser) reader.readObject();
+					userId = user.getId();
+					break; // break while loop
+				} else {
+					System.out.printf("User id %d does not exist. Please try again.\n", userId);
+				}
+			} // end while loop
+			
+			
+			loginUserAccount(userId);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void loginUserAccount(int userId) {
+		try {
+			boolean isLoggedOut = false;
+			while (!isLoggedOut) {
+				System.out.println("0-Create-New-Account\n1-Remove-Account\n2-Add-User-to-Account\n"
+						+ "3-Remove-User-from-Account\n4-Transfer-Admin\n5-Change-Pin\n"
+						+ "6-Forget-Password\n7-Withdraw\n8-Deposit\n9-Transfer\n10-Back");
+				int choice = scanner.nextInt();
+				switch (choice) {
+					case 10:
+						isLoggedOut = true;
+						break;
+					default:
+						break;
+				}
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// !
@@ -323,13 +388,15 @@ public class TellerClient {
 
 		} else {
 			// switch statement for normal teller
-			while (true) {
+			boolean flag = false; // flag to quit the session
+			while (!flag) {
 				System.out.println("0-Create-New_User\n1-Login-User-Account\n2-LogOut");
 				int choice = scanner.nextInt();
 				switch (choice) {
-				case 0: createUser(); break; // create new user
-				//					case 1: id = ; break; // login user account
-				//					case 2: id = ; break; // logout
+					case 0: createUser(); break; // create new user
+					case 1: loginUserAccount(); break;
+					case 2: flag = true; break;
+					default: break;
 				}
 			}
 		}    

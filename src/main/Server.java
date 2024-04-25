@@ -153,13 +153,15 @@ public class Server {
 
 		}
 
-		// deposit
-		// deposit
 		public boolean checkDeposit(int accountNumber, double amount, int pin) {
 			// check if it is available to withdraw
 			// - accountNumber and pin matches
 			// - amount < balance
 			return (accountList.containsKey(accountNumber) && accountList.get(accountNumber).getAccountPin() == pin);
+		}
+		
+		public boolean checkUserId(int userId) {
+			return userList.containsKey(userId) && !activeUsers.get(userId);
 		}
 
 		private void deposit(int accountNumber, double amount) {
@@ -449,6 +451,50 @@ public class Server {
 					} else if (obj instanceof AccountMessage) {
 						AccountMessage msg = (AccountMessage) obj;
 						// code goes here
+						AccountMessageType type = msg.getType();
+						AccountMessage msgReceipt;
+						switch (type) {
+							case ADD_USER:
+								// reply with success status
+								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.ADD_USER);
+								// send back to client
+								writer.writeUnshared(msgReceipt);
+								
+								// create new BankUser
+								Map<String, String> info = msg.getInfo();
+								String name = info.get("name");
+								String birthday = info.get("birthday");
+								String password = info .get("password");
+								BankUser newUser = new BankUser(name, birthday, password);
+								
+								// add to userList and activeUsers
+								userList.put(newUser.getId(), newUser);
+								activeUsers.put(newUser.getId(), false);
+								
+								System.out.println("new user created: " + newUser);
+								
+								// send BankUser to client
+								writer.writeUnshared(newUser);
+								
+								break;
+							case USER_INFO:
+								// check if user id is valid
+								int info_userId = Integer.parseInt( msg.getInfo().get("userId"));
+								if (checkUserId(info_userId)) {
+									// reply with success status and send back to client
+									msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.USER_INFO);
+									writer.writeUnshared(msgReceipt);
+									// send back BankUser obj
+									writer.writeUnshared(userList.get(info_userId));
+								} else {
+									// reply with ERROR status and send back to client
+									msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.USER_INFO);
+									writer.writeUnshared(msgReceipt);
+								}
+								
+								break;
+							default: break;
+						}
 
 					} else if (obj instanceof TellerMessage) {
 						TellerMessage msg = (TellerMessage) obj;

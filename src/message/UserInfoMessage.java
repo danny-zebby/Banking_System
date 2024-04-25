@@ -2,6 +2,7 @@ package message;
 
 import java.io.Serializable;
 
+// this class is only for getting userName given userId
 public class UserInfoMessage implements MessageInterface, Serializable {
 
 	private final Status status;

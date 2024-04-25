@@ -3,6 +3,7 @@ package message;
 import java.io.Serializable;
 import java.util.List;
 
+//this class is only for getting list of users given accountNumber
 public class AccountInfoMessage implements MessageInterface, Serializable {
 
 	private Status status;

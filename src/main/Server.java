@@ -188,7 +188,7 @@ public class Server {
 					&& accountList.get(fromAccountNumber).getBalance() >= amount);
 		}
 
-		private void transfer(int fromAccountNumber, int toAccountNumber, double amount) {
+		private void transfer(int fromAccountNumber, int toAccountNumber, double amount, int currUserID) {
 			BankAccount account = accountList.get(fromAccountNumber);
 			double newBalance = account.getBalance() - amount;
 			account.setBalance(newBalance);
@@ -196,8 +196,7 @@ public class Server {
 			System.out.println("new account info: " + account);
 			try {
 				// send new account object to client
-				writer.reset();
-				writer.writeObject(account);
+				writer.writeUnshared(account);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -206,13 +205,23 @@ public class Server {
 			BankAccount recipientAccount = accountList.get(toAccountNumber);
 			double recipientNewBalance = recipientAccount.getBalance() + amount;
 			recipientAccount.setBalance(recipientNewBalance);
+			// send recipient account to the client
+			// if recipient account contains
+			if (recipientAccount.getUsers().contains(currUserID)) {
+				try {
+					writer.writeUnshared(recipientAccount);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
 			System.out.println("new recipient account info: " + recipientAccount);
-
 		}
 
 		private void atmHandler() {
 
 			Object obj;
+			int currUserId;
 
 			try {
 				// handle ATM login
@@ -220,17 +229,17 @@ public class Server {
 					obj = reader.readObject();
 					LoginMessage loginMessage = (LoginMessage) obj;
 					LoginMessage loginReceipt;
-					int userId = loginMessage.getUserId();
+					currUserId = loginMessage.getUserId();
 					String password = loginMessage.getPassword();
 
 					// if user exists and password is correct, return success message, user info and
 					// break
-					if (userLogin(userId, password)) {
+					if (userLogin(currUserId, password)) {
 						// LoginMessage(int id, String to, String from, Status status, String text)
 						loginReceipt = new LoginMessage(Status.SUCCESS);
 						writer.writeObject(loginReceipt); // send loginReceipt
-						writer.writeObject(userList.get(userId)); // send BankUser object to client
-						System.out.println("ATM client logged in with user: " + userList.get(userId).getName());
+						writer.writeObject(userList.get(currUserId)); // send BankUser object to client
+						System.out.println("ATM client logged in with user: " + userList.get(currUserId).getName());
 						break;
 					} else { // fail to login
 						// return error message
@@ -299,7 +308,7 @@ public class Server {
 									transferAmount);
 							writer.writeUnshared(msgReceipt);
 
-							transfer(fromAccountNumber, toAccountNumber, transferAmount);
+							transfer(fromAccountNumber, toAccountNumber, transferAmount, currUserId);
 						} else {
 							msgReceipt = new TransferMessage(Status.ERROR, fromAccountNumber, toAccountNumber,
 									transferAmount);
@@ -309,7 +318,7 @@ public class Server {
 					} else if (obj instanceof AccountMessage) {
 						AccountMessage msg = (AccountMessage) obj;
 						// code goes here
-						int currUserId = msg.getCurrUserId();
+						currUserId = msg.getCurrUserId();
 						int accountNumber = msg.getAccountNumber();
 						synchronized (activeAccounts) {
 							if (accountList.get(accountNumber).getUsers().contains(currUserId)

@@ -132,6 +132,7 @@ public class ATMClient {
 			int fromAccountNumber;
 			fromAccountNumber = scanner.nextInt();
 			scanner.nextLine();
+			List<Integer> toAccountUsers = null;
 
 			int toAccountNumber;
 			double amount;
@@ -152,7 +153,7 @@ public class ATMClient {
 				// expected an SUCCESS status of account info msg, containing all users linked
 				// to this recipent's account
 				AccountInfoMessage msgReceipt = (AccountInfoMessage) reader.readObject();
-
+				toAccountUsers = msgReceipt.getUsers();
 				System.out.println("Received Account Info Message with users: " + msgReceipt.getUsers());
 
 				// init list of string to store user names
@@ -207,6 +208,11 @@ public class ATMClient {
 				accounts.put(fromAccountNumber, newAccount);
 				// print out newAccount
 				System.out.println("new Account: " + newAccount);
+				if (toAccountUsers.contains(user.getId())) { // in case transfer between your accounts
+					// expect another bankaccount obj
+					BankAccount recipientAccount = (BankAccount) reader.readObject();
+					accounts.put(toAccountNumber, recipientAccount);
+				}
 				// show updated accounts
 				System.out.println("Updated accounts: " + accounts);
 			} else {

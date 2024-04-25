@@ -108,11 +108,11 @@ public class Server {
 		return teller;
 	}
 
-	public boolean userLogin(int userId, String password) {
+	public boolean checkUserLogin(int userId, String password) {
 		return (userList.containsKey(userId) && userList.get(userId).getPassword().equals(password));
 	}
 
-	public boolean tellerLogin(int tellerId, String password) {
+	public boolean checkTellerLogin(int tellerId, String password) {
 		return (tellerList.containsKey(tellerId) && tellerList.get(tellerId).getPassword().equals(password));
 	}
 
@@ -126,11 +126,11 @@ public class Server {
 			this.sock = sock;
 		}
 
-		public boolean checkWithdraw(int accountNumber, double amount, int pin) {
+		public boolean checkWithdraw(int userId, int accountNumber, double amount, int pin) {
 			// check if it is available to withdraw
 			// - accountNumber and pin matches
 			// - amount < balance
-			return (accountList.containsKey(accountNumber) && accountList.get(accountNumber).getAccountPin() == pin
+			return (userList.get(userId).getAccounts().contains(accountNumber) && accountList.get(accountNumber).getAccountPin() == pin
 					&& accountList.get(accountNumber).getBalance() >= amount);
 		}
 
@@ -145,19 +145,18 @@ public class Server {
 			System.out.println("new account info: " + account);
 			try {
 				// send new account object to client
-				writer.reset();
-				writer.writeObject(account);
+				writer.writeUnshared(account);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 		}
 
-		public boolean checkDeposit(int accountNumber, double amount, int pin) {
+		public boolean checkDeposit(int userId, int accountNumber, double amount, int pin) {
 			// check if it is available to withdraw
 			// - accountNumber and pin matches
 			// - amount < balance
-			return (accountList.containsKey(accountNumber) && accountList.get(accountNumber).getAccountPin() == pin);
+			return (userList.get(userId).getAccounts().contains(accountNumber) && accountList.get(accountNumber).getAccountPin() == pin);
 		}
 		
 		public boolean checkUserId(int userId) {
@@ -183,9 +182,9 @@ public class Server {
 
 		}
 
-		public boolean checkTransfer(int fromAccountNumber, double amount, int pin) {
+		public boolean checkTransfer(int userId, int fromAccountNumber, double amount, int pin) {
 			// if account number and pin matches and amount <= balance
-			return (accountList.containsKey(fromAccountNumber)
+			return (userList.get(userId).getAccounts().contains(fromAccountNumber) 
 					&& accountList.get(fromAccountNumber).getAccountPin() == pin
 					&& accountList.get(fromAccountNumber).getBalance() >= amount);
 		}
@@ -219,37 +218,68 @@ public class Server {
 			
 			System.out.println("new recipient account info: " + recipientAccount);
 		}
-
-		private void atmHandler() {
-
+		
+		private int atmLogin() {
 			Object obj;
-			int currUserId;
-
+			int currUserId = 0;
 			try {
-				// handle ATM login
+				
 				while (true) {
 					obj = reader.readObject();
 					LoginMessage loginMessage = (LoginMessage) obj;
 					LoginMessage loginReceipt;
 					currUserId = loginMessage.getUserId();
 					String password = loginMessage.getPassword();
-
-					// if user exists and password is correct, return success message, user info and
-					// break
-					if (userLogin(currUserId, password)) {
-						// LoginMessage(int id, String to, String from, Status status, String text)
-						loginReceipt = new LoginMessage(Status.SUCCESS);
-						writer.writeObject(loginReceipt); // send loginReceipt
-						writer.writeObject(userList.get(currUserId)); // send BankUser object to client
-						System.out.println("ATM client logged in with user: " + userList.get(currUserId).getName());
-						break;
-					} else { // fail to login
-						// return error message
-						loginReceipt = new LoginMessage(Status.ERROR);
-						writer.writeObject(loginReceipt); // send loginReceipt
+					
+					synchronized (activeUsers) {
+												
+						if (checkUserLogin(currUserId, password) && !activeUsers.get(currUserId)) {
+							// LoginMessage(int id, String to, String from, Status status, String text)
+							loginReceipt = new LoginMessage(Status.SUCCESS);
+							writer.writeObject(loginReceipt); // send loginReceipt
+							
+							// Update activeUsers
+							activeUsers.replace(currUserId, true);	
+							
+							writer.writeObject(userList.get(currUserId)); // send BankUser object to client
+							System.out.println("ATM client logged in with user: " + userList.get(currUserId).getName());
+							break;
+						} else { // fail to login
+							// return error message
+							loginReceipt = new LoginMessage(Status.ERROR);
+							writer.writeObject(loginReceipt); // send loginReceipt
+						}
 					}
 				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return currUserId;
+		}
+		
+		private void closeActiveAccounts(int userId) {
+			List<Integer> accounts = userList.get(userId).getAccounts();
+			
+			synchronized (activeAccounts) {
+				for (int accountNumber : accounts) {
+					activeAccounts.replace(accountNumber, false);
+				}
+			}
+			
+			synchronized (activeUsers) {
+				activeUsers.replace(userId, false);
+			}
+		}
+		
+		
+		private void atmHandler() {
 
+			Object obj;
+			int currUserId = atmLogin();
+
+			try {
 				// Wait for Account Message
 				while ((obj = reader.readObject()) != null) {
 
@@ -261,7 +291,11 @@ public class Server {
 						LogoutMessage msg = (LogoutMessage) obj;
 						LogoutMessage logoutReceipt = new LogoutMessage(Status.SUCCESS);
 						writer.writeObject(logoutReceipt);
-						atmHandler();
+						
+						// CLOSE ACTIVE ACCOUNTS
+						closeActiveAccounts(currUserId);
+						
+						atmHandler(); // handle new login
 
 					} else if (obj instanceof DepositMessage) {
 						// code goes here
@@ -270,7 +304,7 @@ public class Server {
 						double amount = msg.getDepositAmount();
 						int pin = msg.getPin();
 						// if it is available to deposit
-						if (checkDeposit(accountNumber, amount, pin)) {
+						if (checkDeposit(currUserId, accountNumber, amount, pin)) {
 							writer.writeObject(new DepositMessage(Status.SUCCESS));
 							// deposit
 							deposit(accountNumber, amount);
@@ -286,7 +320,7 @@ public class Server {
 						double amount = msg.getWithdrawAmount();
 						int pin = msg.getPin();
 
-						if (checkWithdraw(accountNumber, amount, pin)) { // if it is available to withdraw
+						if (checkWithdraw(currUserId, accountNumber, amount, pin)) { // if it is available to withdraw
 							// send back success message
 							writer.writeObject(new WithdrawMessage(Status.SUCCESS));
 							// withdraw
@@ -305,7 +339,7 @@ public class Server {
 
 						TransferMessage msgReceipt;
 						if (msg.getStatus() == Status.ONGOING
-								&& checkTransfer(fromAccountNumber, transferAmount, pin)) {
+								&& checkTransfer(currUserId, fromAccountNumber, transferAmount, pin)) {
 							msgReceipt = new TransferMessage(Status.SUCCESS, fromAccountNumber, toAccountNumber,
 									transferAmount);
 							writer.writeUnshared(msgReceipt);
@@ -370,23 +404,22 @@ public class Server {
 			}
 
 		} // end method atmHandler
-
-		private void tellerHandler() {
+		
+		private int tellerLogin() {
 			Object obj;
-
+			int tellerId = 0;
 			try {
-
 				// handle Teller login
 				while (true) {
 					obj = reader.readObject();
 					LoginMessage loginMessage = (LoginMessage) obj;
 					LoginMessage loginReceipt;
-					int tellerId = loginMessage.getUserId();
+					tellerId = loginMessage.getUserId();
 					String password = loginMessage.getPassword();
 
 					// if user exists and password is correct, return success message, user info and
 					// break
-					if (tellerLogin(tellerId, password)) {
+					if (checkTellerLogin(tellerId, password)) {
 						// LoginMessage(int id, String to, String from, Status status, String text)
 						loginReceipt = new LoginMessage(Status.SUCCESS);
 						writer.writeUnshared(loginReceipt); // send loginReceipt
@@ -400,7 +433,17 @@ public class Server {
 						writer.writeUnshared(loginReceipt); // send loginReceipt
 					}
 				}
-
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return tellerId;
+		}
+		
+		private void tellerHandler() {
+			Object obj;
+			int tellerId = tellerLogin();
+			int userId = 0;
+			try {
 				// handle remaining messages
 				while ((obj = reader.readObject()) != null) {
 
@@ -419,7 +462,7 @@ public class Server {
 						double amount = msg.getDepositAmount();
 						int pin = msg.getPin();
 						// if it is available to deposit
-						if (checkDeposit(accountNumber, amount, pin)) {
+						if (checkDeposit(userId, accountNumber, amount, pin)) {
 							writer.writeObject(new DepositMessage(Status.SUCCESS));
 							// deposit
 							deposit(accountNumber, amount);
@@ -434,7 +477,7 @@ public class Server {
 						int accountNumber = msg.getAccountNumber();
 						double amount = msg.getWithdrawAmount();
 						int pin = msg.getPin();
-						if (checkWithdraw(accountNumber, amount, pin)) { // if it is available to withdraw
+						if (checkWithdraw(userId, accountNumber, amount, pin)) { // if it is available to withdraw
 							// send back success message
 							writer.writeObject(new WithdrawMessage(Status.SUCCESS));
 							// withdraw
@@ -466,10 +509,17 @@ public class Server {
 								String birthday = info.get("birthday");
 								String password = info .get("password");
 								BankUser newUser = new BankUser(name, birthday, password);
+								userId = newUser.getId();
+								synchronized (userList) {
+									// add to userList and activeUsers
+									userList.put(userId, newUser);
+								}
 								
-								// add to userList and activeUsers
-								userList.put(newUser.getId(), newUser);
-								activeUsers.put(newUser.getId(), false);
+								synchronized (activeUsers) {
+									// since Teller client will automatically login this user account 
+									// and redirect to teller main page, set this user to active
+									activeUsers.put(userId, true);									
+								}
 								
 								System.out.println("new user created: " + newUser);
 								
@@ -479,19 +529,37 @@ public class Server {
 								break;
 							case USER_INFO:
 								// check if user id is valid
-								int info_userId = Integer.parseInt( msg.getInfo().get("userId"));
-								if (checkUserId(info_userId)) {
+								userId = Integer.parseInt( msg.getInfo().get("userId"));
+								if (checkUserId(userId)) {
 									// reply with success status and send back to client
 									msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.USER_INFO);
 									writer.writeUnshared(msgReceipt);
 									// send back BankUser obj
-									writer.writeUnshared(userList.get(info_userId));
+									writer.writeUnshared(userList.get(userId));
 								} else {
 									// reply with ERROR status and send back to client
 									msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.USER_INFO);
 									writer.writeUnshared(msgReceipt);
 								}
 								
+								break;
+							case ACCOUNT_INFO:
+								
+								int accountNumber = msg.getAccountNumber();
+								synchronized (activeAccounts) {
+									if (accountList.get(accountNumber).getUsers().contains(userId)
+											&& activeAccounts.get(accountNumber) == false) {
+										activeAccounts.replace(accountNumber, true);
+										// int id, int currUserId, int accountNumber, Status status
+										msgReceipt = new AccountMessage(userId, accountNumber,
+												Status.SUCCESS);
+										writer.writeObject(msgReceipt);
+										writer.writeObject(accountList.get(accountNumber));
+									} else { // Invalid request
+										msgReceipt = new AccountMessage(userId, accountNumber, Status.ERROR);
+										writer.writeObject(msgReceipt);
+									}
+								}
 								break;
 							default: break;
 						}

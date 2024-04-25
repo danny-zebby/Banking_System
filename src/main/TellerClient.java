@@ -204,7 +204,8 @@ public class TellerClient {
 				}
 			} // end while loop
 			
-			
+			getAccountsInfo(); // get all accounts
+			System.out.println("accounts: " + accounts);
 			loginUserAccount(userId);
 			
 		} catch (Exception e) {
@@ -213,6 +214,7 @@ public class TellerClient {
 	}
 	
 	public void loginUserAccount(int userId) {
+		
 		try {
 			boolean isLoggedOut = false;
 			while (!isLoggedOut) {
@@ -221,11 +223,18 @@ public class TellerClient {
 						+ "6-Forget-Password\n7-Withdraw\n8-Deposit\n9-Transfer\n10-Back");
 				int choice = scanner.nextInt();
 				switch (choice) {
-					case 10:
-						isLoggedOut = true;
-						break;
-					default:
-						break;
+					case 0: break;
+					case 1: break;
+					case 2: break;
+					case 3: break;
+					case 4: break;
+					case 5: break;
+					case 6: break;
+					case 7: withdraw(); break; // withdraw
+					case 8: deposit(); break; // deposit
+					case 9: transfer(); break; // transfer
+					case 10: isLoggedOut = true; break; // going back
+					default: break;
 				}
 			}
 			
@@ -235,7 +244,41 @@ public class TellerClient {
 		}
 	}
 
-	// !
+	
+	public void getAccountsInfo() {
+		try {
+			// request info from all accounts of current user
+			for (int accountNumber : user.getAccounts()) {
+				if (accounts == null || accounts.get(accountNumber) == null) { // update only when it's not available
+
+					// create new AccountMessage requesting account info
+					// int id, Status status, int accountNumber, int currUserId, int pin,
+					// AccountMessageType type
+					AccountMessage msg = new AccountMessage(Status.ONGOING, accountNumber, user.getId(), -1,
+							AccountMessageType.ACCOUNT_INFO);
+					// send message
+					writer.writeObject(msg);
+					// wait for message receipt
+					AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+					if (msgReceipt.getStatus() == Status.SUCCESS) {
+						// wait for BankAccount object
+						BankAccount acc = (BankAccount) reader.readObject();
+						// add to accounts
+						accounts.put(accountNumber, acc);
+					} else {
+						accounts.put(accountNumber, null);
+					}
+
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
+	} // end method getAccountsInfo
+	
 	public void checkTeller() {
 		// needs clarification
 	}
@@ -382,24 +425,24 @@ public class TellerClient {
 
 		tellerLogin();
 		scanner = new Scanner(System.in);
-
-		if (teller.getAdmin()) { // if this is an admin teller
-			// switch statement for admin teller
-
-		} else {
-			// switch statement for normal teller
-			boolean flag = false; // flag to quit the session
-			while (!flag) {
-				System.out.println("0-Create-New_User\n1-Login-User-Account\n2-LogOut");
-				int choice = scanner.nextInt();
-				switch (choice) {
-					case 0: createUser(); break; // create new user
-					case 1: loginUserAccount(); break;
-					case 2: flag = true; break;
-					default: break;
-				}
+		accounts = new HashMap<>();
+//		if (teller.getAdmin()) { // if this is an admin teller
+//			// switch statement for admin teller
+//
+//		} else {}
+		// switch statement for normal teller
+		boolean flag = false; // flag to quit the session
+		while (!flag) {
+			System.out.println("0-Create-New_User\n1-Login-User-Account\n2-LogOut");
+			int choice = scanner.nextInt();
+			switch (choice) {
+				case 0: createUser(); break; // create new user
+				case 1: loginUserAccount(); break;
+				case 2: flag = true; break;
+				default: break;
 			}
-		}    
+		}
+		   
 		// switch statement
 
 	}

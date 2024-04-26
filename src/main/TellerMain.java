@@ -24,7 +24,7 @@ public class TellerMain extends JFrame {
 		
 		client.go();
 		//Login Gui
-		TellerLogin.createWindow();
+		TL.createWindow();
 		
 		// Open 
 		

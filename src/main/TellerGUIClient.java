@@ -605,10 +605,10 @@ public class TellerGUIClient {
 	}
 
 	public void handshake() {
+		// public HelloMessage(int id, String text, String to, String from, MessageType
+		// type, Status status)
+		HelloMessage clientHello = new HelloMessage("Teller", Status.ONGOING);
 		try {
-			// public HelloMessage(int id, String text, String to, String from, MessageType
-			// type, Status status)
-			HelloMessage clientHello = new HelloMessage("Teller", Status.ONGOING);
 			writer.writeUnshared(clientHello);
 			HelloMessage serverHello = (HelloMessage) reader.readObject();
 			if (serverHello.getStatus() == Status.SUCCESS) {
@@ -638,9 +638,6 @@ public class TellerGUIClient {
 				// expect a success LoginMessage returned from the server
 				LoginMessage msgReceipt = (LoginMessage) reader.readObject();
 				if (msgReceipt.getStatus() == Status.SUCCESS) {
-					if (teller.getAdmin() == true) {
-						return "SUCCESS(A)";
-					}
 					return "SUCCESS";
 				} else {
 					return "ONGOING";
@@ -657,9 +654,9 @@ public class TellerGUIClient {
 
 	public void newSession() {
 
-		tellerLoginRequest(null,null);
+		teller = null;
 		
-		tellerMenu();
+		//tellerMenu();
 	}
 
 	public void tellerMenu() {

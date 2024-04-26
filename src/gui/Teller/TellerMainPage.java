@@ -24,11 +24,14 @@ public class TellerMainPage {
 		JLabel admin = new JLabel("Admin");
 		JPanel panel = new JPanel();
 		panel.add(admin);
+		JButton button1 = new JButton("Add New Teller");
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(BorderLayout.WEST, panel);
 		frame.setSize(500,300);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		
+		panel.add(button1);
 	}
 }

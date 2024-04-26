@@ -28,13 +28,13 @@ public class TellerLogin {
 	public static void createWindow() {
 	    JFrame frame = new JFrame("Teller Login");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    LoginUI(frame);
+	    TellerLoginUI(frame);
 	    frame.setSize(300, 200);
 	    frame.setLocationRelativeTo(null);
 	    frame.setVisible(true);
 	}
 		
-	private static void LoginUI(final JFrame frame){
+	private static void TellerLoginUI(final JFrame frame){
 		// creates a new panel
 		JPanel panel = new JPanel();
 		LayoutManager layout = new FlowLayout();
@@ -62,10 +62,7 @@ public class TellerLogin {
 					if (status == "SUCCESS") {
 						frame.setVisible(false);
 						getMainPage().run();
-					} else if (status == "SUCCESS(A)") {
-						JOptionPane.showMessageDialog(frame, "Second Screen");
-					}
-					else {
+					} else {
 						JOptionPane.showMessageDialog(frame, "Invaild ID or password. Try again");
 					}
 				}

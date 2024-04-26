@@ -59,7 +59,8 @@ public class AccountMessage implements MessageInterface, Serializable {
 		info.put("accountType", accountType.toString());
 		info.put("pin", Integer.toString(pin));
 	}
-
+	
+	// use for delete account
 	public AccountMessage(Status status, int accountNumber, int userId) {
 		this.status = status;
 		this.type = AccountMessageType.REM_ACCOUNT;

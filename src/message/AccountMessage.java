@@ -88,6 +88,17 @@ public class AccountMessage implements MessageInterface, Serializable {
 		info.put("pin", Integer.toString(pin));
 	}
 	
+	// use for transfer admin
+	public AccountMessage(Status status, int userId, int accountNumber, int pin, int recipientId) {
+		this.status = status;
+		this.type = AccountMessageType.TXF_ADMIN;
+		this.info = new HashMap<>();
+		info.put("userId", Integer.toString(userId));
+		info.put("accountNumber", Integer.toString(accountNumber));
+		info.put("pin", Integer.toString(pin));
+		info.put("recipientId", Integer.toString(recipientId));
+	}
+	
 	@Override
 	public Status getStatus() {
 		return this.status;

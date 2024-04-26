@@ -320,20 +320,19 @@ public class TellerClient {
 					case 1: deleteAccount(); break; // remove account
 					case 2: break; // add user to account
 					case 3: break; // remove user from account
-					case 4: break; // transfer admin
+					case 4: transferAdmin(); break; // transfer admin
 					case 5: changePin(); break; // change pin
 					case 6: forgetPassword(); break; // forget password
 					case 7: withdraw(); break; // withdraw
 					case 8: deposit(); break; // deposit
 					case 9: transfer(); break; // transfer
 					case 10:
+						isLoggedOut = true;
 						LogoutMessage msg = logoutRequest();
 						writer.writeUnshared(msg);
 						LogoutMessage msgBack = (LogoutMessage) reader.readObject();
 						if (msgBack.getStatus() == Status.SUCCESS) {
 							System.out.println("Logout was a success.\nReturning to teller main.");
-							// loginUserAcccount without parameter
-							tellerMenu();
 							break;
 						} else {
 							System.out.println("Logout failed, continue as User ID: " + userId);
@@ -355,27 +354,27 @@ public class TellerClient {
 		try {
 			// request info from all accounts of current user
 			for (int accountNumber : user.getAccounts()) {
-				if (accounts == null || accounts.get(accountNumber) == null) { // update only when it's not available
-
-					// create new AccountMessage requesting account info
-					// int id, Status status, int accountNumber, int currUserId, int pin,
-					// AccountMessageType type
-					AccountMessage msg = new AccountMessage(Status.ONGOING, accountNumber, user.getId(), -1,
-							AccountMessageType.ACCOUNT_INFO);
-					// send message
-					writer.writeUnshared(msg);
-					// wait for message receipt
-					AccountMessage msgReceipt = (AccountMessage) reader.readObject();
-					if (msgReceipt.getStatus() == Status.SUCCESS) {
-						// wait for BankAccount object
-						BankAccount acc = (BankAccount) reader.readObject();
-						// add to accounts
-						accounts.put(accountNumber, acc);
-					} else {
-						accounts.put(accountNumber, null);
-					}
-
+//				if (accounts == null || accounts.get(accountNumber) == null) {}// update only when it's not available
+				
+				// create new AccountMessage requesting account info
+				// int id, Status status, int accountNumber, int currUserId, int pin,
+				// AccountMessageType type
+				AccountMessage msg = new AccountMessage(Status.ONGOING, accountNumber, user.getId(), -1,
+						AccountMessageType.ACCOUNT_INFO);
+				// send message
+				writer.writeUnshared(msg);
+				// wait for message receipt
+				AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+				if (msgReceipt.getStatus() == Status.SUCCESS) {
+					// wait for BankAccount object
+					BankAccount acc = (BankAccount) reader.readObject();
+					// add to accounts
+					accounts.put(accountNumber, acc);
+				} else {
+					accounts.put(accountNumber, null);
 				}
+
+				
 			}
 
 		} catch (Exception e) {
@@ -605,8 +604,91 @@ public class TellerClient {
 	} // end method changePin
 
 	public void transferAdmin() {
+		scanner = new Scanner(System.in);
+		
+		// 1. get latest updates of all accounts
+		getAccountsInfo();
+		// initialize map: key: accountNumber -> value: Map<userId, user name>
+		Map<Integer, Map<Integer, String>> adminAccountsInfo = new HashMap<>();
+		// 1.1 for all accounts:
+		for (int accountNumber : user.getAccounts()) {
 
-	}
+			// if it is admin account (userId: username)
+			if (accounts.get(accountNumber).getAdminID() == user.getId()) {
+				BankAccount tempAccount = accounts.get(accountNumber);
+				// for each user:
+				for (int userId : tempAccount.getUsers()) {
+					// send user info msg to server
+					UserInfoMessage uiMsg = new UserInfoMessage(Status.ONGOING, userId);
+
+					try {
+						writer.writeUnshared(uiMsg);
+						// expected SUCCESS of user info msg, which contains user name
+						UserInfoMessage uiMsgReceipt = (UserInfoMessage) reader.readObject();
+						if (uiMsgReceipt.getStatus() == Status.SUCCESS) {
+							if (!adminAccountsInfo.containsKey(accountNumber)) {
+								adminAccountsInfo.put(accountNumber, new HashMap<>());
+							} 
+							// add username to adminAccountsInfo
+							adminAccountsInfo.get(accountNumber).put(userId, uiMsgReceipt.getUserName());
+						}
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+				} // end for loop
+			}
+			
+		}
+		// 1.2 list out all admin accounts
+		System.out.println("Please choose one of the admin accounts to transfer admin: ");
+		System.out.println(adminAccountsInfo.keySet());
+		
+		
+		// 2. choose admin account
+		int accountNumber = scanner.nextInt();
+		// 2.1 show all users of this account
+		System.out.println("Please choose one of the users to transfer: ");
+		System.out.println(adminAccountsInfo.get(accountNumber));
+		
+		// 3. choose recipient user id
+		int recipientId = scanner.nextInt();
+		
+		// 4. enter pin
+		System.out.println("Enter account pin: ");
+		int pin = scanner.nextInt();
+		
+		// 5. send transfer admin request to server -> AccountMessage of type TXF_ADMIN
+		// Status status, int userId, int accountNumber, int pin, int recipientId
+		AccountMessage msg = new AccountMessage(Status.ONGOING, user.getId(), accountNumber, pin, recipientId);
+		
+		try {
+			// send to server
+			writer.writeUnshared(msg);
+			
+			// wait for success status
+			AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+			
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				System.out.printf("For you account %d, the admin is transferred to %s successfully.", accountNumber, adminAccountsInfo.get(accountNumber).get(recipientId));
+				// update account pin locally (optional)
+				accounts.get(accountNumber).setAccountPin(pin);
+				
+				// 6. update account admin locally
+				accounts.get(accountNumber).setAdminID(recipientId);
+				
+			} else {
+				System.out.println("Fail to change your pin.");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+	} // end method transferAdmin
 
 	private boolean setUpConnection() {
 		try {

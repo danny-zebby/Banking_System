@@ -577,15 +577,14 @@ public class Server {
 							case ACCOUNT_INFO:{
 								
 								int accountNumber = msg.getAccountNumber();
-								
 								synchronized (activeAccounts) {
-									if (accountList.get(accountNumber).getUsers().contains(userId)
-											&& activeAccounts.get(accountNumber) == false) {
+									if (accountList.get(accountNumber).getUsers().contains(userId)) {
 										activeAccounts.replace(accountNumber, true);
 										// int id, int currUserId, int accountNumber, Status status
 										msgReceipt = new AccountMessage(userId, accountNumber,
 												Status.SUCCESS);
 										writer.writeUnshared(msgReceipt);
+										// send BankAccount obj
 										writer.writeUnshared(accountList.get(accountNumber));
 									} else { // Invalid request
 										msgReceipt = new AccountMessage(userId, accountNumber, Status.ERROR);
@@ -693,6 +692,42 @@ public class Server {
 									writer.writeUnshared(msgReceipt);
 									
 								}
+								break;
+							}
+							case TXF_ADMIN: {
+								int tempUserId = Integer.parseInt(info.get("userId"));
+								int accountNumber = Integer.parseInt(info.get("accountNumber"));
+								int pin = Integer.parseInt(info.get("pin"));
+								int recipientId = Integer.parseInt(info.get("recipientId"));
+								
+								// check if it is ready to transfer admin
+								// - if it is initiated by curr user
+								// - if the recipient is other user linked to this account
+								// - if this account's admin is curr user
+								// - if this account belongs to curr user
+								// - if this account belongs to recipient user
+								// - if this account pin matches with input pin
+								if (tempUserId == userId && recipientId != userId
+									&& accountList.get(accountNumber).getAdminID() == userId
+									&& accountList.get(accountNumber).getUsers().contains(userId)
+									&& accountList.get(accountNumber).getUsers().contains(recipientId)
+									&& accountList.get(accountNumber).getAccountPin() == pin) {
+									
+									// update account admin in account on server
+									accountList.get(accountNumber).setAdminID(recipientId);
+									
+									// send back success message
+									msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.TXF_ADMIN);
+									writer.writeUnshared(msgReceipt);
+									
+								} else { // fail to transfer admin
+									
+									msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.TXF_ADMIN);
+									// send back msgReceipt
+									writer.writeUnshared(msgReceipt);
+									
+								}
+								
 								break;
 							}
 							default: break;

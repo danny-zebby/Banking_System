@@ -671,7 +671,30 @@ public class Server {
 								
 								
 								break;
-							}								
+							}
+							case CHG_PIN: {
+								int tempUserId = Integer.parseInt(info.get("userId"));
+								int accountNumber = Integer.parseInt(info.get("accountNumber"));
+								int pin = Integer.parseInt(info.get("pin"));
+								
+								if (tempUserId == userId && accountList.get(accountNumber).getUsers().contains(userId)) {
+									
+									// update pin on server
+									accountList.get(accountNumber).setAccountPin(pin);
+									
+									// send back success message
+									msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHG_PIN);
+									writer.writeUnshared(msgReceipt);
+									
+								} else { // fail to change pin
+									
+									msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.CHG_PIN);
+									// send back msgReceipt
+									writer.writeUnshared(msgReceipt);
+									
+								}
+								break;
+							}
 							default: break;
 						}
 

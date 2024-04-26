@@ -321,7 +321,7 @@ public class TellerClient {
 					case 2: break; // add user to account
 					case 3: break; // remove user from account
 					case 4: break; // transfer admin
-					case 5: break; // change pin
+					case 5: changePin(); break; // change pin
 					case 6: forgetPassword(); break; // forget password
 					case 7: withdraw(); break; // withdraw
 					case 8: deposit(); break; // deposit
@@ -564,11 +564,45 @@ public class TellerClient {
 	}
 
 	public void changePin() {
+		
 		scanner = new Scanner(System.in);
+		System.out.println("Choose an account: ");
+		int accountNumber = scanner.nextInt();
+		
 		System.out.println("Enter new pin: ");
-		int num = scanner.nextInt();
-
-	}
+		int pin = scanner.nextInt();
+		scanner.nextLine();
+		
+		System.out.println("Type Yes to confirm your new pin is " + pin);
+		String input = scanner.nextLine();
+		if (input.equalsIgnoreCase("YES")) {
+			try {
+				// create AccountMessage with type CHG_PIN to server
+				// Status status, int userId, int accountNumber, int pin
+				AccountMessage msg = new AccountMessage(Status.ONGOING, user.getId(), accountNumber, pin);
+				
+				// send to server
+				writer.writeUnshared(msg);
+				
+				// wait for success status
+				AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+				
+				if (msgReceipt.getStatus() == Status.SUCCESS) {
+					System.out.println("Your pin is changed successfully.");
+					// update account pin locally (optional)
+					accounts.get(accountNumber).setAccountPin(pin);
+				} else {
+					System.out.println("Fail to change your pin.");
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		
+		}
+		
+		
+	} // end method changePin
 
 	public void transferAdmin() {
 

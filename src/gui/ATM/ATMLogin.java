@@ -1,15 +1,34 @@
 package gui.ATM;
 
 import javax.swing.*;
+
+import main.ATMGUIClient;
 import java.awt.*;
 import java.awt.event.*;
 
 public class ATMLogin {
-	public static void main(String[] args) {
-	      createWindow();
+	
+	public static ATMGUIClient client;
+	public static MainPage mainpage;
+	
+//	public static void main(String[] args) {
+//	      createWindow();
+//	}
+	
+	public ATMLogin (ATMGUIClient client, MainPage mainpage) {
+		this.client = client;
+		this.mainpage = mainpage;
 	}
 	
-	private static void createWindow() {
+	public static ATMGUIClient getClient() {
+		return client;
+	}
+	
+	public static MainPage getMainPage() {
+		return mainpage;
+	}
+	
+	public static void createWindow() {
 	    JFrame frame = new JFrame("ATM Login");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    LoginUI(frame);
@@ -17,7 +36,7 @@ public class ATMLogin {
 	    frame.setLocationRelativeTo(null);
 	    frame.setVisible(true);
 	}
-	
+		
 	private static void LoginUI(final JFrame frame){
 		// creates a new panel
 		JPanel panel = new JPanel();
@@ -42,8 +61,15 @@ public class ATMLogin {
 					JOptionPane.showMessageDialog(frame, "Please type in ID or password.");
 				} else {
 					// testing purposes
-					JOptionPane.showMessageDialog(frame, id);
-					JOptionPane.showMessageDialog(frame, password);
+					String status = getClient().loginRequest(id, password);
+					if (status == "SUCCESS") {
+//						System.exit(0);
+						frame.setVisible(false);
+						getMainPage().createWindow();
+					}
+					else {
+						JOptionPane.showMessageDialog(frame, "Invaild ID or password. Try again");
+					}
 				}
 			}
 		});
@@ -67,9 +93,9 @@ public class ATMLogin {
 		
 	}
 	
-	private static void mainpage(final JFrame frame){
-		//opens Mainpage.java
-		//MainPage.go();
-	}
+//	private static void mainpage(final JFrame frame){
+//		//opens Mainpage.java
+//		//MainPage.go();
+//	}
 	
 }

@@ -322,7 +322,7 @@ public class TellerClient {
 					case 3: break; // remove user from account
 					case 4: break; // transfer admin
 					case 5: break; // change pin
-					case 6: break; // forget password
+					case 6: forgetPassword(); break; // forget password
 					case 7: withdraw(); break; // withdraw
 					case 8: deposit(); break; // deposit
 					case 9: transfer(); break; // transfer
@@ -527,12 +527,40 @@ public class TellerClient {
 
 	public void forgetPassword() {
 		scanner = new Scanner(System.in);
-		System.out.println("Enter birthday: ");
-		String bd = scanner.nextLine();
-
-		System.out.println("Enter new password: ");
-		String pd = scanner.nextLine();
-
+		while (true) {
+			System.out.println("Enter birthday: ");
+			String birthday = scanner.nextLine();
+	
+			System.out.println("Enter new password: ");
+			String password = scanner.nextLine();
+			
+			System.out.println("Please type yes to confirm that your new password is " + password);
+			String input = scanner.nextLine();
+			if (input.equalsIgnoreCase("YES")) {
+				try {
+					
+					// create new AccountMessage with type CHG_PWD
+					AccountMessage msg = new AccountMessage(Status.ONGOING, birthday, password);
+					
+					// send to server
+					writer.writeUnshared(msg);
+					
+					// wait for success status
+					AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+					
+					if (msgReceipt.getStatus() == Status.SUCCESS) {
+						System.out.println("Your password is changed successfully.");
+					} else {
+						System.out.println("Wrong birthday. Fail to change your password.");
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				break; // break the while loop
+			}
+		}
 	}
 
 	public void changePin() {

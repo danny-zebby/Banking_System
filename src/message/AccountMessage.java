@@ -69,6 +69,15 @@ public class AccountMessage implements MessageInterface, Serializable {
 		info.put("userId", Integer.toString(userId));
 	}
 	
+	// use for forget password
+	public AccountMessage(Status status, String birthday, String password) {
+		this.status = status;
+		this.type = AccountMessageType.CHG_PWD;
+		this.info = new HashMap<>();
+		info.put("birthday", birthday);
+		info.put("password", password);
+	}
+	
 	@Override
 	public Status getStatus() {
 		return this.status;

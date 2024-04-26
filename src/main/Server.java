@@ -532,6 +532,7 @@ public class Server {
 						// code goes here
 						AccountMessageType type = msg.getType();
 						AccountMessage msgReceipt;
+						Map<String, String> info = msg.getInfo();
 						switch (type) {
 							case ADD_USER: {
 								// reply with success status
@@ -540,7 +541,6 @@ public class Server {
 								writer.writeUnshared(msgReceipt);
 								
 								// create new BankUser
-								Map<String, String> info = msg.getInfo();
 								String name = info.get("name");
 								String birthday = info.get("birthday");
 								String password = info .get("password");
@@ -595,7 +595,6 @@ public class Server {
 								break;
 							}
 							case ADD_ACCOUNT: {
-								Map<String, String> info = msg.getInfo();
 								AccountType accountType = AccountType.valueOf(info.get("accountType"));
 								int pin = Integer.parseInt(info.get("pin"));
 								
@@ -618,7 +617,6 @@ public class Server {
 								break;
 							}
 							case REM_ACCOUNT: {
-								Map<String, String> info = msg.getInfo();
 								int accountNumber = Integer.parseInt(info.get("accountNumber"));
 								
 								// check if it is ready to remove account
@@ -650,7 +648,30 @@ public class Server {
 								}
 								
 								break;
-							}									
+							}
+							case CHG_PWD: {
+								String birthday = info.get("birthday");
+								String password = info.get("password");
+								BankUser currUser = userList.get(userId);
+								// check if birthday is correct
+								if (currUser.getBirthday().equals(birthday)) {
+									// if yes, update password in userList, BankUser
+									currUser.setPassword(password);
+									
+									// send back success message
+									msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHG_PWD);
+									writer.writeUnshared(msgReceipt);
+									
+								} else { // incorrect birthday, fail to change password
+									
+									msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.CHG_PWD);
+									// send back msgReceipt
+									writer.writeUnshared(msgReceipt);
+								}
+								
+								
+								break;
+							}								
 							default: break;
 						}
 

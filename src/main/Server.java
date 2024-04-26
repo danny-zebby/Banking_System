@@ -236,18 +236,18 @@ public class Server {
 						if (checkUserLogin(currUserId, password) && !activeUsers.get(currUserId)) {
 							// LoginMessage(int id, String to, String from, Status status, String text)
 							loginReceipt = new LoginMessage(Status.SUCCESS);
-							writer.writeObject(loginReceipt); // send loginReceipt
+							writer.writeUnshared(loginReceipt); // send loginReceipt
 							
 							// Update activeUsers
 							activeUsers.replace(currUserId, true);	
 							
-							writer.writeObject(userList.get(currUserId)); // send BankUser object to client
+							writer.writeUnshared(userList.get(currUserId)); // send BankUser object to client
 							System.out.println("ATM client logged in with user: " + userList.get(currUserId).getName());
 							break;
 						} else { // fail to login
 							// return error message
 							loginReceipt = new LoginMessage(Status.ERROR);
-							writer.writeObject(loginReceipt); // send loginReceipt
+							writer.writeUnshared(loginReceipt); // send loginReceipt
 						}
 					}
 				}
@@ -290,7 +290,7 @@ public class Server {
 					} else if (obj instanceof LogoutMessage) {
 						LogoutMessage msg = (LogoutMessage) obj;
 						LogoutMessage logoutReceipt = new LogoutMessage(Status.SUCCESS);
-						writer.writeObject(logoutReceipt);
+						writer.writeUnshared(logoutReceipt);
 						
 						// CLOSE ACTIVE ACCOUNTS
 						closeActiveAccounts(currUserId);
@@ -305,12 +305,12 @@ public class Server {
 						int pin = msg.getPin();
 						// if it is available to deposit
 						if (checkDeposit(currUserId, accountNumber, amount, pin)) {
-							writer.writeObject(new DepositMessage(Status.SUCCESS));
+							writer.writeUnshared(new DepositMessage(Status.SUCCESS));
 							// deposit
 							deposit(accountNumber, amount);
 						} else { // is it is not available to deposit
 							// return error message
-							writer.writeObject(new DepositMessage(Status.ERROR));
+							writer.writeUnshared(new DepositMessage(Status.ERROR));
 						}
 
 					} else if (obj instanceof WithdrawMessage) {
@@ -322,12 +322,12 @@ public class Server {
 
 						if (checkWithdraw(currUserId, accountNumber, amount, pin)) { // if it is available to withdraw
 							// send back success message
-							writer.writeObject(new WithdrawMessage(Status.SUCCESS));
+							writer.writeUnshared(new WithdrawMessage(Status.SUCCESS));
 							// withdraw
 							withdraw(accountNumber, amount);
 						} else { // if it is not available to withdraw
 							// return error message
-							writer.writeObject(new WithdrawMessage(Status.ERROR));
+							writer.writeUnshared(new WithdrawMessage(Status.ERROR));
 						}
 
 					} else if (obj instanceof TransferMessage) {
@@ -363,11 +363,11 @@ public class Server {
 								// int id, int currUserId, int accountNumber, Status status
 								AccountMessage msgReceipt = new AccountMessage(currUserId, accountNumber,
 										Status.SUCCESS);
-								writer.writeObject(msgReceipt);
-								writer.writeObject(accountList.get(accountNumber));
+								writer.writeUnshared(msgReceipt);
+								writer.writeUnshared(accountList.get(accountNumber));
 							} else { // Invalid request
 								AccountMessage msgReceipt = new AccountMessage(currUserId, accountNumber, Status.ERROR);
-								writer.writeObject(msgReceipt);
+								writer.writeUnshared(msgReceipt);
 							}
 						}
 
@@ -408,6 +408,7 @@ public class Server {
 		private int tellerLogin() {
 			Object obj;
 			int tellerId = 0;
+			
 			try {
 				// handle Teller login
 				while (true) {
@@ -416,21 +417,27 @@ public class Server {
 					LoginMessage loginReceipt;
 					tellerId = loginMessage.getUserId();
 					String password = loginMessage.getPassword();
-
+				
+					
 					// if user exists and password is correct, return success message, user info and
 					// break
-					if (checkTellerLogin(tellerId, password)) {
-						// LoginMessage(int id, String to, String from, Status status, String text)
-						loginReceipt = new LoginMessage(Status.SUCCESS);
-						writer.writeUnshared(loginReceipt); // send loginReceipt
-						writer.writeUnshared(tellerList.get(tellerId)); // send BankUser object to client
-						System.out
-						.println("Teller client logged in with teller: " + tellerList.get(tellerId).getName());
-						break;
-					} else { // fail to login
-						// return error message
-						loginReceipt = new LoginMessage(Status.ERROR);
-						writer.writeUnshared(loginReceipt); // send loginReceipt
+					synchronized (activeTellers) {
+						if (checkTellerLogin(tellerId, password) && !activeTellers.get(tellerId)) {
+							// LoginMessage(int id, String to, String from, Status status, String text)
+							loginReceipt = new LoginMessage(Status.SUCCESS);
+							writer.writeUnshared(loginReceipt); // send loginReceipt
+							
+							activeTellers.replace(tellerId, true);
+							
+							writer.writeUnshared(tellerList.get(tellerId)); // send BankUser object to client
+							System.out.println("Teller client logged in with teller: " + tellerList.get(tellerId).getName());
+							break;
+						} else { // fail to login
+							// return error message
+							loginReceipt = new LoginMessage(Status.ERROR);
+							writer.writeUnshared(loginReceipt); // send loginReceipt
+						}
+						
 					}
 				}
 			} catch (Exception e) {
@@ -443,6 +450,7 @@ public class Server {
 			Object obj;
 			int tellerId = tellerLogin();
 			int userId = 0;
+		
 			try {
 				// handle remaining messages
 				while ((obj = reader.readObject()) != null) {
@@ -454,6 +462,13 @@ public class Server {
 					} else if (obj instanceof LogoutMessage) {
 						LogoutMessage msg = (LogoutMessage) obj;
 						// code goes here
+						LogoutMessage logoutReceipt = new LogoutMessage(Status.SUCCESS);
+						writer.writeUnshared(logoutReceipt);
+						
+						// CLOSE ACTIVE ACCOUNTS
+						closeActiveAccounts(userId);
+
+						
 
 					} else if (obj instanceof DepositMessage) {
 						DepositMessage msg = (DepositMessage) obj;
@@ -463,12 +478,12 @@ public class Server {
 						int pin = msg.getPin();
 						// if it is available to deposit
 						if (checkDeposit(userId, accountNumber, amount, pin)) {
-							writer.writeObject(new DepositMessage(Status.SUCCESS));
+							writer.writeUnshared(new DepositMessage(Status.SUCCESS));
 							// deposit
 							deposit(accountNumber, amount);
 						} else { // is it is not available to deposit
 							// return error message
-							writer.writeObject(new DepositMessage(Status.ERROR));
+							writer.writeUnshared(new DepositMessage(Status.ERROR));
 						}
 
 					} else if (obj instanceof WithdrawMessage) {
@@ -479,18 +494,39 @@ public class Server {
 						int pin = msg.getPin();
 						if (checkWithdraw(userId, accountNumber, amount, pin)) { // if it is available to withdraw
 							// send back success message
-							writer.writeObject(new WithdrawMessage(Status.SUCCESS));
+							writer.writeUnshared(new WithdrawMessage(Status.SUCCESS));
 							// withdraw
 							withdraw(accountNumber, amount);
 						} else { // if it is not available to withdraw
 							// return error message
-							writer.writeObject(new WithdrawMessage(Status.ERROR));
+							writer.writeUnshared(new WithdrawMessage(Status.ERROR));
 						}
 
 					} else if (obj instanceof TransferMessage) {
 						TransferMessage msg = (TransferMessage) obj;
 						// code goes here
+						int fromAccountNumber = msg.getFromAccountNumber();
+						int toAccountNumber = msg.getToAccountNumber();
+						double transferAmount = msg.getTransferAmount();
+						int pin = msg.getPin();
+						
+						TransferMessage msgReceipt;
+						
+						if (msg.getStatus() == Status.ONGOING
+								&& checkTransfer(userId, fromAccountNumber, transferAmount, pin)) {
+							msgReceipt = new TransferMessage(Status.SUCCESS, fromAccountNumber, toAccountNumber,
+									transferAmount);
+							writer.writeUnshared(msgReceipt);
 
+							// check receiver
+							
+							
+							transfer(fromAccountNumber, toAccountNumber, transferAmount, userId);
+						} else {
+							msgReceipt = new TransferMessage(Status.ERROR, fromAccountNumber, toAccountNumber,
+									transferAmount);
+							writer.writeUnshared(msgReceipt);
+						}
 					} else if (obj instanceof AccountMessage) {
 						AccountMessage msg = (AccountMessage) obj;
 						// code goes here
@@ -519,16 +555,21 @@ public class Server {
 							case USER_INFO: {
 								// check if user id is valid
 								userId = Integer.parseInt( msg.getInfo().get("userId"));
-								if (checkUserId(userId)) {
-									// reply with success status and send back to client
-									msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.USER_INFO);
-									writer.writeUnshared(msgReceipt);
-									// send back BankUser obj
-									writer.writeUnshared(userList.get(userId));
-								} else {
-									// reply with ERROR status and send back to client
-									msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.USER_INFO);
-									writer.writeUnshared(msgReceipt);
+								synchronized (activeUsers) {
+									if (checkUserId(userId) && !activeUsers.get(userId)) {
+										// reply with success status and send back to client
+										msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.USER_INFO);
+										writer.writeUnshared(msgReceipt);
+										
+										activeUsers.replace(userId, true);
+										
+										// send back BankUser obj
+										writer.writeUnshared(userList.get(userId));
+									} else {
+										// reply with ERROR status and send back to client
+										msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.USER_INFO);
+										writer.writeUnshared(msgReceipt);
+									}
 								}
 								
 								break;
@@ -536,8 +577,6 @@ public class Server {
 							case ACCOUNT_INFO:{
 								
 								int accountNumber = msg.getAccountNumber();
-								// debugging
-								System.out.println("Requesting account " + accountNumber);
 								
 								synchronized (activeAccounts) {
 									if (accountList.get(accountNumber).getUsers().contains(userId)
@@ -581,6 +620,29 @@ public class Server {
 							default: break;
 						}
 
+					} else if (obj instanceof AccountInfoMessage) {
+						AccountInfoMessage msg = (AccountInfoMessage) obj;
+						int accountNumber = msg.getAccountNumber();
+						AccountInfoMessage msgReceipt;
+						if (msg.getStatus() == Status.ONGOING && accountList.containsKey(accountNumber)) {
+							msgReceipt = new AccountInfoMessage(Status.SUCCESS, accountNumber,
+									accountList.get(accountNumber).getUsers());
+						} else {
+							msgReceipt = new AccountInfoMessage(Status.ERROR, accountNumber);
+						}
+						writer.writeUnshared(msgReceipt);
+
+					} else if (obj instanceof UserInfoMessage) {
+						UserInfoMessage msg = (UserInfoMessage) obj;
+						int toUserId = msg.getUserID();
+						UserInfoMessage msgReceipt;
+						if (msg.getStatus() == Status.ONGOING && userList.containsKey(toUserId)) {
+							msgReceipt = new UserInfoMessage(Status.SUCCESS, toUserId, userList.get(toUserId).getName());
+						} else {
+							msgReceipt = new UserInfoMessage(Status.ERROR, toUserId);
+						}
+						writer.writeUnshared(msgReceipt);
+						
 					} else if (obj instanceof TellerMessage) {
 						TellerMessage msg = (TellerMessage) obj;
 						// code goes here
@@ -606,7 +668,7 @@ public class Server {
 					clientHello = (HelloMessage) obj;
 					System.out.println(clientHello.toString());
 					HelloMessage serverHello = new HelloMessage("Server", Status.SUCCESS);
-					writer.writeObject(serverHello);
+					writer.writeUnshared(serverHello);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -50,7 +50,7 @@ public class MainPage {
 	
 	public void go() {
 		// create new frame
-		frame = new JFrame();
+		frame = new JFrame("ATM MainPage");
 		
 		// create new panel
 		southPanel = new JPanel();
@@ -58,7 +58,6 @@ public class MainPage {
 		eastPanel = new JPanel();
 		westPanel = new JPanel();
 		JButton showButton = new JButton("Show");
-		showButton.addActionListener(new showButtonActionListener());
 		eastPanel.setLayout(new FlowLayout());
 		eastPanel.add(showButton);
 		
@@ -83,6 +82,7 @@ public class MainPage {
 		// show frame
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(500, 300);
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 	
@@ -148,6 +148,7 @@ public class MainPage {
 				
 			}
 		});
+		
 	}
 
 	

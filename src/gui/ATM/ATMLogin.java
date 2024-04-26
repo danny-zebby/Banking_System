@@ -56,10 +56,9 @@ public class ATMLogin {
 				if (id.contentEquals("") || password.contentEquals("")) {
 					JOptionPane.showMessageDialog(frame, "Please type in ID or password.");
 				} else {
-					// testing purposes
 					String status = getClient().loginRequest(id, password);
+					// if Login Request is successful, Login GUI is made invisible and MainPage opens
 					if (status == "SUCCESS") {
-//						System.exit(0);
 						frame.setVisible(false);
 						getMainPage().go();
 					}
@@ -88,10 +87,5 @@ public class ATMLogin {
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 		
 	}
-	
-//	private static void mainpage(final JFrame frame){
-//		//opens Mainpage.java
-//		//MainPage.go();
-//	}
 	
 }

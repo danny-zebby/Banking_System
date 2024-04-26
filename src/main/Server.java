@@ -43,6 +43,10 @@ public class Server {
 		BankAccount acc2 = addAccount(1234, AccountType.SAVING, user1, 10000);
 		BankAccount acc3 = addAccount(3333, AccountType.CHECKING, user2, 10000);
 		BankAccount acc4 = addAccount(4444, AccountType.CHECKING, user2, 10000);
+		
+		acc1.addUser(user2);
+		user2.addAccount(acc1);
+		
 		Teller tel1 = addTeller("Alice", "letmein", true); // this is the admin
 		Teller tel2 = addTeller("BOB", "plsletmein", false);
 		Teller tel3 = addTeller("BOB", "letmeinin", false);

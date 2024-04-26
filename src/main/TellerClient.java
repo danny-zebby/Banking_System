@@ -671,7 +671,7 @@ public class TellerClient {
 			AccountMessage msgReceipt = (AccountMessage) reader.readObject();
 			
 			if (msgReceipt.getStatus() == Status.SUCCESS) {
-				System.out.printf("For you account %d, the admin is transferred to %s successfully.", accountNumber, adminAccountsInfo.get(accountNumber).get(recipientId));
+				System.out.printf("For you account %d, the admin is transferred to %s successfully.\n", accountNumber, adminAccountsInfo.get(accountNumber).get(recipientId));
 				// update account pin locally (optional)
 				accounts.get(accountNumber).setAccountPin(pin);
 				

@@ -103,12 +103,105 @@ public class TellerClient {
 	// Transfer
 	public void transfer() {
 		try {
+			// get inputs: acc#, amount, pin
+			scanner = new Scanner(System.in);
+			System.out.println("Enter your account number: ");
+			int fromAccountNumber;
+			fromAccountNumber = scanner.nextInt();
+			scanner.nextLine();
+			List<Integer> toAccountUsers = null;
+
+			int toAccountNumber;
+			double amount;
+
+			while (true) {
+				System.out.println("Enter recipient account number: ");
+				toAccountNumber = scanner.nextInt();
+				scanner.nextLine();
+				System.out.println("Enter the amount to transfer: ");
+				amount = scanner.nextDouble();
+				scanner.nextLine();
+
+				// verify from server the recipient's info
+				// send an account info message to the server: int id, int currUserId, int
+				// accountNumber, Status status
+				AccountInfoMessage msg = new AccountInfoMessage(Status.ONGOING, toAccountNumber);
+				writer.writeUnshared(msg);
+				// expected an SUCCESS status of account info msg, containing all users linked
+				// to this recipent's account
+				AccountInfoMessage msgReceipt = (AccountInfoMessage) reader.readObject();
+				toAccountUsers = msgReceipt.getUsers();
+				System.out.println("Received Account Info Message with users: " + msgReceipt.getUsers());
+
+				// init list of string to store user names
+				ArrayList<String> recipentNames = new ArrayList<>();
+
+				if (msgReceipt.getStatus() == Status.SUCCESS) {
+					// for each user of this account
+					for (int userId : msgReceipt.getUsers()) {
+						// send user info msg to server
+						UserInfoMessage uiMsg = new UserInfoMessage(Status.ONGOING, userId);
+						writer.writeUnshared(uiMsg);
+						// expected SUCCESS of user info msg, which contains user name
+						UserInfoMessage uiMsgReceipt = (UserInfoMessage) reader.readObject();
+
+						if (uiMsgReceipt.getStatus() == Status.SUCCESS) {
+							recipentNames.add(uiMsgReceipt.getUserName()); // add user name to list
+						}
+
+					}
+					// show the confirmation msg with all the user names and amount of money
+					System.out.printf("You are transferring $%.2f to account %d, which has users %s.\n", amount,
+							toAccountNumber, recipentNames);
+					System.out.println("Please enter yes to confirm.");
+					String userInput = scanner.nextLine();
+					if (userInput.equalsIgnoreCase("YES")) {
+						break; // if user confirms, break the while loop
+					} else {
+						continue;
+					}
+				}
+
+			} // end while loop
+
+			System.out.println("Enter the account pin: ");
+			int accountPin = scanner.nextInt();
+			scanner.nextLine();
+
+			// create a transfer message
+			// int id, Status status, int accountNumber, double transferAmount, int pin
+			TransferMessage txMsg = new TransferMessage(Status.ONGOING, fromAccountNumber, toAccountNumber, amount,
+					accountPin);
+			// send a message to server
+			writer.writeUnshared(txMsg);
+
+			// wait for a transfer message receipt
+			TransferMessage txMsgReceipt = (TransferMessage) reader.readObject();
+
+			if (txMsgReceipt.getStatus() == Status.SUCCESS) {
+				// expect a new Account object
+				BankAccount newAccount = (BankAccount) reader.readObject();
+				// update accounts
+				accounts.put(fromAccountNumber, newAccount);
+				// print out newAccount
+				System.out.println("new Account: " + newAccount);
+				if (toAccountUsers.contains(user.getId())) { // in case transfer between your accounts
+					// expect another bankaccount obj
+					BankAccount recipientAccount = (BankAccount) reader.readObject();
+					accounts.put(toAccountNumber, recipientAccount);
+				}
+				// show updated accounts
+				System.out.println("Updated accounts: " + accounts);
+			} else {
+				System.out.println("Fail to transfer $" + amount + " from account " + fromAccountNumber + " to account "
+						+ toAccountNumber);
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-	}
+	} // end of transfer method
 
 	// Teller functions
 	public void addTeller() {
@@ -127,26 +220,26 @@ public class TellerClient {
 
 	public void createUser() {
 		try {
-			
+
 			while (true) {
-				
+
 				scanner = new Scanner(System.in);
 				System.out.println("Enter name: ");
 				String name = scanner.nextLine();
-				
+
 				scanner = new Scanner(System.in);
 				System.out.println("Enter birthday: ");
 				String birthday = scanner.nextLine();
-				
+
 				scanner = new Scanner(System.in);
 				System.out.println("Enter password: ");
 				String password = scanner.nextLine();
-				
+
 				System.out.println("Please type yes to confirm your information below.");
 				System.out.printf("Name: %s\nDOB: %s\nPassword: %s\n", name, birthday, password);
-				
+
 				String userConfirm = scanner.nextLine();
-				
+
 				if (userConfirm.equalsIgnoreCase("YES")) {
 					// send Account Message to server with type ADD_USER
 					AccountMessage msg = new AccountMessage(Status.ONGOING, name, birthday, password);
@@ -161,14 +254,14 @@ public class TellerClient {
 						System.out.println("Fail to create a new user. Please try again.");
 						continue;
 					}
-					
+
 					// redirect to login in as user page
 					loginUserAccount(user.getId());
-					
+
 					break; // break while loop
 				}
 			} // end while loop
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -183,12 +276,12 @@ public class TellerClient {
 		try {
 			int userId;
 			while (true) {
-				
+
 				scanner = new Scanner(System.in);
 				System.out.println("Enter user id: ");
 				userId = scanner.nextInt();
 				scanner.nextLine();
-				
+
 				// send AccountMessage with type USER_INFO to get BankUser object
 				AccountMessage msg = new AccountMessage(Status.ONGOING, userId);
 				writer.writeUnshared(msg);
@@ -203,18 +296,18 @@ public class TellerClient {
 					System.out.printf("User id %d does not exist. Please try again.\n", userId);
 				}
 			} // end while loop
-			
+
 			getAccountsInfo(); // get all accounts
 			System.out.println("accounts: " + accounts);
 			loginUserAccount(userId);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void loginUserAccount(int userId) {
-		
+
 		try {
 			boolean isLoggedOut = false;
 			while (!isLoggedOut) {
@@ -233,18 +326,31 @@ public class TellerClient {
 					case 7: withdraw(); break; // withdraw
 					case 8: deposit(); break; // deposit
 					case 9: transfer(); break; // transfer
-					case 10: isLoggedOut = true; break; // going back
+					case 10:
+						LogoutMessage msg = logoutRequest();
+						writer.writeUnshared(msg);
+						LogoutMessage msgBack = (LogoutMessage) reader.readObject();
+						if (msgBack.getStatus() == Status.SUCCESS) {
+							System.out.println("Logout was a success.\nReturning to teller main.");
+							// loginUserAcccount without parameter
+							tellerMenu();
+							break;
+						} else {
+							System.out.println("Logout failed, continue as User ID: " + userId);
+							break;
+						}
+						
 					default: break;
 				}
 			}
-			
-			
+
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	
+
 	public void getAccountsInfo() {
 		try {
 			// request info from all accounts of current user
@@ -278,7 +384,7 @@ public class TellerClient {
 
 
 	} // end method getAccountsInfo
-	
+
 	public void checkTeller() {
 		// needs clarification
 	}
@@ -306,12 +412,12 @@ public class TellerClient {
 						return;
 					}
 				} catch (Exception e) {} // do nothing
-				
+
 				System.out.println("Invalid input. Please enter 0 or 1.");
-				
+
 			} // end while loop
-			
-			
+
+
 			// enter pin
 			while (true) {
 				System.out.println("Enter pin (only digits): ");
@@ -324,7 +430,7 @@ public class TellerClient {
 				} catch (Exception e) {}
 				System.out.println("Invalid pin. Please try again.");
 			} // end while loop
-			
+
 			// confirm
 			System.out.printf("You are creating a %s account with pin %d.\n", accountType, pin);
 			System.out.println("Please enter yes to confirm.");
@@ -335,33 +441,33 @@ public class TellerClient {
 				continue;
 			}
 		} // end outer while loop
-		
-		
+
+
 		try {
 			// send AccountMessage of to server: Status status, AccountType accountType, int pin
 			AccountMessage msg = new AccountMessage(Status.ONGOING, accountType, pin);
 			writer.writeUnshared(msg);
-			
+
 			// wait for success status and new Bank Account number
 			AccountMessage msgReceipt = (AccountMessage) reader.readObject();
-			
+
 			if (msgReceipt.getStatus() == Status.SUCCESS) {
 				int accountNumber = Integer.parseInt(msgReceipt.getInfo().get("accountNumber"));
 				user.getAccounts().add(accountNumber);
-				
+
 				// getAccountsInfo to get the newly created account to accounts
 				getAccountsInfo();
 				System.out.println("updated accounts: " + accounts);
-				
+
 			} else {
 				System.out.printf("Fail to create a new %s account.\n", accountType);
 				return;
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	} // end method createAccount
 
 	// delete account if the balance is zero, else fail to delete
@@ -475,7 +581,7 @@ public class TellerClient {
 			// public HelloMessage(int id, String text, String to, String from, MessageType
 			// type, Status status)
 			HelloMessage clientHello = new HelloMessage("Teller", Status.ONGOING);
-			writer.writeObject(clientHello);
+			writer.writeUnshared(clientHello);
 			HelloMessage serverHello = (HelloMessage) reader.readObject();
 			if (serverHello.getStatus() == Status.SUCCESS) {
 				System.out.println("client-server handshake successfully");
@@ -535,26 +641,37 @@ public class TellerClient {
 	public void newSession() {
 
 		tellerLogin();
+		
+		tellerMenu();
+	}
+
+	public void tellerMenu() {
 		scanner = new Scanner(System.in);
 		accounts = new HashMap<>();
-//		if (teller.getAdmin()) { // if this is an admin teller
-//			// switch statement for admin teller
-//
-//		} else {}
+		// if (teller.getAdmin()) { // if this is an admin teller
+		// // switch statement for admin teller
+		//
+		// } else {}
 		// switch statement for normal teller
 		boolean flag = false; // flag to quit the session
 		while (!flag) {
 			System.out.println("0-Create-New_User\n1-Login-User-Account\n2-LogOut");
 			int choice = scanner.nextInt();
 			switch (choice) {
-				case 0: createUser(); break; // create new user
-				case 1: loginUserAccount(); break;
-				case 2: flag = true; break;
-				default: break;
+			case 0:
+				createUser();
+				break; // create new user
+			case 1:
+				loginUserAccount();
+				break;
+			case 2:
+				flag = true;
+				break;
+			default:
+				break;
 			}
-		}
-		   
 
+		}
 	}
 
 	public void go() {
@@ -574,6 +691,12 @@ public class TellerClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+	}
+	
+	public LogoutMessage logoutRequest() {
+
+		return new LogoutMessage(Status.ONGOING);
 
 	}
 

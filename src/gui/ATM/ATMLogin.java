@@ -11,10 +11,6 @@ public class ATMLogin {
 	public static ATMGUIClient client;
 	public static MainPage mainpage;
 	
-//	public static void main(String[] args) {
-//	      createWindow();
-//	}
-	
 	public ATMLogin (ATMGUIClient client, MainPage mainpage) {
 		this.client = client;
 		this.mainpage = mainpage;
@@ -65,14 +61,14 @@ public class ATMLogin {
 					if (status == "SUCCESS") {
 //						System.exit(0);
 						frame.setVisible(false);
-						getMainPage().createWindow();
+						getMainPage().go();
 					}
 					else {
 						JOptionPane.showMessageDialog(frame, "Invaild ID or password. Try again");
 					}
 				}
 			}
-		});
+		} );
 		
 		exitButton.addActionListener(new ActionListener() {
 	          public void actionPerformed(ActionEvent e) {

@@ -80,6 +80,14 @@ public class BankAccount implements Serializable {
     this.adminID = adminID;
   }
 
+  public String toStringNoBalance() {
+	    return "BankAccount info:\n" +
+	        "accountNum: " + this.accountNumber + "\n" +
+	        "accountType: " + this.accountType + "\n" +
+	        "balance: ***.** \n" +
+	        "users: " + this.users + "\n";
+	  }
+  
   public String toString() {
     return "BankAccount info:\n" +
         "accountNum: " + this.accountNumber + "\n" +

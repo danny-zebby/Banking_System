@@ -316,31 +316,31 @@ public class TellerClient {
 						+ "6-Forget-Password\n7-Withdraw\n8-Deposit\n9-Transfer\n10-Back");
 				int choice = scanner.nextInt();
 				switch (choice) {
-				case 0: createAccount(); break; // create new account
-				case 1: break; // remove account
-				case 2: break; // add user to account
-				case 3: break; // remove user from account
-				case 4: break; // transfer admin
-				case 5: break; // change pin
-				case 6: break; // forget password
-				case 7: withdraw(); break; // withdraw
-				case 8: deposit(); break; // deposit
-				case 9: transfer(); break; // transfer
-				case 10:
-					LogoutMessage msg = logoutRequest();
-					writer.writeUnshared(msg);
-					LogoutMessage msgBack = (LogoutMessage) reader.readObject();
-					if (msgBack.getStatus() == Status.SUCCESS) {
-						System.out.println("Logout was a success.\nReturning to teller main.");
-						// loginUserAcccount without parameter
-						tellerMenu();
-						break;
-					} else {
-						System.out.println("Logout failed, continue as User ID: " + userId);
-						break;
-					}
-					
-				default: break;
+					case 0: createAccount(); break; // create new account
+					case 1: deleteAccount(); break; // remove account
+					case 2: break; // add user to account
+					case 3: break; // remove user from account
+					case 4: break; // transfer admin
+					case 5: break; // change pin
+					case 6: break; // forget password
+					case 7: withdraw(); break; // withdraw
+					case 8: deposit(); break; // deposit
+					case 9: transfer(); break; // transfer
+					case 10:
+						LogoutMessage msg = logoutRequest();
+						writer.writeUnshared(msg);
+						LogoutMessage msgBack = (LogoutMessage) reader.readObject();
+						if (msgBack.getStatus() == Status.SUCCESS) {
+							System.out.println("Logout was a success.\nReturning to teller main.");
+							// loginUserAcccount without parameter
+							tellerMenu();
+							break;
+						} else {
+							System.out.println("Logout failed, continue as User ID: " + userId);
+							break;
+						}
+						
+					default: break;
 				}
 			}
 
@@ -470,12 +470,46 @@ public class TellerClient {
 
 	} // end method createAccount
 
+	// delete account if the balance is zero, else fail to delete
 	public void deleteAccount() {
 		scanner = new Scanner(System.in);
-		System.out.println("Enter user id: ");
-		String userId = scanner.nextLine();
-
-	}
+		System.out.println("Enter Account number: ");
+		int accountNumber = scanner.nextInt();
+		scanner.nextLine();
+		
+		
+		// check if this account number is valid and account balance is not zero and whether the user has admin access to this account
+		if (user.getAccounts().contains(accountNumber) 
+				&& accounts.get(accountNumber).getBalance() == 0
+				&& accounts.get(accountNumber).getAdminID() == user.getId()) {
+			
+			// send AccountMessage to server
+			AccountMessage msg = new AccountMessage(Status.ONGOING, accountNumber, user.getId());
+			try {
+				writer.writeUnshared(msg);
+				// wait for success status
+				AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+				
+				if (msgReceipt.getStatus() == Status.SUCCESS) {
+					// update accounts, user.accounts
+					user.getAccounts().remove(Integer.valueOf(accountNumber));
+					accounts.remove(accountNumber);
+					System.out.println("Successfully remove account " + accountNumber + ".");
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			
+			
+		} else {
+			System.out.println("Invalid accountNumber or your balance is not zero or you are not the admin of this account.");
+		}
+		
+		
+		
+	} // end method deleteAccount
 
 	public void addUser() {
 		scanner = new Scanner(System.in);

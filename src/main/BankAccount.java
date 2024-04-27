@@ -60,7 +60,7 @@ public class BankAccount implements Serializable {
   }
 
   public void addUser(BankUser user) {
-    this.users.add(user.getId());
+    this.users.add(Integer.valueOf(user.getId()));
   }
 
   public List<Integer> getUsers() {
@@ -68,7 +68,7 @@ public class BankAccount implements Serializable {
   }
 
   public boolean deleteUser(BankUser user) {
-    this.users.remove(user.getId());
+    this.users.remove(Integer.valueOf(user.getId()));
     return true;
   }
 

@@ -206,16 +206,58 @@ public class TellerClient {
 	// Teller functions
 	public void addTeller() {
 		scanner = new Scanner(System.in);
+		
 		System.out.println("Enter name: ");
 		String name = scanner.nextLine();
 
-		scanner = new Scanner(System.in);
 		System.out.println("Enter password: ");
-		String pw = scanner.nextLine();
+		String password = scanner.nextLine();
+		
+		// create new teller message
+		TellerMessage msg = new TellerMessage(Status.ONGOING, name, password);
+		try {
+			// send message to server
+			writer.writeUnshared(msg);
+			
+			// wait for success status
+			TellerMessage msgReceipt = (TellerMessage) reader.readObject();
+			
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				System.out.println("A new teller account is created successfully.");
+				
+				// receive a Teller obj
+				Teller newTeller = (Teller) reader.readObject();
+				
+				System.out.println("New teller: \n" +  newTeller);
+			} else {
+				System.out.println("Fail to create a new teller account.");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void deleteTeller() {
-		// no inputs are required from Teller
+		
+		scanner = new Scanner(System.in);
+		System.out.println("Please enter the id of the teller to remove: ");
+		int tempTellerId = scanner.nextInt();
+		scanner.nextLine();
+		
+		TellerMessage msg = new TellerMessage(Status.ONGOING, tempTellerId);
+		try {
+			// send TellerMessage to server
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		
 	}
 
 	public void createUser() {
@@ -792,29 +834,36 @@ public class TellerClient {
 	public void tellerMenu() {
 		scanner = new Scanner(System.in);
 		accounts = new HashMap<>();
-		// if (teller.getAdmin()) { // if this is an admin teller
-		// // switch statement for admin teller
-		//
-		// } else {}
-		// switch statement for normal teller
 		boolean flag = false; // flag to quit the session
-		while (!flag) {
-			System.out.println("0-Create-New_User\n1-Login-User-Account\n2-LogOut");
-			int choice = scanner.nextInt();
-			switch (choice) {
-			case 0:
-				createUser();
-				break; // create new user
-			case 1:
-				loginUserAccount();
-				break;
-			case 2:
-				flag = true;
-				break;
-			default:
-				break;
-			}
-
+		 if (teller.getAdmin()) { // if this is an admin teller
+			 // switch statement for admin teller
+			while (!flag) {
+				System.out.println("0-Add-New-Teller\n1-Delete-Teller\n2-View-logs\n3-Create-New-User\n4-Login-User-Account\n5-LogOut");
+				int choice = scanner.nextInt();
+				switch (choice) {
+				case 0: addTeller(); break; // add teller
+				case 1: deleteTeller(); break; // delete teller
+				case 2: openLogs(); break; // view logs
+				case 3: createUser(); break; // create new user
+				case 4: loginUserAccount(); break; // login user account
+				case 5: flag = true; break; // logout
+				default: break;
+				}
+	
+			} // end while loop
+		 } else {
+			// switch statement for normal teller
+			while (!flag) {
+				System.out.println("0-Create-New_User\n1-Login-User-Account\n2-LogOut");
+				int choice = scanner.nextInt();
+				switch (choice) {
+				case 0: createUser(); break; // create new user
+				case 1: loginUserAccount(); break;
+				case 2: flag = true; break;
+				default: break;
+				}
+	
+			} // end while loop
 		}
 	}
 

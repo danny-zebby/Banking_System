@@ -98,7 +98,7 @@ public class TellerClient {
 			e.printStackTrace();
 		}
 
-	}
+	} // end method deposit
 
 	// Transfer
 	public void transfer() {
@@ -203,7 +203,7 @@ public class TellerClient {
 
 	} // end of transfer method
 
-	// Teller functions
+	
 	public void addTeller() {
 		scanner = new Scanner(System.in);
 		
@@ -237,7 +237,7 @@ public class TellerClient {
 			e.printStackTrace();
 		}
 		
-	}
+	} // end method addTeller
 	
 	public Map<Integer, String> getTellersInfo() {
 		Map<Integer, String> tellersInfo = new HashMap<>();
@@ -265,9 +265,8 @@ public class TellerClient {
 			e.printStackTrace();
 		}
 		
-		
 		return tellersInfo;
-	}
+	} // end method getTellersInfo
 	
 	public void deleteTeller() {
 		
@@ -308,9 +307,7 @@ public class TellerClient {
 			e.printStackTrace();
 		}
 		
-		
-		
-	}
+	} // end method deleteTeller
 
 	public void addUserToAccount(int loggedInUserID) {
 
@@ -364,7 +361,7 @@ public class TellerClient {
 			e.printStackTrace();
 		}
 
-	}
+	} // end method addUserToAccount
 
 	public void deleteUserFromAccount(int loggedInUserID) {
 
@@ -420,7 +417,7 @@ public class TellerClient {
 			e.printStackTrace();
 		}
 
-	}
+	} // end method deleteUserFromAccount
 
 	public void createUser() {
 		try {
@@ -714,20 +711,7 @@ public class TellerClient {
 
 
 	} // end method deleteAccount
-
-	public void addUser() {
-		scanner = new Scanner(System.in);
-		System.out.println("Enter user id: ");
-		String userId = scanner.nextLine();
-
-	}
-
-	public void deleteUser() {
-		scanner = new Scanner(System.in);
-		System.out.println("Enter user id: ");
-		String userId = scanner.nextLine();
-
-	}
+	
 
 	public void forgetPassword() {
 		scanner = new Scanner(System.in);

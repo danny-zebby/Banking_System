@@ -98,7 +98,7 @@ public class TellerClient {
 			e.printStackTrace();
 		}
 
-	}
+	} // end method deposit
 
 	// Transfer
 	public void transfer() {
@@ -138,7 +138,7 @@ public class TellerClient {
 
 				if (msgReceipt.getStatus() == Status.SUCCESS) {
 					// for each user of this account
-					for (int userId : msgReceipt.getUsers()) {
+					for (int userId : toAccountUsers) {
 						// send user info msg to server
 						UserInfoMessage uiMsg = new UserInfoMessage(Status.ONGOING, userId);
 						writer.writeUnshared(uiMsg);
@@ -203,20 +203,111 @@ public class TellerClient {
 
 	} // end of transfer method
 
-	// Teller functions
+	
 	public void addTeller() {
 		scanner = new Scanner(System.in);
+		
 		System.out.println("Enter name: ");
 		String name = scanner.nextLine();
 
-		scanner = new Scanner(System.in);
 		System.out.println("Enter password: ");
-		String pw = scanner.nextLine();
-	}
-
+		String password = scanner.nextLine();
+		
+		// create new teller message
+		TellerMessage msg = new TellerMessage(Status.ONGOING, name, password);
+		try {
+			// send message to server
+			writer.writeUnshared(msg);
+			
+			// wait for success status
+			TellerMessage msgReceipt = (TellerMessage) reader.readObject();
+			
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				System.out.println("A new teller account is created successfully.");
+				
+				// receive a Teller obj
+				Teller newTeller = (Teller) reader.readObject();
+				
+				System.out.println("New teller: \n" +  newTeller);
+			} else {
+				System.out.println("Fail to create a new teller account.");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	} // end method addTeller
+	
+	public Map<Integer, String> getTellersInfo() {
+		Map<Integer, String> tellersInfo = new HashMap<>();
+		
+		TellerMessage msg = new TellerMessage(Status.ONGOING, TellerMessageType.TELLERS_INFO);
+		try {
+			// send teller message with type TELLERS_INFO
+			writer.writeUnshared(msg);
+			
+			// wait for success status
+			TellerMessage msgReceipt = (TellerMessage) reader.readObject();
+			
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				
+				Map<String, String> info = msgReceipt.getInfo();
+				for (String key : info.keySet()) {
+					// add info to tellersInfo
+					tellersInfo.put(Integer.parseInt(key), info.get(key)); // tellerId -> teller name
+				}
+				
+			} else { // status error
+				System.out.println("Fail to get all tellers info.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return tellersInfo;
+	} // end method getTellersInfo
+	
 	public void deleteTeller() {
-		// no inputs are required from Teller
-	}
+		
+		scanner = new Scanner(System.in);
+		
+		// get the list of tellers: tellerId + name
+		Map<Integer, String> tellersInfo = getTellersInfo();
+		// show only non-admin tellers
+		System.out.println("List of non-admin tellers: \ntellerId:teller name");
+		for (int tellerId : tellersInfo.keySet()) {
+			if (tellerId != teller.getId()) {
+				System.out.println(tellerId + ":" + tellersInfo.get(tellerId));
+			}
+		}
+		
+		System.out.println("Please enter the id of the teller to remove: ");
+		int tempTellerId = scanner.nextInt();
+		scanner.nextLine();
+		
+		TellerMessage msg = new TellerMessage(Status.ONGOING, tempTellerId);
+		try {
+			// send TellerMessage to server
+			writer.writeUnshared(msg);
+			
+			// wait for msgReceipt
+			TellerMessage msgReceipt = (TellerMessage) reader.readObject();
+			
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				
+				System.out.println("Successfully remove teller with id: " + tempTellerId);
+				
+			} else {
+				System.out.println("Fail to remove teller with id: " + tempTellerId);
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	} // end method deleteTeller
 
 	public void addUserToAccount(int loggedInUserID) {
 
@@ -270,7 +361,7 @@ public class TellerClient {
 			e.printStackTrace();
 		}
 
-	}
+	} // end method addUserToAccount
 
 	public void deleteUserFromAccount(int loggedInUserID) {
 
@@ -326,7 +417,7 @@ public class TellerClient {
 			e.printStackTrace();
 		}
 
-	}
+	} // end method deleteUserFromAccount
 
 	public void createUser() {
 		try {
@@ -620,20 +711,7 @@ public class TellerClient {
 
 
 	} // end method deleteAccount
-
-	public void addUser() {
-		scanner = new Scanner(System.in);
-		System.out.println("Enter user id: ");
-		String userId = scanner.nextLine();
-
-	}
-
-	public void deleteUser() {
-		scanner = new Scanner(System.in);
-		System.out.println("Enter user id: ");
-		String userId = scanner.nextLine();
-
-	}
+	
 
 	public void forgetPassword() {
 		scanner = new Scanner(System.in);
@@ -782,7 +860,7 @@ public class TellerClient {
 			AccountMessage msgReceipt = (AccountMessage) reader.readObject();
 
 			if (msgReceipt.getStatus() == Status.SUCCESS) {
-				System.out.printf("For you account %d, the admin is transferred to %s successfully.", accountNumber, adminAccountsInfo.get(accountNumber).get(recipientId));
+				System.out.printf("For you account %d, the admin is transferred to %s successfully.\n", accountNumber, adminAccountsInfo.get(accountNumber).get(recipientId));
 				// update account pin locally (optional)
 				accounts.get(accountNumber).setAccountPin(pin);
 
@@ -903,29 +981,36 @@ public class TellerClient {
 	public void tellerMenu() {
 		scanner = new Scanner(System.in);
 		accounts = new HashMap<>();
-		// if (teller.getAdmin()) { // if this is an admin teller
-		// // switch statement for admin teller
-		//
-		// } else {}
-		// switch statement for normal teller
 		boolean flag = false; // flag to quit the session
-		while (!flag) {
-			System.out.println("0-Create-New_User\n1-Login-User-Account\n2-LogOut");
-			int choice = scanner.nextInt();
-			switch (choice) {
-			case 0:
-				createUser();
-				break; // create new user
-			case 1:
-				loginUserAccount();
-				break;
-			case 2:
-				flag = true;
-				break;
-			default:
-				break;
-			}
-
+		 if (teller.getAdmin()) { // if this is an admin teller
+			 // switch statement for admin teller
+			while (!flag) {
+				System.out.println("0-Add-New-Teller\n1-Delete-Teller\n2-View-logs\n3-Create-New-User\n4-Login-User-Account\n5-LogOut");
+				int choice = scanner.nextInt();
+				switch (choice) {
+				case 0: addTeller(); break; // add teller
+				case 1: deleteTeller(); break; // delete teller
+				case 2: openLogs(); break; // view logs
+				case 3: createUser(); break; // create new user
+				case 4: loginUserAccount(); break; // login user account
+				case 5: flag = true; break; // logout
+				default: break;
+				}
+	
+			} // end while loop
+		 } else {
+			// switch statement for normal teller
+			while (!flag) {
+				System.out.println("0-Create-New_User\n1-Login-User-Account\n2-LogOut");
+				int choice = scanner.nextInt();
+				switch (choice) {
+				case 0: createUser(); break; // create new user
+				case 1: loginUserAccount(); break;
+				case 2: flag = true; break;
+				default: break;
+				}
+	
+			} // end while loop
 		}
 	}
 
@@ -933,8 +1018,7 @@ public class TellerClient {
 		try {
 			// start client
 			setUpConnection();
-
-			int id = 0;
+			
 			// handshake with server: Teller client hello
 			handshake();
 

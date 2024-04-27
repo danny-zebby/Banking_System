@@ -43,9 +43,13 @@ public class Server {
 		BankAccount acc2 = addAccount(1234, AccountType.SAVING, user1, 10000);
 		BankAccount acc3 = addAccount(3333, AccountType.CHECKING, user2, 10000);
 		BankAccount acc4 = addAccount(4444, AccountType.CHECKING, user2, 10000);
+		
+		acc1.addUser(user2);
+		user2.addAccount(acc1);
+		
 		Teller tel1 = addTeller("Alice", "letmein", true); // this is the admin
-		Teller tel2 = addTeller("BOB", "plsletmein", false);
-		Teller tel3 = addTeller("BOB", "letmeinin", false);
+		Teller tel2 = addTeller("BOB1", "plsletmein", false);
+		Teller tel3 = addTeller("BOB2", "letmeinin", false);
 	}
 
 	public void go() {
@@ -793,7 +797,87 @@ public class Server {
 					} else if (obj instanceof TellerMessage) {
 						TellerMessage msg = (TellerMessage) obj;
 						// code goes here
+						TellerMessageType type = msg.getType();
+						TellerMessage msgReceipt;
+						Map<String, String> info = msg.getInfo();
+						List<String> logs = msg.getLogs();
+						
+						switch (type) {
+						case ADD_TELLER: {
+							String name = info.get("name");
+							String password = info.get("password");
+							
+							Teller newTeller = new Teller(name, password, false);
+							int newTellerId = newTeller.getId();
+							synchronized (tellerList) {
+								tellerList.put(newTellerId, newTeller);
+							}
+							synchronized (activeTellers) {
+								activeTellers.put(newTellerId, false);
+							}
+							
+							// send back msgReceipt
+							msgReceipt = new TellerMessage(Status.SUCCESS, TellerMessageType.ADD_TELLER);
+							writer.writeUnshared(msgReceipt);
+							
+							// send Teller obj to client
+							writer.writeUnshared(newTeller);
+							
+							break;
+						}
+						case REM_TELLER: {
+							int tempTellerId = Integer.parseInt(info.get("tellerId"));
+							// check if tempTellerId is valid or not and this teller is not logged in
+							
+							if (tellerList.containsKey(tempTellerId) && activeTellers.get(tempTellerId) == false) {
+								
+								// remove teller from tellerList and activeTellers
+								synchronized (tellerList) {
+									tellerList.remove(tempTellerId);
+								}
+								synchronized (activeTellers) {
+									activeTellers.remove(tempTellerId);
+								}
+								
+								// send back msgReceipt with success status
+								msgReceipt = new TellerMessage(Status.SUCCESS, TellerMessageType.REM_TELLER);
+								writer.writeUnshared(msgReceipt);
+								
+							} else {
+								// send back msgReceipt with ERROR status
+								msgReceipt = new TellerMessage(Status.ERROR, TellerMessageType.REM_TELLER);
+								writer.writeUnshared(msgReceipt);
+								
+							}
 
+							break;
+						}
+						case VIEW_LOGS: {
+							break;
+						}
+						case TELLERS_INFO: {
+							// if this is admin teller
+							if (msg.getStatus() == Status.ONGOING && tellerList.get(tellerId).getAdmin()) {
+								
+								Map<String, String> newInfo = new HashMap<>();
+								for (int tempTellerId: tellerList.keySet()) {
+									newInfo.put(Integer.toString(tempTellerId), tellerList.get(tempTellerId).getName());
+								}
+								
+								// send back msgReceipt with SUCCESS status
+								msgReceipt = new TellerMessage(Status.SUCCESS, TellerMessageType.TELLERS_INFO, newInfo);
+								writer.writeUnshared(msgReceipt);
+								
+							} else {
+								// send back msgReceipt with ERROR status
+								msgReceipt = new TellerMessage(Status.ERROR, TellerMessageType.TELLERS_INFO);
+								writer.writeUnshared(msgReceipt);
+							}
+							
+							break;
+						}
+						default: break;	
+						} // end switch statement
 					}
 				} // end while loop
 

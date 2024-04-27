@@ -162,7 +162,7 @@ public class Server {
 			// - amount < balance
 			return (userList.get(userId).getAccounts().contains(accountNumber) && accountList.get(accountNumber).getAccountPin() == pin);
 		}
-		
+
 		public boolean checkUserId(int userId) {
 			return userList.containsKey(userId) && !activeUsers.get(userId);
 		}
@@ -219,32 +219,32 @@ public class Server {
 					e.printStackTrace();
 				}
 			}
-			
+
 			System.out.println("new recipient account info: " + recipientAccount);
 		}
-		
+
 		private int atmLogin() {
 			Object obj;
 			int currUserId = 0;
 			try {
-				
+
 				while (true) {
 					obj = reader.readObject();
 					LoginMessage loginMessage = (LoginMessage) obj;
 					LoginMessage loginReceipt;
 					currUserId = loginMessage.getUserId();
 					String password = loginMessage.getPassword();
-					
+
 					synchronized (activeUsers) {
-												
+
 						if (checkUserLogin(currUserId, password) && !activeUsers.get(currUserId)) {
 							// LoginMessage(int id, String to, String from, Status status, String text)
 							loginReceipt = new LoginMessage(Status.SUCCESS);
 							writer.writeUnshared(loginReceipt); // send loginReceipt
-							
+
 							// Update activeUsers
 							activeUsers.replace(currUserId, true);	
-							
+
 							writer.writeUnshared(userList.get(currUserId)); // send BankUser object to client
 							System.out.println("ATM client logged in with user: " + userList.get(currUserId).getName());
 							break;
@@ -255,29 +255,29 @@ public class Server {
 						}
 					}
 				}
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			return currUserId;
 		}
-		
+
 		private void closeActiveAccounts(int userId) {
 			List<Integer> accounts = userList.get(userId).getAccounts();
-			
+
 			synchronized (activeAccounts) {
 				for (int accountNumber : accounts) {
 					activeAccounts.replace(accountNumber, false);
 				}
 			}
-			
+
 			synchronized (activeUsers) {
 				activeUsers.replace(userId, false);
 			}
 		}
-		
-		
+
+
 		private void atmHandler() {
 
 			Object obj;
@@ -295,10 +295,10 @@ public class Server {
 						LogoutMessage msg = (LogoutMessage) obj;
 						LogoutMessage logoutReceipt = new LogoutMessage(Status.SUCCESS);
 						writer.writeUnshared(logoutReceipt);
-						
+
 						// CLOSE ACTIVE ACCOUNTS
 						closeActiveAccounts(currUserId);
-						
+
 						atmHandler(); // handle new login
 
 					} else if (obj instanceof DepositMessage) {
@@ -408,11 +408,11 @@ public class Server {
 			}
 
 		} // end method atmHandler
-		
+
 		private int tellerLogin() {
 			Object obj;
 			int tellerId = 0;
-			
+
 			try {
 				// handle Teller login
 				while (true) {
@@ -421,8 +421,8 @@ public class Server {
 					LoginMessage loginReceipt;
 					tellerId = loginMessage.getUserId();
 					String password = loginMessage.getPassword();
-				
-					
+
+
 					// if user exists and password is correct, return success message, user info and
 					// break
 					synchronized (activeTellers) {
@@ -430,9 +430,9 @@ public class Server {
 							// LoginMessage(int id, String to, String from, Status status, String text)
 							loginReceipt = new LoginMessage(Status.SUCCESS);
 							writer.writeUnshared(loginReceipt); // send loginReceipt
-							
+
 							activeTellers.replace(tellerId, true);
-							
+
 							writer.writeUnshared(tellerList.get(tellerId)); // send BankUser object to client
 							System.out.println("Teller client logged in with teller: " + tellerList.get(tellerId).getName());
 							break;
@@ -441,7 +441,7 @@ public class Server {
 							loginReceipt = new LoginMessage(Status.ERROR);
 							writer.writeUnshared(loginReceipt); // send loginReceipt
 						}
-						
+
 					}
 				}
 			} catch (Exception e) {
@@ -449,12 +449,12 @@ public class Server {
 			}
 			return tellerId;
 		}
-		
+
 		private void tellerHandler() {
 			Object obj;
 			int tellerId = tellerLogin();
 			int userId = 0;
-		
+
 			try {
 				// handle remaining messages
 				while ((obj = reader.readObject()) != null) {
@@ -468,11 +468,9 @@ public class Server {
 						// code goes here
 						LogoutMessage logoutReceipt = new LogoutMessage(Status.SUCCESS);
 						writer.writeUnshared(logoutReceipt);
-						
+
 						// CLOSE ACTIVE ACCOUNTS
 						closeActiveAccounts(userId);
-
-						
 
 					} else if (obj instanceof DepositMessage) {
 						DepositMessage msg = (DepositMessage) obj;
@@ -513,9 +511,9 @@ public class Server {
 						int toAccountNumber = msg.getToAccountNumber();
 						double transferAmount = msg.getTransferAmount();
 						int pin = msg.getPin();
-						
+
 						TransferMessage msgReceipt;
-						
+
 						if (msg.getStatus() == Status.ONGOING
 								&& checkTransfer(userId, fromAccountNumber, transferAmount, pin)) {
 							msgReceipt = new TransferMessage(Status.SUCCESS, fromAccountNumber, toAccountNumber,
@@ -523,8 +521,7 @@ public class Server {
 							writer.writeUnshared(msgReceipt);
 
 							// check receiver
-							
-							
+
 							transfer(fromAccountNumber, toAccountNumber, transferAmount, userId);
 						} else {
 							msgReceipt = new TransferMessage(Status.ERROR, fromAccountNumber, toAccountNumber,
@@ -538,203 +535,240 @@ public class Server {
 						AccountMessage msgReceipt;
 						Map<String, String> info = msg.getInfo();
 						switch (type) {
-							case ADD_USER: {
-								// reply with success status
-								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.ADD_USER);
-								// send back to client
-								writer.writeUnshared(msgReceipt);
-								
-								// create new BankUser
-								String name = info.get("name");
-								String birthday = info.get("birthday");
-								String password = info .get("password");
-								BankUser newUser = addUser(name, birthday, password);
-								System.out.println("new user created: " + newUser);
-								
-								// send BankUser to client
-								writer.writeUnshared(newUser);
-								
-								break;
-							}
-							case USER_INFO: {
-								// check if user id is valid
-								userId = Integer.parseInt( msg.getInfo().get("userId"));
-								synchronized (activeUsers) {
-									if (checkUserId(userId) && !activeUsers.get(userId)) {
-										// reply with success status and send back to client
-										msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.USER_INFO);
-										writer.writeUnshared(msgReceipt);
-										
-										activeUsers.replace(userId, true);
-										
-										// send back BankUser obj
-										writer.writeUnshared(userList.get(userId));
-									} else {
-										// reply with ERROR status and send back to client
-										msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.USER_INFO);
-										writer.writeUnshared(msgReceipt);
-									}
+						case ADD_USER: {
+							// reply with success status
+							msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.ADD_USER);
+							// send back to client
+							writer.writeUnshared(msgReceipt);
+
+							// create new BankUser
+							String name = info.get("name");
+							String birthday = info.get("birthday");
+							String password = info .get("password");
+							BankUser newUser = addUser(name, birthday, password);
+							System.out.println("new user created: " + newUser);
+
+							// send BankUser to client
+							writer.writeUnshared(newUser);
+
+							break;
+						}
+						case USER_INFO: {
+							// check if user id is valid
+							userId = Integer.parseInt( msg.getInfo().get("userId"));
+							synchronized (activeUsers) {
+								if (checkUserId(userId) && !activeUsers.get(userId)) {
+									// reply with success status and send back to client
+									msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.USER_INFO);
+									writer.writeUnshared(msgReceipt);
+
+									activeUsers.replace(userId, true);
+
+									// send back BankUser obj
+									writer.writeUnshared(userList.get(userId));
+								} else {
+									// reply with ERROR status and send back to client
+									msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.USER_INFO);
+									writer.writeUnshared(msgReceipt);
 								}
-								
-								break;
 							}
-							case ACCOUNT_INFO:{
-								
-								int accountNumber = msg.getAccountNumber();
-								synchronized (activeAccounts) {
-									if (accountList.get(accountNumber).getUsers().contains(userId)) {
-										activeAccounts.replace(accountNumber, true);
-										// int id, int currUserId, int accountNumber, Status status
-										msgReceipt = new AccountMessage(userId, accountNumber,
-												Status.SUCCESS);
-										writer.writeUnshared(msgReceipt);
-										// send BankAccount obj
-										writer.writeUnshared(accountList.get(accountNumber));
-									} else { // Invalid request
-										msgReceipt = new AccountMessage(userId, accountNumber, Status.ERROR);
-										writer.writeUnshared(msgReceipt);
-									}
+
+							break;
+						}
+						case ACCOUNT_INFO:{
+							int accountNumber = msg.getAccountNumber();
+							synchronized (activeAccounts) {
+								if (accountList.get(accountNumber).getUsers().contains(userId)) {
+									activeAccounts.replace(accountNumber, true);
+									// int id, int currUserId, int accountNumber, Status status
+									msgReceipt = new AccountMessage(userId, accountNumber,
+											Status.SUCCESS);
+									writer.writeUnshared(msgReceipt);
+									// send BankAccount obj
+									writer.writeUnshared(accountList.get(accountNumber));
+								} else { // Invalid request
+									msgReceipt = new AccountMessage(userId, accountNumber, Status.ERROR);
+									writer.writeUnshared(msgReceipt);
 								}
-								break;
 							}
-							case ADD_ACCOUNT: {
-								AccountType accountType = AccountType.valueOf(info.get("accountType"));
-								int pin = Integer.parseInt(info.get("pin"));
-								
-								BankAccount bankAccount = new BankAccount(pin, accountType, userId);
-								int accountNumber = bankAccount.getAccountNumber();
-								synchronized (accountList) {
-									accountList.put(accountNumber, bankAccount);
-								}
-								synchronized (activeAccounts) {
-									activeAccounts.put(accountNumber, false);
-								}
-								userList.get(userId).addAccount(bankAccount);
-								
-								// reply with success status with new accountNumber
-								Map<String, String> newInfo = new HashMap<>();
-								newInfo.put("accountNumber", Integer.toString(accountNumber));
-								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.ADD_ACCOUNT, newInfo);
-								writer.writeUnshared(msgReceipt);
-								
-								break;
+							break;
+						}
+						case ADD_ACCOUNT: {
+							AccountType accountType = AccountType.valueOf(info.get("accountType"));
+							int pin = Integer.parseInt(info.get("pin"));
+
+							BankAccount bankAccount = new BankAccount(pin, accountType, userId);
+							int accountNumber = bankAccount.getAccountNumber();
+							synchronized (accountList) {
+								accountList.put(accountNumber, bankAccount);
 							}
-							case REM_ACCOUNT: {
-								int accountNumber = Integer.parseInt(info.get("accountNumber"));
-								
-								// check if it is ready to remove account
-								// - if this user belongs to this account
-								// - if this account has balance of zero
-								// - if this user is the admin of this account
-								if (accountList.get(accountNumber).getUsers().contains(userId)
+							synchronized (activeAccounts) {
+								activeAccounts.put(accountNumber, false);
+							}
+							userList.get(userId).addAccount(bankAccount);
+
+							// reply with success status with new accountNumber
+							Map<String, String> newInfo = new HashMap<>();
+							newInfo.put("accountNumber", Integer.toString(accountNumber));
+							msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.ADD_ACCOUNT, newInfo);
+							writer.writeUnshared(msgReceipt);
+
+							break;
+						}
+						case REM_ACCOUNT: {
+							int accountNumber = Integer.parseInt(info.get("accountNumber"));
+
+							// check if it is ready to remove account
+							// - if this user belongs to this account
+							// - if this account has balance of zero
+							// - if this user is the admin of this account
+							if (accountList.get(accountNumber).getUsers().contains(userId)
 									&& accountList.get(accountNumber).getBalance() == 0
 									&& accountList.get(accountNumber).getAdminID() == userId) {
-									
-									// update BankUser in userList, 
-									userList.get(userId).getAccounts().remove(Integer.valueOf(accountNumber));
-									
-									// update activeAccounts, accountList
-									synchronized (activeAccounts) {
-										activeAccounts.remove(accountNumber);
-									}
-									accountList.remove(accountNumber);
-									
-									// send back msgReceipt
-									msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.REM_ACCOUNT);
-									// send back msgReceipt
-									writer.writeUnshared(msgReceipt);
-									
-								} else { // not able to remove
-									msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.REM_ACCOUNT);
-									// send back msgReceipt
-									writer.writeUnshared(msgReceipt);
+
+								// update BankUser in userList, 
+								userList.get(userId).getAccounts().remove(Integer.valueOf(accountNumber));
+
+								// update activeAccounts, accountList
+								synchronized (activeAccounts) {
+									activeAccounts.remove(accountNumber);
 								}
-								
-								break;
+								accountList.remove(accountNumber);
+
+								// send back msgReceipt
+								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.REM_ACCOUNT);
+								// send back msgReceipt
+								writer.writeUnshared(msgReceipt);
+
+							} else { // not able to remove
+								msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.REM_ACCOUNT);
+								// send back msgReceipt
+								writer.writeUnshared(msgReceipt);
 							}
-							case CHG_PWD: {
-								String birthday = info.get("birthday");
-								String password = info.get("password");
-								BankUser currUser = userList.get(userId);
-								// check if birthday is correct
-								if (currUser.getBirthday().equals(birthday)) {
-									// if yes, update password in userList, BankUser
-									currUser.setPassword(password);
-									
-									// send back success message
-									msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHG_PWD);
-									writer.writeUnshared(msgReceipt);
-									
-								} else { // incorrect birthday, fail to change password
-									
-									msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.CHG_PWD);
-									// send back msgReceipt
-									writer.writeUnshared(msgReceipt);
-								}
-								
-								
-								break;
+							break;
+						}
+						case CHG_PWD: {
+							String birthday = info.get("birthday");
+							String password = info.get("password");
+							BankUser currUser = userList.get(userId);
+							// check if birthday is correct
+							if (currUser.getBirthday().equals(birthday)) {
+								// if yes, update password in userList, BankUser
+								currUser.setPassword(password);
+
+								// send back success message
+								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHG_PWD);
+								writer.writeUnshared(msgReceipt);
+
+							} else { // incorrect birthday, fail to change password
+
+								msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.CHG_PWD);
+								// send back msgReceipt
+								writer.writeUnshared(msgReceipt);
 							}
-							case CHG_PIN: {
-								int tempUserId = Integer.parseInt(info.get("userId"));
-								int accountNumber = Integer.parseInt(info.get("accountNumber"));
-								int pin = Integer.parseInt(info.get("pin"));
-								
-								if (tempUserId == userId && accountList.get(accountNumber).getUsers().contains(userId)) {
-									
-									// update pin on server
-									accountList.get(accountNumber).setAccountPin(pin);
-									
-									// send back success message
-									msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHG_PIN);
-									writer.writeUnshared(msgReceipt);
-									
-								} else { // fail to change pin
-									
-									msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.CHG_PIN);
-									// send back msgReceipt
-									writer.writeUnshared(msgReceipt);
-									
-								}
-								break;
+							break;
+						}
+						case CHG_PIN: {
+							int tempUserId = Integer.parseInt(info.get("userId"));
+							int accountNumber = Integer.parseInt(info.get("accountNumber"));
+							int pin = Integer.parseInt(info.get("pin"));
+
+							if (tempUserId == userId && accountList.get(accountNumber).getUsers().contains(userId)) {
+
+								// update pin on server
+								accountList.get(accountNumber).setAccountPin(pin);
+
+								// send back success message
+								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHG_PIN);
+								writer.writeUnshared(msgReceipt);
+
+							} else { // fail to change pin
+
+								msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.CHG_PIN);
+								// send back msgReceipt
+								writer.writeUnshared(msgReceipt);
+
 							}
-							case TXF_ADMIN: {
-								int tempUserId = Integer.parseInt(info.get("userId"));
-								int accountNumber = Integer.parseInt(info.get("accountNumber"));
-								int pin = Integer.parseInt(info.get("pin"));
-								int recipientId = Integer.parseInt(info.get("recipientId"));
-								
-								// check if it is ready to transfer admin
-								// - if it is initiated by curr user
-								// - if the recipient is other user linked to this account
-								// - if this account's admin is curr user
-								// - if this account belongs to curr user
-								// - if this account belongs to recipient user
-								// - if this account pin matches with input pin
-								if (tempUserId == userId && recipientId != userId
+							break;
+						}
+						case TXF_ADMIN: {
+							int tempUserId = Integer.parseInt(info.get("userId"));
+							int accountNumber = Integer.parseInt(info.get("accountNumber"));
+							int pin = Integer.parseInt(info.get("pin"));
+							int recipientId = Integer.parseInt(info.get("recipientId"));
+
+							// check if it is ready to transfer admin
+							// - if it is initiated by curr user
+							// - if the recipient is other user linked to this account
+							// - if this account's admin is curr user
+							// - if this account belongs to curr user
+							// - if this account belongs to recipient user
+							// - if this account pin matches with input pin
+							if (tempUserId == userId && recipientId != userId
 									&& accountList.get(accountNumber).getAdminID() == userId
 									&& accountList.get(accountNumber).getUsers().contains(userId)
 									&& accountList.get(accountNumber).getUsers().contains(recipientId)
 									&& accountList.get(accountNumber).getAccountPin() == pin) {
-									
-									// update account admin in account on server
-									accountList.get(accountNumber).setAdminID(recipientId);
-									
-									// send back success message
-									msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.TXF_ADMIN);
-									writer.writeUnshared(msgReceipt);
-									
-								} else { // fail to transfer admin
-									
-									msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.TXF_ADMIN);
-									// send back msgReceipt
-									writer.writeUnshared(msgReceipt);
-									
-								}
-								
-								break;
+
+								// update account admin in account on server
+								accountList.get(accountNumber).setAdminID(recipientId);
+
+								// send back success message
+								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.TXF_ADMIN);
+								writer.writeUnshared(msgReceipt);
+
+							} else { // fail to transfer admin
+
+								msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.TXF_ADMIN);
+								// send back msgReceipt
+								writer.writeUnshared(msgReceipt);
+
 							}
-							default: break;
+
+							break;
+						}
+						case CHK_OWN: {
+							int tempUserId = Integer.parseInt(info.get("userId"));
+							int accountNumber = Integer.parseInt(info.get("accountNumber"));
+
+							if (accountList.get(accountNumber).getUsers().contains(tempUserId)) {
+								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHK_OWN);
+								writer.writeUnshared(msgReceipt);
+							} else {
+								msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.CHK_OWN);
+								// send back msgReceipt
+								writer.writeUnshared(msgReceipt);
+							}
+							break;
+						}
+						case ADD_USER_TO_ACC: {
+							int tempUserId = Integer.parseInt(info.get("userId"));
+							Integer userIdToAdd = Integer.valueOf(tempUserId);
+							int accountNumber = Integer.parseInt(info.get("accountNumber"));
+							Integer accNumToAdd = Integer.valueOf(accountNumber);
+							accountList.get(accountNumber).getUsers().add(userIdToAdd);
+							userList.get(tempUserId).getAccounts().add(accNumToAdd);
+
+							BankUser newUser = userList.get(tempUserId);
+							writer.writeUnshared(newUser);
+							break;
+						}
+						case REM_USER_FROM_ACC: {
+							int tempUserId = Integer.parseInt(info.get("userId"));
+							Integer userIdToRemove = Integer.valueOf(tempUserId);
+							int accountNumber = Integer.parseInt(info.get("accountNumber"));
+							Integer accNumToRem = Integer.valueOf(accountNumber);
+							accountList.get(accountNumber).getUsers().remove(userIdToRemove);
+							userList.get(tempUserId).getAccounts().remove(accNumToRem);
+							BankUser remUser = userList.get(tempUserId);
+							System.out.println("Sending BankUser object to client: " + remUser);
+							writer.writeObject(remUser);
+							writer.flush(); // Ensure data is sent immediately
+							System.out.println("BankUser object sent");
+	
+							break;
+						}
+						default: break;
 						}
 
 					} else if (obj instanceof AccountInfoMessage) {
@@ -759,7 +793,7 @@ public class Server {
 							msgReceipt = new UserInfoMessage(Status.ERROR, toUserId);
 						}
 						writer.writeUnshared(msgReceipt);
-						
+
 					} else if (obj instanceof TellerMessage) {
 						TellerMessage msg = (TellerMessage) obj;
 						// code goes here
@@ -845,7 +879,6 @@ public class Server {
 						default: break;	
 						} // end switch statement
 					}
-
 				} // end while loop
 
 			} catch (Exception e) {

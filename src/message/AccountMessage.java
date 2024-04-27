@@ -99,6 +99,15 @@ public class AccountMessage implements MessageInterface, Serializable {
 		info.put("recipientId", Integer.toString(recipientId));
 	}
 	
+	// use for add user to account, delete user to account for checking account ownership
+	public AccountMessage(Status status, AccountMessageType type, int userId, int accountNumber) {
+		this.status = status;
+		this.type = type;
+		this.info = new HashMap<>();
+		info.put("userId", Integer.toString(userId));
+		info.put("accountNumber", Integer.toString(accountNumber));
+	}
+	
 	@Override
 	public Status getStatus() {
 		return this.status;

@@ -6,7 +6,6 @@ import javax.swing.*;
 
 import main.TellerGUIClient;
 
-
 public class TellerLogin {
 	
 	public static TellerGUIClient client;
@@ -54,7 +53,7 @@ public class TellerLogin {
 				String id = textField.getText();
 				String password = textField2.getText();
 				//if either id or password are blank, a frame opens up and asks for input.
-				if (id.contentEquals("") || password.contentEquals("")) {
+				if (id.equals("") || password.equals("")) {
 					JOptionPane.showMessageDialog(frame, "Please type in ID or password.");
 				} else {
 					String status = getClient().tellerLoginRequest(id, password);
@@ -71,9 +70,8 @@ public class TellerLogin {
 		
 		exitButton.addActionListener(new ActionListener() {
 	          public void actionPerformed(ActionEvent e) {
-	        	 // testing purposes
 	             JOptionPane.showMessageDialog(frame, "Goodbye");
-	             //closes ATMclient
+	             //closes TellerLogin
 	             System.exit(0);
 	          }
 		});

@@ -53,7 +53,7 @@ public class ATMLogin {
 				String id = textField.getText();
 				String password = textField2.getText();
 				//if either id or password are blank, a frame opens up and asks for input.
-				if (id.contentEquals("") || password.contentEquals("")) {
+				if (id.equals("") || password.equals("")) {
 					JOptionPane.showMessageDialog(frame, "Please type in ID or password.");
 				} else {
 					String status = getClient().loginRequest(id, password);
@@ -71,9 +71,8 @@ public class ATMLogin {
 		
 		exitButton.addActionListener(new ActionListener() {
 	          public void actionPerformed(ActionEvent e) {
-	        	 // testing purposes
 	             JOptionPane.showMessageDialog(frame, "Goodbye");
-	             //closes ATMclient
+	             //closes ATMLogin
 	             System.exit(0);
 	          }
 		});

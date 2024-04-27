@@ -11,6 +11,11 @@ public class TellerMainPage {
 	JFrame frame;
 	public static TellerGUIClient client;
 	
+	//testing; can be 
+	public static void main(String[] args) {
+		run();
+	}
+	
 	public TellerMainPage(TellerGUIClient client) {
 		this.client = client;
 	}
@@ -19,19 +24,24 @@ public class TellerMainPage {
 		return client;
 	}
 	
-	public void run() {
-		frame = new JFrame("Teller MainPage");
+	public static void run() {
+		JFrame frame = new JFrame("Teller MainPage");
 		JLabel admin = new JLabel("Admin");
 		JPanel panel = new JPanel();
-		panel.add(admin);
-		JButton button1 = new JButton("Add New Teller");
 		
+		JButton button1 = new JButton("Add New Teller");
+		JButton button2 = new JButton("Login as User");
+		JButton button3 = new JButton("Logout");
+	
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(BorderLayout.WEST, panel);
 		frame.setSize(500,300);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
+		panel.add(admin);
 		panel.add(button1);
+		panel.add(button2);
+		panel.add(button3);
 	}
 }

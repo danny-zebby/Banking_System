@@ -1,39 +1,39 @@
-package gui.ATM;
+package gui.Teller;
 
-import javax.swing.*;
-
-import main.ATMGUIClient;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
 
-public class ATMLogin {
+import main.TellerGUIClient;
+
+public class TellerLogin {
 	
-	public static ATMGUIClient client;
-	public static MainPage mainpage;
+	public static TellerGUIClient client;
+	public static TellerMainPage mainpage;
 	
-	public ATMLogin (ATMGUIClient client, MainPage mainpage) {
+	public TellerLogin (TellerGUIClient client, TellerMainPage mainpage) {
 		this.client = client;
 		this.mainpage = mainpage;
 	}
 	
-	public static ATMGUIClient getClient() {
+	public static TellerGUIClient getClient() {
 		return client;
 	}
 	
-	public static MainPage getMainPage() {
+	public static TellerMainPage getMainPage() {
 		return mainpage;
 	}
 	
 	public static void createWindow() {
-	    JFrame frame = new JFrame("ATM Login");
+	    JFrame frame = new JFrame("Teller Login");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    LoginUI(frame);
+	    TellerLoginUI(frame);
 	    frame.setSize(300, 200);
 	    frame.setLocationRelativeTo(null);
 	    frame.setVisible(true);
 	}
 		
-	private static void LoginUI(final JFrame frame){
+	private static void TellerLoginUI(final JFrame frame){
 		// creates a new panel
 		JPanel panel = new JPanel();
 		LayoutManager layout = new FlowLayout();
@@ -56,13 +56,12 @@ public class ATMLogin {
 				if (id.equals("") || password.equals("")) {
 					JOptionPane.showMessageDialog(frame, "Please type in ID or password.");
 				} else {
-					String status = getClient().loginRequest(id, password);
+					String status = getClient().tellerLoginRequest(id, password);
 					// if Login Request is successful, Login GUI is made invisible and MainPage opens
 					if (status == "SUCCESS") {
 						frame.setVisible(false);
-						getMainPage().go();
-					}
-					else {
+						getMainPage().run();
+					} else {
 						JOptionPane.showMessageDialog(frame, "Invaild ID or password. Try again");
 					}
 				}
@@ -72,7 +71,7 @@ public class ATMLogin {
 		exitButton.addActionListener(new ActionListener() {
 	          public void actionPerformed(ActionEvent e) {
 	             JOptionPane.showMessageDialog(frame, "Goodbye");
-	             //closes ATMLogin
+	             //closes TellerLogin
 	             System.exit(0);
 	          }
 		});

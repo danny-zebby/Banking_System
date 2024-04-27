@@ -80,7 +80,6 @@ public class ATMClient {
 			e.printStackTrace();
 		}
 
-
 	} // end method deposit
 
 	public void withdraw() {
@@ -95,7 +94,7 @@ public class ATMClient {
 			System.out.println("Enter the account pin: ");
 			int accountPin = scanner.nextInt();
 			scanner.nextLine();
-	
+
 			// create a withdraw message
 			// int id, Status status, int accountNumber, double withdrawAmount, int pin
 			WithdrawMessage msg = new WithdrawMessage(Status.ONGOING, accountNumber, amount, accountPin);
@@ -103,7 +102,7 @@ public class ATMClient {
 			writer.writeUnshared(msg);
 			// wait for withdraw message receipt
 			WithdrawMessage msgReceipt = (WithdrawMessage) reader.readObject();
-	
+
 			if (msgReceipt.getStatus() == Status.SUCCESS) {
 				// expect a new Account object
 				BankAccount newAccount = (BankAccount) reader.readObject();
@@ -113,15 +112,15 @@ public class ATMClient {
 				System.out.println("new Account: " + newAccount);
 				// show updated accounts
 				System.out.println("Updated accounts: " + accounts);
-	
+
 			} else {
 				System.out.println("Fail to withdraw $" + amount + " from account " + accountNumber);
 			}
-	
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	
+
 	} // end method withdraw
 
 	public void transfer() {
@@ -157,7 +156,7 @@ public class ATMClient {
 				System.out.println("Received Account Info Message with users: " + msgReceipt.getUsers());
 
 				// init list of string to store user names
-				ArrayList<String> recipentNames = new ArrayList<>();
+				ArrayList<String> recipientNames = new ArrayList<>();
 
 				if (msgReceipt.getStatus() == Status.SUCCESS) {
 					// for each user of this account
@@ -169,13 +168,13 @@ public class ATMClient {
 						UserInfoMessage uiMsgReceipt = (UserInfoMessage) reader.readObject();
 
 						if (uiMsgReceipt.getStatus() == Status.SUCCESS) {
-							recipentNames.add(uiMsgReceipt.getUserName()); // add user name to list
+							recipientNames.add(uiMsgReceipt.getUserName()); // add user name to list
 						}
 
 					}
 					// show the confirmation msg with all the user names and amount of money
 					System.out.printf("You are transferring $%.2f to account %d, which has users %s.\n", amount,
-							toAccountNumber, recipentNames);
+							toAccountNumber, recipientNames);
 					System.out.println("Please enter yes to confirm.");
 					String userInput = scanner.nextLine();
 					if (userInput.equalsIgnoreCase("YES")) {
@@ -351,7 +350,6 @@ public class ATMClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 
 	} // end method getAccountsInfo
 

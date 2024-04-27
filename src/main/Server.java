@@ -48,8 +48,8 @@ public class Server {
 		user2.addAccount(acc1);
 		
 		Teller tel1 = addTeller("Alice", "letmein", true); // this is the admin
-		Teller tel2 = addTeller("BOB", "plsletmein", false);
-		Teller tel3 = addTeller("BOB", "letmeinin", false);
+		Teller tel2 = addTeller("BOB1", "plsletmein", false);
+		Teller tel3 = addTeller("BOB2", "letmeinin", false);
 	}
 
 	public void go() {
@@ -821,8 +821,29 @@ public class Server {
 						case VIEW_LOGS: {
 							break;
 						}
-						default: break;	
+						case TELLERS_INFO: {
+							// if this is admin teller
+							if (msg.getStatus() == Status.ONGOING && tellerList.get(tellerId).getAdmin()) {
+								
+								Map<String, String> newInfo = new HashMap<>();
+								for (int tempTellerId: tellerList.keySet()) {
+									newInfo.put(Integer.toString(tempTellerId), tellerList.get(tempTellerId).getName());
+								}
+								
+								// send back msgReceipt with SUCCESS status
+								msgReceipt = new TellerMessage(Status.SUCCESS, TellerMessageType.TELLERS_INFO, newInfo);
+								writer.writeUnshared(msgReceipt);
+								
+							} else {
+								// send back msgReceipt with ERROR status
+								msgReceipt = new TellerMessage(Status.ERROR, TellerMessageType.TELLERS_INFO);
+								writer.writeUnshared(msgReceipt);
+							}
+							
+							break;
 						}
+						default: break;	
+						} // end switch statement
 					}
 
 				} // end while loop

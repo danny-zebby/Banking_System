@@ -36,6 +36,13 @@ public class TellerMessage implements MessageInterface, Serializable {
 		this.logs = null;
 	}
 	
+	public TellerMessage(Status status, TellerMessageType type, Map<String, String> info) {
+		this.status = status;
+		this.type = type;
+		this.info = info;
+		this.logs = null;
+	}
+	
 	// use for view logs
 	public TellerMessage(Status status, List<String> logs) {
 		this.status = status;

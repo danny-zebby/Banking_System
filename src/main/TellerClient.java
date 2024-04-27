@@ -138,7 +138,7 @@ public class TellerClient {
 
 				if (msgReceipt.getStatus() == Status.SUCCESS) {
 					// for each user of this account
-					for (int userId : msgReceipt.getUsers()) {
+					for (int userId : toAccountUsers) {
 						// send user info msg to server
 						UserInfoMessage uiMsg = new UserInfoMessage(Status.ONGOING, userId);
 						writer.writeUnshared(uiMsg);
@@ -238,10 +238,51 @@ public class TellerClient {
 		}
 		
 	}
-
+	
+	public Map<Integer, String> getTellersInfo() {
+		Map<Integer, String> tellersInfo = new HashMap<>();
+		
+		TellerMessage msg = new TellerMessage(Status.ONGOING, TellerMessageType.TELLERS_INFO);
+		try {
+			// send teller message with type TELLERS_INFO
+			writer.writeUnshared(msg);
+			
+			// wait for success status
+			TellerMessage msgReceipt = (TellerMessage) reader.readObject();
+			
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				
+				Map<String, String> info = msgReceipt.getInfo();
+				for (String key : info.keySet()) {
+					// add info to tellersInfo
+					tellersInfo.put(Integer.parseInt(key), info.get(key)); // tellerId -> teller name
+				}
+				
+			} else { // status error
+				System.out.println("Fail to get all tellers info.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return tellersInfo;
+	}
+	
 	public void deleteTeller() {
 		
 		scanner = new Scanner(System.in);
+		
+		// get the list of tellers: tellerId + name
+		Map<Integer, String> tellersInfo = getTellersInfo();
+		// show only non-admin tellers
+		System.out.println("List of non-admin tellers: \ntellerId:teller name");
+		for (int tellerId : tellersInfo.keySet()) {
+			if (tellerId != teller.getId()) {
+				System.out.println(tellerId + ":" + tellersInfo.get(tellerId));
+			}
+		}
+		
 		System.out.println("Please enter the id of the teller to remove: ");
 		int tempTellerId = scanner.nextInt();
 		scanner.nextLine();
@@ -249,7 +290,18 @@ public class TellerClient {
 		TellerMessage msg = new TellerMessage(Status.ONGOING, tempTellerId);
 		try {
 			// send TellerMessage to server
+			writer.writeUnshared(msg);
 			
+			// wait for msgReceipt
+			TellerMessage msgReceipt = (TellerMessage) reader.readObject();
+			
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				
+				System.out.println("Successfully remove teller with id: " + tempTellerId);
+				
+			} else {
+				System.out.println("Fail to remove teller with id: " + tempTellerId);
+			}
 			
 			
 		} catch (Exception e) {
@@ -871,8 +923,7 @@ public class TellerClient {
 		try {
 			// start client
 			setUpConnection();
-
-			int id = 0;
+			
 			// handshake with server: Teller client hello
 			handshake();
 

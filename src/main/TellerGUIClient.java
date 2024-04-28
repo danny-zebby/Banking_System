@@ -15,6 +15,14 @@ public class TellerGUIClient {
 	Map<Integer, BankAccount> accounts = null; // map of account number to account object
 	Scanner scanner = null;
 
+	public void setTeller(Teller teller) {
+		this.teller = teller;
+	}
+	public Teller getTeller() {
+		return this.teller;
+	}
+	
+	
 	// ATM Functions
 	// Withdraw
 	public void withdraw(int loggedInUserId) {

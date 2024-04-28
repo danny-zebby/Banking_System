@@ -1,14 +1,9 @@
 package main;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import main.Server.clientHandler;
+import java.util.concurrent.*;
 import message.*;
 
 public class Server {
@@ -20,6 +15,11 @@ public class Server {
 	Map<Integer, Boolean> activeAccounts;
 	Map<Integer, Boolean> activeTellers;
 
+	List<String> logs = null;
+	BufferedWriter logger = null;
+	String logsFilename = "logs.txt";
+	Scanner scanner = null;
+	
 	public Server() {
 		userList = new HashMap<>();
 		accountList = new HashMap<>();
@@ -27,6 +27,7 @@ public class Server {
 		activeUsers = new HashMap<>();
 		activeAccounts = new HashMap<>();
 		activeTellers = new HashMap<>();
+		logs = new ArrayList<>();
 	}
 
 	public static void main(String[] args) {
@@ -53,17 +54,41 @@ public class Server {
 	}
 
 	public void go() {
-
+		readLogs();
+		
+		// start logger
+		try {
+			logger = new BufferedWriter(new FileWriter(new File(logsFilename)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		hardCodeSetUp();
 
 		// set up thread pool
 		ExecutorService threadPool = Executors.newFixedThreadPool(20);
-
+		
+		threadPool.execute(() -> {
+			scanner = new Scanner(System.in);
+			String inputCmd;
+			
+			while (scanner.hasNextLine()) {
+				inputCmd = scanner.nextLine();
+				if (inputCmd.equalsIgnoreCase("EXIT")) {
+					System.out.println("Server is shutting down.");
+					logs.add("Server is shutting down at " + new Date().toString());
+					writeLogs();
+					System.exit(0);
+				}
+			}
+		});
+		
 		// create a server socket
 		try (ServerSocket serverSock = new ServerSocket(50000)) {
 			// print out server socket info
 			System.out.println("Server is running at 127.0.0.1:50000 ...");
-
+			logs.add("Server starts running at " + new Date().toString());
+			
 			// while true:
 			while (true) {
 				// accept incoming connection as a new socket
@@ -81,6 +106,44 @@ public class Server {
 		threadPool.shutdown();
 	}
 
+	
+	public void readLogs() {
+		try {
+			File file = new File(logsFilename);
+			if (file.exists()) {
+				Scanner scanner = new Scanner(file);
+				String entry;
+				
+				while (scanner.hasNextLine()) {
+					entry = scanner.nextLine();
+					if (entry != "\n") {
+						this.logs.add(entry);
+					}
+				}
+				
+				scanner.close();
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	} // end method readLogs
+	
+	// write out all logs to txt
+	public void writeLogs() {
+		try {
+			File file = new File(logsFilename);
+			for (String s : logs) {
+				logger.write(s);
+				logger.newLine();
+			}
+			logger.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	} // end method writeLogs
+	
 	public BankUser addUser(String name, String birthday, String password) {
 		// create new BankUser
 		BankUser user = new BankUser(name, birthday, password);
@@ -129,7 +192,13 @@ public class Server {
 		public clientHandler(Socket sock) {
 			this.sock = sock;
 		}
-
+		
+		public void writeLogs(String s) {
+			synchronized (logs) {
+				logs.add(s);
+			}
+		}
+		
 		public boolean checkWithdraw(int userId, int accountNumber, double amount, int pin) {
 			// check if it is available to withdraw
 			// - accountNumber and pin matches
@@ -247,6 +316,7 @@ public class Server {
 
 							writer.writeUnshared(userList.get(currUserId)); // send BankUser object to client
 							System.out.println("ATM client logged in with user: " + userList.get(currUserId).getName());
+							writeLogs(String.format("ATM: BankUser %s(%d) has logged in. %s", userList.get(currUserId).getName(), currUserId, sock.getRemoteSocketAddress()));
 							break;
 						} else { // fail to login
 							// return error message
@@ -298,7 +368,9 @@ public class Server {
 
 						// CLOSE ACTIVE ACCOUNTS
 						closeActiveAccounts(currUserId);
-
+						
+						writeLogs(String.format("ATM: BankUser %s(%d) has logged out. %s", userList.get(currUserId).getName(), currUserId, sock.getRemoteSocketAddress()));
+						
 						atmHandler(); // handle new login
 
 					} else if (obj instanceof DepositMessage) {
@@ -312,6 +384,8 @@ public class Server {
 							writer.writeUnshared(new DepositMessage(Status.SUCCESS));
 							// deposit
 							deposit(accountNumber, amount);
+							writeLogs(String.format("ATM: BankUser %s(%d) has deposited %.2f to Account %d.", userList.get(currUserId).getName(), currUserId, amount, accountNumber));
+							
 						} else { // is it is not available to deposit
 							// return error message
 							writer.writeUnshared(new DepositMessage(Status.ERROR));
@@ -329,6 +403,8 @@ public class Server {
 							writer.writeUnshared(new WithdrawMessage(Status.SUCCESS));
 							// withdraw
 							withdraw(accountNumber, amount);
+							writeLogs(String.format("ATM: BankUser %s(%d) has withdrawn %.2f to Account %d.", userList.get(currUserId).getName(), currUserId, amount, accountNumber));
+							
 						} else { // if it is not available to withdraw
 							// return error message
 							writer.writeUnshared(new WithdrawMessage(Status.ERROR));
@@ -349,6 +425,9 @@ public class Server {
 							writer.writeUnshared(msgReceipt);
 
 							transfer(fromAccountNumber, toAccountNumber, transferAmount, currUserId);
+							writeLogs(String.format("ATM: BankUser %s(%d) has transferred %.2f from Account %d to Account %d.", 
+									userList.get(currUserId).getName(), currUserId, transferAmount, fromAccountNumber, toAccountNumber));
+							
 						} else {
 							msgReceipt = new TransferMessage(Status.ERROR, fromAccountNumber, toAccountNumber,
 									transferAmount);
@@ -435,6 +514,7 @@ public class Server {
 
 							writer.writeUnshared(tellerList.get(tellerId)); // send BankUser object to client
 							System.out.println("Teller client logged in with teller: " + tellerList.get(tellerId).getName());
+							writeLogs(String.format("Teller: teller %s(%d) has logged in.", tellerList.get(tellerId).getName(), tellerId));
 							break;
 						} else { // fail to login
 							// return error message
@@ -483,6 +563,9 @@ public class Server {
 							writer.writeUnshared(new DepositMessage(Status.SUCCESS));
 							// deposit
 							deposit(accountNumber, amount);
+							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with depositing %.2f to Account %d.", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, amount, accountNumber));
+							
 						} else { // is it is not available to deposit
 							// return error message
 							writer.writeUnshared(new DepositMessage(Status.ERROR));
@@ -499,6 +582,9 @@ public class Server {
 							writer.writeUnshared(new WithdrawMessage(Status.SUCCESS));
 							// withdraw
 							withdraw(accountNumber, amount);
+							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with withdrawing %.2f to Account %d.", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, amount, accountNumber));
+							
 						} else { // if it is not available to withdraw
 							// return error message
 							writer.writeUnshared(new WithdrawMessage(Status.ERROR));
@@ -519,10 +605,11 @@ public class Server {
 							msgReceipt = new TransferMessage(Status.SUCCESS, fromAccountNumber, toAccountNumber,
 									transferAmount);
 							writer.writeUnshared(msgReceipt);
-
-							// check receiver
-
+							
 							transfer(fromAccountNumber, toAccountNumber, transferAmount, userId);
+							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with transferring %.2f from Account %d to Account %d.", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, transferAmount, fromAccountNumber, toAccountNumber));
+							
 						} else {
 							msgReceipt = new TransferMessage(Status.ERROR, fromAccountNumber, toAccountNumber,
 									transferAmount);
@@ -548,6 +635,9 @@ public class Server {
 							BankUser newUser = addUser(name, birthday, password);
 							System.out.println("new user created: " + newUser);
 
+							writeLogs(String.format("Teller: Teller %s(%d) created a new BankUser %s(%d)", 
+									tellerList.get(tellerId).getName(), tellerId, newUser.getName(), newUser.getId()));
+							
 							// send BankUser to client
 							writer.writeUnshared(newUser);
 
@@ -596,7 +686,8 @@ public class Server {
 						case ADD_ACCOUNT: {
 							AccountType accountType = AccountType.valueOf(info.get("accountType"));
 							int pin = Integer.parseInt(info.get("pin"));
-
+							
+							// create a new BankAccount for user
 							BankAccount bankAccount = new BankAccount(pin, accountType, userId);
 							int accountNumber = bankAccount.getAccountNumber();
 							synchronized (accountList) {
@@ -611,8 +702,11 @@ public class Server {
 							Map<String, String> newInfo = new HashMap<>();
 							newInfo.put("accountNumber", Integer.toString(accountNumber));
 							msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.ADD_ACCOUNT, newInfo);
+							
 							writer.writeUnshared(msgReceipt);
-
+							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with opening a new Account %d.", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, accountNumber));
+							
 							break;
 						}
 						case REM_ACCOUNT: {
@@ -639,6 +733,8 @@ public class Server {
 								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.REM_ACCOUNT);
 								// send back msgReceipt
 								writer.writeUnshared(msgReceipt);
+								writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with removing an Account %d.", 
+										tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, accountNumber));
 
 							} else { // not able to remove
 								msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.REM_ACCOUNT);
@@ -659,6 +755,8 @@ public class Server {
 								// send back success message
 								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHG_PWD);
 								writer.writeUnshared(msgReceipt);
+								writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with changing password.", 
+										tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId));
 
 							} else { // incorrect birthday, fail to change password
 
@@ -681,6 +779,8 @@ public class Server {
 								// send back success message
 								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHG_PIN);
 								writer.writeUnshared(msgReceipt);
+								writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with changing pin for Account %d.", 
+										tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, accountNumber));
 
 							} else { // fail to change pin
 
@@ -716,6 +816,8 @@ public class Server {
 								// send back success message
 								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.TXF_ADMIN);
 								writer.writeUnshared(msgReceipt);
+								writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with transferring admin for Account %d from BankUser %d to BankUser %d.", 
+										tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, accountNumber, userId, recipientId));
 
 							} else { // fail to transfer admin
 
@@ -751,6 +853,10 @@ public class Server {
 
 							BankUser newUser = userList.get(tempUserId);
 							writer.writeUnshared(newUser);
+							
+							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with adding BankUser %d to Account %d.", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(tempUserId).getName(), tempUserId, userIdToAdd, accountNumber));
+							
 							break;
 						}
 						case REM_USER_FROM_ACC: {
@@ -762,10 +868,11 @@ public class Server {
 							userList.get(tempUserId).getAccounts().remove(accNumToRem);
 							BankUser remUser = userList.get(tempUserId);
 							System.out.println("Sending BankUser object to client: " + remUser);
-							writer.writeObject(remUser);
-							writer.flush(); // Ensure data is sent immediately
-							System.out.println("BankUser object sent");
-	
+							writer.writeUnshared(remUser);
+
+							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with removing BankUser %d from Account %d.", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(tempUserId).getName(), tempUserId, userIdToRemove, accountNumber));
+							
 							break;
 						}
 						default: break;
@@ -800,7 +907,6 @@ public class Server {
 						TellerMessageType type = msg.getType();
 						TellerMessage msgReceipt;
 						Map<String, String> info = msg.getInfo();
-						List<String> logs = msg.getLogs();
 						
 						switch (type) {
 						case ADD_TELLER: {
@@ -823,6 +929,9 @@ public class Server {
 							// send Teller obj to client
 							writer.writeUnshared(newTeller);
 							
+							writeLogs(String.format("Teller: Teller %s(%d) created a new Teller %s(%d).", 
+									tellerList.get(tellerId).getName(), tellerId, name, newTellerId));
+							
 							break;
 						}
 						case REM_TELLER: {
@@ -830,6 +939,8 @@ public class Server {
 							// check if tempTellerId is valid or not and this teller is not logged in
 							
 							if (tellerList.containsKey(tempTellerId) && activeTellers.get(tempTellerId) == false) {
+								
+								String name = tellerList.get(tempTellerId).getName();
 								
 								// remove teller from tellerList and activeTellers
 								synchronized (tellerList) {
@@ -843,6 +954,9 @@ public class Server {
 								msgReceipt = new TellerMessage(Status.SUCCESS, TellerMessageType.REM_TELLER);
 								writer.writeUnshared(msgReceipt);
 								
+								writeLogs(String.format("Teller: Teller %s(%d) removed the Teller %s(%d).", 
+										tellerList.get(tellerId).getName(), tellerId, name, tempTellerId));
+								
 							} else {
 								// send back msgReceipt with ERROR status
 								msgReceipt = new TellerMessage(Status.ERROR, TellerMessageType.REM_TELLER);
@@ -853,6 +967,9 @@ public class Server {
 							break;
 						}
 						case VIEW_LOGS: {
+							msgReceipt = new TellerMessage(Status.SUCCESS, logs);
+							writer.writeUnshared(msgReceipt);
+							
 							break;
 						}
 						case TELLERS_INFO: {

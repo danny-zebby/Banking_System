@@ -316,7 +316,8 @@ public class Server {
 								
 								writer.writeUnshared(userList.get(currUserId)); // send BankUser object to client
 								System.out.println("ATM client logged in with user: " + userList.get(currUserId).getName());
-								writeLogs(String.format("ATM: BankUser %s(%d) has logged in. %s", userList.get(currUserId).getName(), currUserId, sock.getRemoteSocketAddress()));
+								writeLogs(String.format("ATM: BankUser %s(%d) logged in at %s. %s", 
+										userList.get(currUserId).getName(), currUserId, new Date().toString(), sock.getRemoteSocketAddress()));
 								break;
 							} else { // fail to login
 								// return error message
@@ -366,10 +367,11 @@ public class Server {
 			if (currUserId == 0) {
 				return;
 			}
+			boolean flag = false;
 			
 			try {
 				// Wait for Account Message
-				while ((obj = reader.readObject()) != null) {
+				while (!flag && (obj = reader.readObject()) != null) {
 
 					if (obj instanceof LoginMessage) {
 						LoginMessage msg = (LoginMessage) obj;
@@ -383,8 +385,10 @@ public class Server {
 						// CLOSE ACTIVE ACCOUNTS
 						closeActiveAccounts(currUserId);
 
-						writeLogs(String.format("ATM: BankUser %s(%d) has logged out. %s", userList.get(currUserId).getName(), currUserId, sock.getRemoteSocketAddress()));
-
+						writeLogs(String.format("ATM: BankUser %s(%d) logged out at %s. %s", 
+								userList.get(currUserId).getName(), currUserId, new Date().toString(), sock.getRemoteSocketAddress()));
+						
+						flag = true;
 						atmHandler(); // handle new login
 
 					} else if (obj instanceof DepositMessage) {
@@ -398,7 +402,8 @@ public class Server {
 							writer.writeUnshared(new DepositMessage(Status.SUCCESS));
 							// deposit
 							deposit(accountNumber, amount);
-							writeLogs(String.format("ATM: BankUser %s(%d) has deposited %.2f to Account %d.", userList.get(currUserId).getName(), currUserId, amount, accountNumber));
+							writeLogs(String.format("ATM: BankUser %s(%d) has deposited %.2f to Account %d at %s.", 
+									userList.get(currUserId).getName(), currUserId, amount, accountNumber, new Date().toString()));
 
 						} else { // is it is not available to deposit
 							// return error message
@@ -417,7 +422,8 @@ public class Server {
 							writer.writeUnshared(new WithdrawMessage(Status.SUCCESS));
 							// withdraw
 							withdraw(accountNumber, amount);
-							writeLogs(String.format("ATM: BankUser %s(%d) has withdrawn %.2f to Account %d.", userList.get(currUserId).getName(), currUserId, amount, accountNumber));
+							writeLogs(String.format("ATM: BankUser %s(%d) has withdrawn %.2f to Account %d at %s.", 
+									userList.get(currUserId).getName(), currUserId, amount, accountNumber, new Date().toString()));
 
 						} else { // if it is not available to withdraw
 							// return error message
@@ -439,8 +445,8 @@ public class Server {
 							writer.writeUnshared(msgReceipt);
 
 							transfer(fromAccountNumber, toAccountNumber, transferAmount, currUserId);
-							writeLogs(String.format("ATM: BankUser %s(%d) has transferred %.2f from Account %d to Account %d.", 
-									userList.get(currUserId).getName(), currUserId, transferAmount, fromAccountNumber, toAccountNumber));
+							writeLogs(String.format("ATM: BankUser %s(%d) has transferred %.2f from Account %d to Account %d at %s.", 
+									userList.get(currUserId).getName(), currUserId, transferAmount, fromAccountNumber, toAccountNumber, new Date().toString()));
 
 						} else {
 							msgReceipt = new TransferMessage(Status.ERROR, fromAccountNumber, toAccountNumber,

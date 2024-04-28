@@ -896,6 +896,36 @@ public class Server {
 							}
 							break;
 						}
+						case CHK_DUP: {
+							int tempUserId = Integer.parseInt(info.get("userId"));
+							int accountNumber = Integer.parseInt(info.get("accountNumber"));
+							int addUserId = Integer.parseInt(info.get("checkId"));
+
+							if (accountList.get(accountNumber).getUsers().contains(addUserId)) {
+								msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.CHK_DUP);
+								writer.writeUnshared(msgReceipt);
+							} else {
+								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHK_DUP);
+								// send back msgReceipt
+								writer.writeUnshared(msgReceipt);
+							}
+							break;
+						}
+						case CHK_ITSELF: {
+							int loggedInUserId = Integer.parseInt(info.get("userId"));
+							int accountNumber = Integer.parseInt(info.get("accountNumber"));
+							int remUserId = Integer.parseInt(info.get("checkId"));
+
+							if (loggedInUserId != remUserId) {
+								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHK_ITSELF);
+								writer.writeUnshared(msgReceipt);
+							} else {
+								msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.CHK_ITSELF);
+								// send back msgReceipt
+								writer.writeUnshared(msgReceipt);
+							}
+							break;
+						}
 						case ADD_USER_TO_ACC: {
 							int tempUserId = Integer.parseInt(info.get("userId"));
 							Integer userIdToAdd = Integer.valueOf(tempUserId);

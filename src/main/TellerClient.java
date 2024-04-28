@@ -348,10 +348,17 @@ public class TellerClient {
 					writer.writeUnshared(accMsgAdmin);
 					// wait for accMsgAdmin receipt
 					AccountMessage accMsgAdminReceipt = (AccountMessage) reader.readObject();
+					
+					// check if the user id is already in the account
+					AccountMessage acmChkDup = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_DUP, loggedInUserID, accNum, userIdAdd);
+					writer.writeUnshared(acmChkDup);
+					// wait for a user info message receipt
+					AccountMessage acmChkDupReceipt = (AccountMessage) reader.readObject();
 
 					if (uiMsgReceipt.getStatus() == Status.SUCCESS
 							&& accMsgReceipt.getStatus() == Status.SUCCESS
-							&& accMsgAdminReceipt.getStatus() == Status.SUCCESS) {
+							&& accMsgAdminReceipt.getStatus() == Status.SUCCESS
+							&& acmChkDupReceipt.getStatus() == Status.SUCCESS) {
 
 						accMsg = new AccountMessage(Status.ONGOING, AccountMessageType.ADD_USER_TO_ACC, userIdAdd, accNum);
 						writer.writeUnshared(accMsg);
@@ -410,11 +417,18 @@ public class TellerClient {
 					writer.writeUnshared(accMsgAdmin);
 					// wait for accMsgAdmin receipt
 					AccountMessage accMsgAdminReceipt = (AccountMessage) reader.readObject();
-
+					
+					// check if the user is trying to delete itself from account
+					AccountMessage acmChkItself = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_ITSELF, loggedInUserID, accNum, userIdRem);
+					writer.writeUnshared(acmChkItself);
+					// wait for a user info message receipt
+					AccountMessage acmChkItselfReceipt = (AccountMessage) reader.readObject();
+					
 					// check both msgs' status
 					if (acmReceipt.getStatus() == Status.SUCCESS
 							&& acmRemReceipt.getStatus() == Status.SUCCESS
-							&& accMsgAdminReceipt.getStatus() == Status.SUCCESS) {
+							&& accMsgAdminReceipt.getStatus() == Status.SUCCESS
+							&& acmChkItselfReceipt.getStatus() == Status.SUCCESS) {
 
 						acmRem = new AccountMessage(Status.ONGOING, AccountMessageType.REM_USER_FROM_ACC, userIdRem, accNum);
 						writer.writeUnshared(acmRem);

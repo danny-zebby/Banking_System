@@ -1010,71 +1010,6 @@ public class TellerGUIClient {
 
 	}
 
-	public void tellerLogin() {
-		scanner = new Scanner(System.in);
-		int tellerId;
-		String password;
-		while (true) {
-			while (true) {
-				System.out.println("Enter your teller id or type exit to quit: ");
-				String input = null;
-				try {
-					input = scanner.nextLine();
-					tellerId = Integer.parseInt(input);
-					break;
-				} catch (Exception e) {
-					if (input.equalsIgnoreCase("EXIT")) {
-						ExitMessage msg = new ExitMessage(Status.ONGOING);
-						try {
-							writer.writeUnshared(msg);
-							// wait for success status
-							ExitMessage msgReceipt = (ExitMessage) reader.readObject();
-							if (msgReceipt.getStatus() == Status.SUCCESS) {
-								System.out.println("Teller client exiting...");
-								// a good way to exit
-								System.exit(0);
-								System.out.println("after system exit");
-							}
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
-						
-					} else {
-						System.out.println("Error: your teller id is an integer. Please try again.");						
-					}
-				}
-			}
-
-			System.out.println("Enter your password: ");
-			password = scanner.nextLine();
-
-			// create LoginMessage
-			LoginMessage msg = new LoginMessage(Status.ONGOING, tellerId, password);
-
-			try {
-				// send LoginMessage to server
-				writer.writeUnshared(msg);
-
-				// expect a success LoginMessage returned from the server
-				LoginMessage msgReceipt = (LoginMessage) reader.readObject();
-
-				if (msgReceipt.getStatus() == Status.SUCCESS) {
-					// wait for Teller object
-					teller = (Teller) reader.readObject();
-					System.out.println(teller);
-					break; // break the while loop
-				} else {
-					System.out.println("Wrong teller id or password. Please try again.");
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-		}
-
-	}
-	
 	public String tellerLoginRequest(String tellerId, String password) {
 		boolean isInt;
 		try {
@@ -1108,9 +1043,6 @@ public class TellerGUIClient {
 
 	public void newSession() {
 
-		tellerLogin();
-
-		tellerMenu();
 	}
 
 	public void tellerMenu() {
@@ -1209,7 +1141,7 @@ public class TellerGUIClient {
 			newSession();
 
 			// close client
-			closeConnection();
+			// closeConnection();
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -627,7 +627,6 @@ public class TellerClient {
 		try {
 			// request info from all accounts of current user
 			for (int accountNumber : user.getAccounts()) {
-				//				if (accounts == null || accounts.get(accountNumber) == null) {}// update only when it's not available
 
 				// create new AccountMessage requesting account info
 				// int id, Status status, int accountNumber, int currUserId, int pin,

@@ -1028,6 +1028,8 @@ public class TellerGUIClient {
 				// wait for loginMessage from server
 				LoginMessage msgReceipt = (LoginMessage) reader.readObject();
 				if ((msgReceipt.getStatus() == Status.SUCCESS)) { // if success, break while loop
+					// wait for Teller object
+					teller = (Teller) reader.readObject();
 					return "SUCCESS";
 				}
 				else {
@@ -1039,10 +1041,6 @@ public class TellerGUIClient {
 			}
 		}
 		return "ERROR";
-	}
-
-	public void newSession() {
-
 	}
 
 	public void tellerMenu() {
@@ -1081,7 +1079,6 @@ public class TellerGUIClient {
 						e.printStackTrace();
 					}
 					
-					newSession();
 
 					break; // logout
 					
@@ -1119,7 +1116,7 @@ public class TellerGUIClient {
 					}
 					
 					System.out.println("Hit newSession");
-					newSession();
+
 					System.out.println("after newSession");
 					
 					break;
@@ -1137,11 +1134,6 @@ public class TellerGUIClient {
 
 			// handshake with server: Teller client hello
 			handshake();
-
-			newSession();
-
-			// close client
-			// closeConnection();
 
 		} catch (Exception e) {
 			e.printStackTrace();

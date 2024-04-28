@@ -19,14 +19,12 @@ public class TellerMain extends JFrame {
     public static void main(String[] args) {
     	
     	TellerGUIClient client = new TellerGUIClient();
-		TellerMainPage TMP = new TellerMainPage(client);
-		TellerLogin TL = new TellerLogin(client, TMP);
+		TellerMainPage tellerMainPage = new TellerMainPage(client);
+		TellerLogin tellerLogin = new TellerLogin(client, tellerMainPage);
 		
-		client.go();
-		//Login Gui
-		TL.createWindow();
-		// Open 
+		client.go(); // set up connection and do handshake with server
 		
-		
+		tellerLogin.createWindow(); // start teller login
+
    }
 }

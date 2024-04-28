@@ -475,6 +475,9 @@ public class TellerClient {
 						System.out.println("Fail to create a new user. Please try again.");
 						continue;
 					}
+					
+					System.out.println(String.format("Log in as %s(%d)\n", user.getName(), user.getId()));
+					
 					// redirect to login in as user page
 					loginUserAccount(user.getId());
 					break; // break while loop
@@ -1006,6 +1009,7 @@ public class TellerClient {
 								System.out.println("Teller client exiting...");
 								// a good way to exit
 								System.exit(0);
+								System.out.println("after system exit");
 							}
 						} catch (Exception ex) {
 							ex.printStackTrace();
@@ -1064,7 +1068,7 @@ public class TellerClient {
 				System.out.println("0-Add-New-Teller\n1-Delete-Teller\n2-View-logs\n3-Create-New-User\n4-Login-User-Account\n5-LogOut");
 				int choice = scanner.nextInt();
 				scanner.nextLine();
-				System.out.println("choice: " + choice);
+
 				switch (choice) {
 				case 0: addTeller(); break; // add teller
 				case 1: deleteTeller(); break; // delete teller
@@ -1082,7 +1086,7 @@ public class TellerClient {
 
 						if (logoutMsgReceipt.getStatus() == Status.SUCCESS) {
 							flag = true;
-							System.out.println("Logout was a success.\nReturning to teller login.");
+							System.out.println("Logout was a success.\nReturning to teller login.\n");
 						} else {
 							System.out.println("Logout failed.");
 						}
@@ -1090,9 +1094,8 @@ public class TellerClient {
 						e.printStackTrace();
 					}
 					
-					System.out.println("Hit newSession");
 					newSession();
-					System.out.println("after newSession");
+
 					break; // logout
 					
 				default: break;

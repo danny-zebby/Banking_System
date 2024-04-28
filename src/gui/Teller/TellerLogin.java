@@ -50,6 +50,7 @@ public class TellerLogin {
 		
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//textField getters
 				String id = textField.getText();
 				String password = textField2.getText();
 				//if either id or password are blank, a frame opens up and asks for input.

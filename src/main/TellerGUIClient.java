@@ -1066,6 +1066,37 @@ public class TellerGUIClient {
 		}
 
 	}
+	
+	public String tellerLoginRequest(String tellerId, String password) {
+		boolean isInt;
+		try {
+            Integer.parseInt(tellerId); // Try parsing the string to an integer
+            isInt = true; // If successful, return true
+        } catch (NumberFormatException e) {
+        	isInt = false; // If an exception is caught, return false
+        }
+		if(isInt) {
+			try {
+				// create new login message
+				LoginMessage msg = new LoginMessage(Status.ONGOING, Integer.parseInt(tellerId), password);
+				// send login message to server
+				writer.writeUnshared(msg);
+		
+				// wait for loginMessage from server
+				LoginMessage msgReceipt = (LoginMessage) reader.readObject();
+				if ((msgReceipt.getStatus() == Status.SUCCESS)) { // if success, break while loop
+					return "SUCCESS";
+				}
+				else {
+					return "ONGOING";
+	//				System.out.println("Wrong user id or password. Please try again.\n");
+				}
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return "ERROR";
+	}
 
 	public void newSession() {
 

@@ -387,6 +387,7 @@ public class Server {
 
 						writeLogs(String.format("ATM: BankUser %s(%d) logged out at %s. %s", 
 								userList.get(currUserId).getName(), currUserId, new Date().toString(), sock.getRemoteSocketAddress()));
+						currUserId = 0;
 						
 						flag = true;
 						atmHandler(); // handle new login
@@ -504,6 +505,14 @@ public class Server {
 
 			} catch (Exception e) {
 				e.printStackTrace();
+			} finally {
+				// housekeeping
+				if (currUserId > 0 && userList.containsKey(currUserId)) {
+					// CLOSE ACTIVE ACCOUNTS
+					closeActiveAccounts(currUserId);
+					writeLogs(String.format("ATM: BankUser %s(%d) logged out at %s. %s", 
+							userList.get(currUserId).getName(), currUserId, new Date().toString(), sock.getRemoteSocketAddress()));
+				}
 			}
 
 		} // end method atmHandler
@@ -594,7 +603,7 @@ public class Server {
 							
 							writeLogs(String.format("Teller: teller %s(%d) logged out BankUser %s(%d) at %s.", 
 									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, new Date().toString()));
-							
+							userId = 0;
 							break;
 						}
 						case TELLER: { // log out teller
@@ -608,6 +617,7 @@ public class Server {
 							
 							writeLogs(String.format("Teller: teller %s(%d) logged out at %s.", tellerList.get(tellerId).getName(), tellerId, new Date().toString()));
 							
+							tellerId = 0;
 							tellerHandler();
 							break;
 						}
@@ -773,7 +783,7 @@ public class Server {
 							msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.ADD_ACCOUNT, newInfo);
 
 							writer.writeUnshared(msgReceipt);
-							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with opening a new Account %d. at %s", 
+							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with opening a new Account %d at %s.", 
 									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, accountNumber, new Date().toString()));
 
 							break;
@@ -1089,6 +1099,22 @@ public class Server {
 
 			} catch (Exception e) {
 				e.printStackTrace();
+			} finally {
+				// housekeeping
+				if (tellerId > 0 && activeTellers.containsKey(tellerId)) {
+					synchronized(activeTellers) {
+						activeTellers.replace(tellerId, false);
+					}
+					writeLogs(String.format("Teller: teller %s(%d) logged out at %s.", tellerList.get(tellerId).getName(), tellerId, new Date().toString()));
+				}
+				
+				if (userId > 0 && activeUsers.containsKey(userId)) {
+					// CLOSE ACTIVE ACCOUNTS
+					closeActiveAccounts(userId);
+					writeLogs(String.format("Teller: teller %s(%d) logged out BankUser %s(%d) at %s.", 
+							tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, new Date().toString()));
+					userId = 0;
+				}
 			}
 
 		} // end method tellerHandler

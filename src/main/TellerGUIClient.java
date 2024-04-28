@@ -21,6 +21,12 @@ public class TellerGUIClient {
 	public Teller getTeller() {
 		return this.teller;
 	}
+	public void setUser(BankUser user) {
+		this.user = user;
+	}
+	public BankUser getUser() {
+		return this.user;
+	}
 	
 	
 	// ATM Functions
@@ -462,58 +468,24 @@ public class TellerGUIClient {
 		}
 	} // end method deleteUserFromAccount
 
-	public void createUser() {
+	public String createUser(String name, String birthday, String password) {
 		try {
-			while (true) {
-
-				scanner = new Scanner(System.in);
-				System.out.println("Enter name: ");
-				String name = scanner.nextLine();
-
-				scanner = new Scanner(System.in);
-				System.out.println("Enter birthday: ");
-				String birthday = scanner.nextLine();
-
-				scanner = new Scanner(System.in);
-				System.out.println("Enter password: ");
-				String password = scanner.nextLine();
-
-				System.out.println("Please type yes to confirm your information below.");
-				System.out.printf("Name: %s\nDOB: %s\nPassword: %s\n", name, birthday, password);
-
-				String userConfirm = scanner.nextLine();
-
-				if (userConfirm.equalsIgnoreCase("YES")) {
-					// send Account Message to server with type ADD_USER
-					AccountMessage msg = new AccountMessage(Status.ONGOING, name, birthday, password);
-					writer.writeUnshared(msg);
-					// wait for success status
-					AccountMessage msgReceipt = (AccountMessage) reader.readObject();
-					if (msgReceipt.getStatus() == Status.SUCCESS) {
-						// wait for BankUser object
-						user = (BankUser) reader.readObject();
-						System.out.println("new User info: \n" + user);
-					} else {
-						System.out.println("Fail to create a new user. Please try again.");
-						continue;
-					}
-					
-					System.out.println(String.format("Log in as %s(%d)\n", user.getName(), user.getId()));
-					
-					// redirect to login in as user page
-					loginUserAccount(user.getId());
-					break; // break while loop
-
-				} else { // if userConfirm is not YES
-
-					System.out.println("Fail to create a new user. Please try again.");
-
-				}
-			} // end while loop
-
+			// send Account Message to server with type ADD_USER
+			AccountMessage msg = new AccountMessage(Status.ONGOING, name, birthday, password);
+			writer.writeUnshared(msg);
+			// wait for success status
+			AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				// wait for BankUser object
+				user = (BankUser) reader.readObject();
+				setUser(user);
+				return "SUCCESS";
+			} else {
+				return "Fail to create a new user. Please try again.";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}return "Fail";
 	} // end method createUser
 
 	public void openLogs() {
@@ -1028,8 +1000,8 @@ public class TellerGUIClient {
 				// wait for loginMessage from server
 				LoginMessage msgReceipt = (LoginMessage) reader.readObject();
 				if ((msgReceipt.getStatus() == Status.SUCCESS)) { // if success, break while loop
-					// wait for Teller object
-					teller = (Teller) reader.readObject();
+					Teller tell = (Teller) reader.readObject();
+					setTeller(tell);
 					return "SUCCESS";
 				}
 				else {
@@ -1058,7 +1030,7 @@ public class TellerGUIClient {
 				case 0: addTeller(); break; // add teller
 				case 1: deleteTeller(); break; // delete teller
 				case 2: openLogs(); break; // view logs
-				case 3: createUser(); break; // create new user
+//				case 3: createUser(); break; // create new user
 				case 4: loginUserAccount(); break; // login user account
 				case 5:
 					
@@ -1094,7 +1066,7 @@ public class TellerGUIClient {
 				scanner.nextLine();
 
 				switch (choice) {
-				case 0: createUser(); break; // create new user
+//				case 0: createUser(); break; // create new user
 				case 1: loginUserAccount(); break;
 				case 2:
 					
@@ -1134,7 +1106,7 @@ public class TellerGUIClient {
 
 			// handshake with server: Teller client hello
 			handshake();
-
+      
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

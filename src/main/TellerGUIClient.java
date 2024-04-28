@@ -809,11 +809,10 @@ public class TellerGUIClient {
 			int id = 0;
 			// handshake with server: Teller client hello
 			handshake();
-
+			
 			newSession();
-
 			// close client
-			closeConnection();
+			// closeConnection();
 
 		} catch (Exception e) {
 			e.printStackTrace();

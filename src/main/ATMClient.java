@@ -251,20 +251,7 @@ public class ATMClient {
 		try {
 
 			// ATM login
-			while (true) {
-				// create new login message
-				LoginMessage loginMessage = loginRequest();
-				// send login message to server
-				writer.writeUnshared(loginMessage);
-
-				// wait for loginMessage from server
-				LoginMessage loginReceipt = (LoginMessage) reader.readObject();
-				if ((loginReceipt.getStatus() == Status.SUCCESS)) { // if success, break while loop
-					break;
-				}
-
-				System.out.println("Wrong user id or password. Please try again.\n");
-			}
+			atmLogin();
 
 			// wait for bankuser object from server
 			user = (BankUser) reader.readObject();
@@ -372,26 +359,65 @@ public class ATMClient {
 
 	} // end method handshake
 
-	public LoginMessage loginRequest() {
+	public int atmLogin() {
 		scanner = new Scanner(System.in);
 		int userId;
-		while (true) { // get valid user id from user
-			System.out.println("Enter user id: ");
+		while (true) {
+			
+			while (true) { // get valid user id from user
+				System.out.println("Enter user id or type exit to quit: ");
+				String input = null;
+				try {
+					input = scanner.nextLine();
+					userId = Integer.parseInt(input);
+					break;
+				} catch (Exception e) {
+					
+					if (input.equalsIgnoreCase("EXIT")) {
+						ExitMessage msg = new ExitMessage(Status.ONGOING);
+						try {
+							writer.writeUnshared(msg);
+							// wait for success status
+							ExitMessage msgReceipt = (ExitMessage) reader.readObject();
+							if (msgReceipt.getStatus() == Status.SUCCESS) {
+								System.out.println("ATM is shutting down...");
+								// a good way to exit
+								System.exit(0);
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+						
+					} else {
+						System.out.println("Error: your user id is an integer. Please try again.");						
+					}
+					
+				}
+			}
+			
+			System.out.println("Enter your password: ");
+			String password = scanner.nextLine();
+			
 			try {
-				userId = Integer.parseInt(scanner.nextLine());
-				break;
+				// send login message to server
+				writer.writeUnshared(new LoginMessage(Status.ONGOING, userId, password));
+				
+				// wait for loginMessage from server
+				LoginMessage loginReceipt = (LoginMessage) reader.readObject();
+				if ((loginReceipt.getStatus() == Status.SUCCESS)) { // if success, break while loop
+					break; // break the outside while loop
+				}
+				
+				System.out.println("Wrong user id or password. Please try again.\n");
+				
 			} catch (Exception e) {
-				System.out.println("Invalid user id. User id only contains digits. Please try again. \n");
+				e.printStackTrace();
 			}
 		}
-
-		System.out.println("Enter your password: ");
-		String password = scanner.nextLine();
-
 		// LoginMessage(int id, String to, String from, Status status, int userId,
 		// String password)
-		return new LoginMessage(Status.ONGOING, userId, password);
-
+//		return ;
+		return userId;
 	}
 
 	public LogoutMessage logoutRequest() {

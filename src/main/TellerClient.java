@@ -336,23 +336,23 @@ public class TellerClient {
 					writer.writeUnshared(uiMsg);
 					// wait for a user info message receipt
 					UserInfoMessage uiMsgReceipt = (UserInfoMessage) reader.readObject();
-					
+
 					// check if the logged in user owns the account.
 					AccountMessage accMsg = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_OWN, loggedInUserID, accNum);
 					writer.writeUnshared(accMsg);
 					// wait for a user info message receipt
 					AccountMessage accMsgReceipt = (AccountMessage) reader.readObject();
-					
+
 					// send accMsg to check admin status
 					AccountMessage accMsgAdmin = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_ACC_ADM, loggedInUserID, accNum);
 					writer.writeUnshared(accMsgAdmin);
 					// wait for accMsgAdmin receipt
 					AccountMessage accMsgAdminReceipt = (AccountMessage) reader.readObject();
-					
+
 					if (uiMsgReceipt.getStatus() == Status.SUCCESS
-						&& accMsgReceipt.getStatus() == Status.SUCCESS
-						&& accMsgAdminReceipt.getStatus() == Status.SUCCESS) {
-						
+							&& accMsgReceipt.getStatus() == Status.SUCCESS
+							&& accMsgAdminReceipt.getStatus() == Status.SUCCESS) {
+
 						accMsg = new AccountMessage(Status.ONGOING, AccountMessageType.ADD_USER_TO_ACC, userIdAdd, accNum);
 						writer.writeUnshared(accMsg);
 						// expect BankUser Object from server
@@ -398,13 +398,13 @@ public class TellerClient {
 					writer.writeUnshared(acmOwn);
 					// wait for a user info message receipt
 					AccountMessage acmReceipt = (AccountMessage) reader.readObject();
-					
+
 					// check if removing user owns the account.
 					AccountMessage acmRem = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_OWN, userIdRem, accNum);
 					writer.writeUnshared(acmRem);
 					// wait for a user info message receipt
 					AccountMessage acmRemReceipt = (AccountMessage) reader.readObject();
-					
+
 					// send accMsg to check admin status
 					AccountMessage accMsgAdmin = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_ACC_ADM, loggedInUserID, accNum);
 					writer.writeUnshared(accMsgAdmin);
@@ -413,9 +413,9 @@ public class TellerClient {
 
 					// check both msgs' status
 					if (acmReceipt.getStatus() == Status.SUCCESS
-						&& acmRemReceipt.getStatus() == Status.SUCCESS
-						&& accMsgAdminReceipt.getStatus() == Status.SUCCESS) {
-						
+							&& acmRemReceipt.getStatus() == Status.SUCCESS
+							&& accMsgAdminReceipt.getStatus() == Status.SUCCESS) {
+
 						acmRem = new AccountMessage(Status.ONGOING, AccountMessageType.REM_USER_FROM_ACC, userIdRem, accNum);
 						writer.writeUnshared(acmRem);
 						// expect BankUser Object from server
@@ -478,11 +478,11 @@ public class TellerClient {
 					// redirect to login in as user page
 					loginUserAccount(user.getId());
 					break; // break while loop
-					
+
 				} else { // if userConfirm is not YES
-					
+
 					System.out.println("Fail to create a new user. Please try again.");
-					
+
 				}
 			} // end while loop
 
@@ -495,28 +495,28 @@ public class TellerClient {
 		TellerMessage msg = new TellerMessage(Status.ONGOING, TellerMessageType.VIEW_LOGS);
 		TellerMessage msgReceipt = null;
 		List<String> logs = null;
-		
+
 		try {
 			// send msg to server
 			writer.writeUnshared(msg);
-			
+
 			// wait for success status
 			msgReceipt = (TellerMessage) reader.readObject();
-			
+
 			if (msgReceipt.getStatus() == Status.SUCCESS) {
-				
+
 				logs = msgReceipt.getLogs();
-				
+
 			} else {
-				
+
 				System.out.println("Fail to get logs from server.");
-				
+
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		if (logs != null) {
 			System.out.println("Logs: ");
 			for (String s : logs) {
@@ -989,13 +989,31 @@ public class TellerClient {
 		String password;
 		while (true) {
 			while (true) {
-				System.out.println("Enter your teller id: ");
+				System.out.println("Enter your teller id or type exit to quit: ");
+				String input = null;
 				try {
-					tellerId = scanner.nextInt();
-					scanner.nextLine();
+					input = scanner.nextLine();
+					tellerId = Integer.parseInt(input);
 					break;
 				} catch (Exception e) {
-					System.out.println("Error: your teller id is an integer. Please try again.");
+					if (input.equalsIgnoreCase("EXIT")) {
+						ExitMessage msg = new ExitMessage(Status.ONGOING);
+						try {
+							writer.writeUnshared(msg);
+							// wait for success status
+							ExitMessage msgReceipt = (ExitMessage) reader.readObject();
+							if (msgReceipt.getStatus() == Status.SUCCESS) {
+								System.out.println("Teller client exiting...");
+								// a good way to exit
+								System.exit(0);
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+						
+					} else {
+						System.out.println("Error: your teller id is an integer. Please try again.");						
+					}
 				}
 			}
 
@@ -1045,13 +1063,38 @@ public class TellerClient {
 			while (!flag) {
 				System.out.println("0-Add-New-Teller\n1-Delete-Teller\n2-View-logs\n3-Create-New-User\n4-Login-User-Account\n5-LogOut");
 				int choice = scanner.nextInt();
+				scanner.nextLine();
+				System.out.println("choice: " + choice);
 				switch (choice) {
 				case 0: addTeller(); break; // add teller
 				case 1: deleteTeller(); break; // delete teller
 				case 2: openLogs(); break; // view logs
 				case 3: createUser(); break; // create new user
 				case 4: loginUserAccount(); break; // login user account
-				case 5: flag = true; break; // logout
+				case 5:
+					
+
+					try {
+
+						LogoutMessage logoutMsg = new LogoutMessage(Status.ONGOING, LogoutMessageType.TELLER);
+						writer.writeUnshared(logoutMsg);
+						LogoutMessage logoutMsgReceipt = (LogoutMessage) reader.readObject();
+
+						if (logoutMsgReceipt.getStatus() == Status.SUCCESS) {
+							flag = true;
+							System.out.println("Logout was a success.\nReturning to teller login.");
+						} else {
+							System.out.println("Logout failed.");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					System.out.println("Hit newSession");
+					newSession();
+					System.out.println("after newSession");
+					break; // logout
+					
 				default: break;
 				}
 
@@ -1061,10 +1104,35 @@ public class TellerClient {
 			while (!flag) {
 				System.out.println("0-Create-New_User\n1-Login-User-Account\n2-LogOut");
 				int choice = scanner.nextInt();
+				scanner.nextLine();
+				System.out.println("choice: " + choice);
 				switch (choice) {
 				case 0: createUser(); break; // create new user
 				case 1: loginUserAccount(); break;
-				case 2: flag = true; break;
+				case 2:
+					
+
+					try {
+
+						LogoutMessage logoutMsg = new LogoutMessage(Status.ONGOING, LogoutMessageType.TELLER);
+						writer.writeUnshared(logoutMsg);
+						LogoutMessage logoutMsgReceipt = (LogoutMessage) reader.readObject();
+
+						if (logoutMsgReceipt.getStatus() == Status.SUCCESS) {
+							flag = true;
+							System.out.println("Logout was a success.\nReturning to teller login.");
+						} else {
+							System.out.println("Logout failed.");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					System.out.println("Hit newSession");
+					newSession();
+					System.out.println("after newSession");
+					
+					break;
 				default: break;
 				}
 

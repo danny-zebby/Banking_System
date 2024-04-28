@@ -202,8 +202,10 @@ public class Server {
 			// check if it is available to withdraw
 			// - accountNumber and pin matches
 			// - amount < balance
-			return (userList.get(userId).getAccounts().contains(accountNumber) && accountList.get(accountNumber).getAccountPin() == pin
-					&& accountList.get(accountNumber).getBalance() >= amount);
+			return (userList.get(userId).getAccounts().contains(accountNumber) 
+					&& accountList.get(accountNumber).getAccountPin() == pin
+					&& accountList.get(accountNumber).getBalance() >= amount
+					&& amount > 0);
 		}
 
 		private void withdraw(int accountNumber, double amount) {
@@ -228,7 +230,9 @@ public class Server {
 			// check if it is available to withdraw
 			// - accountNumber and pin matches
 			// - amount < balance
-			return (userList.get(userId).getAccounts().contains(accountNumber) && accountList.get(accountNumber).getAccountPin() == pin);
+			return (userList.get(userId).getAccounts().contains(accountNumber) 
+					&& accountList.get(accountNumber).getAccountPin() == pin
+					&& amount > 0);
 		}
 
 		public boolean checkUserId(int userId) {
@@ -258,7 +262,8 @@ public class Server {
 			// if account number and pin matches and amount <= balance
 			return (userList.get(userId).getAccounts().contains(fromAccountNumber) 
 					&& accountList.get(fromAccountNumber).getAccountPin() == pin
-					&& accountList.get(fromAccountNumber).getBalance() >= amount);
+					&& accountList.get(fromAccountNumber).getBalance() >= amount
+					&& amount > 0);
 		}
 
 		private void transfer(int fromAccountNumber, int toAccountNumber, double amount, int currUserID) {

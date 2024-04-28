@@ -530,7 +530,7 @@ public class Server {
 
 								writer.writeUnshared(tellerList.get(tellerId)); // send BankUser object to client
 								System.out.println("Teller client logged in with teller: " + tellerList.get(tellerId).getName());
-								writeLogs(String.format("Teller: teller %s(%d) has logged in.", tellerList.get(tellerId).getName(), tellerId));
+								writeLogs(String.format("Teller: teller %s(%d) logged in at %s.", tellerList.get(tellerId).getName(), tellerId, new Date().toString()));
 								break;
 							} else { // fail to login
 								// return error message
@@ -554,6 +554,7 @@ public class Server {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+
 			return tellerId;
 		}
 
@@ -564,10 +565,10 @@ public class Server {
 				return;
 			}
 			int userId = 0;
-
+			boolean flag = false;
 			try {
 				// handle remaining messages
-				while ((obj = reader.readObject()) != null) {
+				while (!flag && (obj = reader.readObject()) != null) {
 
 					if (obj instanceof LoginMessage) {
 						LoginMessage msg = (LoginMessage) obj;
@@ -578,28 +579,29 @@ public class Server {
 						LogoutMessageType type = msg.getType();						
 						System.out.println("Logout msg received.");
 						switch (type) {
-						case BANK_USER: {
-							// code goes here
+						case BANK_USER: { // log out bank user
 
 							// CLOSE ACTIVE ACCOUNTS
 							closeActiveAccounts(userId);
-							System.out.println("Server will send Logout msg.");
 							LogoutMessage logoutReceipt = new LogoutMessage(Status.SUCCESS);
 							writer.writeUnshared(logoutReceipt);
-
-							System.out.println("Server sent Logout msg.");
+							
+							writeLogs(String.format("Teller: teller %s(%d) logged out BankUser %s(%d) at %s.", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, new Date().toString()));
+							
 							break;
 						}
-						case TELLER: {
-							System.out.println("Hit Teller log out");
+						case TELLER: { // log out teller
+							flag = true;
 							// code goes here
 							synchronized(activeTellers) {
 								activeTellers.replace(tellerId, false);
 							}
-							System.out.println("Server will send Logout msg.");
 							LogoutMessage logoutReceipt = new LogoutMessage(Status.SUCCESS);
 							writer.writeUnshared(logoutReceipt);
-							System.out.println("Server sent Logout msg.");
+							
+							writeLogs(String.format("Teller: teller %s(%d) logged out at %s.", tellerList.get(tellerId).getName(), tellerId, new Date().toString()));
+							
 							tellerHandler();
 							break;
 						}
@@ -616,8 +618,8 @@ public class Server {
 							writer.writeUnshared(new DepositMessage(Status.SUCCESS));
 							// deposit
 							deposit(accountNumber, amount);
-							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with depositing %.2f to Account %d.", 
-									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, amount, accountNumber));
+							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with depositing %.2f to Account %d at %s.", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, amount, accountNumber, new Date().toString()));
 
 						} else { // is it is not available to deposit
 							// return error message
@@ -635,8 +637,8 @@ public class Server {
 							writer.writeUnshared(new WithdrawMessage(Status.SUCCESS));
 							// withdraw
 							withdraw(accountNumber, amount);
-							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with withdrawing %.2f to Account %d.", 
-									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, amount, accountNumber));
+							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with withdrawing %.2f to Account %d at %s.", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, amount, accountNumber, new Date().toString()));
 
 						} else { // if it is not available to withdraw
 							// return error message
@@ -660,8 +662,8 @@ public class Server {
 							writer.writeUnshared(msgReceipt);
 
 							transfer(fromAccountNumber, toAccountNumber, transferAmount, userId);
-							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with transferring %.2f from Account %d to Account %d.", 
-									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, transferAmount, fromAccountNumber, toAccountNumber));
+							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with transferring %.2f from Account %d to Account %d at %s.", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, transferAmount, fromAccountNumber, toAccountNumber, new Date().toString()));
 
 						} else {
 							msgReceipt = new TransferMessage(Status.ERROR, fromAccountNumber, toAccountNumber,
@@ -686,17 +688,22 @@ public class Server {
 							String birthday = info.get("birthday");
 							String password = info .get("password");
 							BankUser newUser = addUser(name, birthday, password);
-							System.out.println("new user created: " + newUser);
 
-							writeLogs(String.format("Teller: Teller %s(%d) created a new BankUser %s(%d)", 
-									tellerList.get(tellerId).getName(), tellerId, newUser.getName(), newUser.getId()));
+							writeLogs(String.format("Teller: Teller %s(%d) created a new BankUser %s(%d) at %s", 
+									tellerList.get(tellerId).getName(), tellerId, newUser.getName(), newUser.getId(), new Date().toString()));
 
 							// send BankUser to client
 							writer.writeUnshared(newUser);
-
+							
+							// log in as new BankUser
+							userId = newUser.getId();
+							
+							writeLogs(String.format("Teller: teller %s(%d) logged in BankUser %s(%d) at %s.", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, new Date().toString()));
+							
 							break;
 						}
-						case USER_INFO: {
+						case USER_INFO: { // log in as BankUser
 							// check if user id is valid
 							userId = Integer.parseInt( msg.getInfo().get("userId"));
 							synchronized (activeUsers) {
@@ -709,6 +716,9 @@ public class Server {
 
 									// send back BankUser obj
 									writer.writeUnshared(userList.get(userId));
+									
+									writeLogs(String.format("Teller: teller %s(%d) logged in BankUser %s(%d) at %s.", 
+											tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, new Date().toString()));
 								} else {
 									// reply with ERROR status and send back to client
 									msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.USER_INFO);
@@ -757,8 +767,8 @@ public class Server {
 							msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.ADD_ACCOUNT, newInfo);
 
 							writer.writeUnshared(msgReceipt);
-							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with opening a new Account %d.", 
-									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, accountNumber));
+							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with opening a new Account %d. at %s", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, accountNumber, new Date().toString()));
 
 							break;
 						}
@@ -786,8 +796,8 @@ public class Server {
 								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.REM_ACCOUNT);
 								// send back msgReceipt
 								writer.writeUnshared(msgReceipt);
-								writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with removing an Account %d.", 
-										tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, accountNumber));
+								writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with removing an Account %d. at %s", 
+										tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, accountNumber, new Date().toString()));
 
 							} else { // not able to remove
 								msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.REM_ACCOUNT);
@@ -808,8 +818,8 @@ public class Server {
 								// send back success message
 								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHG_PWD);
 								writer.writeUnshared(msgReceipt);
-								writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with changing password.", 
-										tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId));
+								writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with changing password at %s.", 
+										tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, new Date().toString()));
 
 							} else { // incorrect birthday, fail to change password
 
@@ -832,8 +842,8 @@ public class Server {
 								// send back success message
 								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHG_PIN);
 								writer.writeUnshared(msgReceipt);
-								writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with changing pin for Account %d.", 
-										tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, accountNumber));
+								writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with changing pin for Account %d at %s.", 
+										tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, accountNumber, new Date().toString()));
 
 							} else { // fail to change pin
 
@@ -869,8 +879,8 @@ public class Server {
 								// send back success message
 								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.TXF_ADMIN);
 								writer.writeUnshared(msgReceipt);
-								writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with transferring admin for Account %d from BankUser %d to BankUser %d.", 
-										tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, accountNumber, userId, recipientId));
+								writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with transferring admin for Account %d from BankUser %d to BankUser %d at %s.", 
+										tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, accountNumber, userId, recipientId, new Date().toString()));
 
 							} else { // fail to transfer admin
 
@@ -907,8 +917,8 @@ public class Server {
 							BankUser newUser = userList.get(tempUserId);
 							writer.writeUnshared(newUser);
 
-							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with adding BankUser %d to Account %d.", 
-									tellerList.get(tellerId).getName(), tellerId, userList.get(tempUserId).getName(), tempUserId, userIdToAdd, accountNumber));
+							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with adding BankUser %d to Account %d at %s.", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(tempUserId).getName(), tempUserId, userIdToAdd, accountNumber, new Date().toString()));
 
 							break;
 						}
@@ -923,8 +933,8 @@ public class Server {
 							System.out.println("Sending BankUser object to client: " + remUser);
 							writer.writeUnshared(remUser);
 
-							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with removing BankUser %d from Account %d.", 
-									tellerList.get(tellerId).getName(), tellerId, userList.get(tempUserId).getName(), tempUserId, userIdToRemove, accountNumber));
+							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with removing BankUser %d from Account %d at %s.", 
+									tellerList.get(tellerId).getName(), tellerId, userList.get(tempUserId).getName(), tempUserId, userIdToRemove, accountNumber, new Date().toString()));
 
 							break;
 						}
@@ -1000,8 +1010,8 @@ public class Server {
 							// send Teller obj to client
 							writer.writeUnshared(newTeller);
 
-							writeLogs(String.format("Teller: Teller %s(%d) created a new Teller %s(%d).", 
-									tellerList.get(tellerId).getName(), tellerId, name, newTellerId));
+							writeLogs(String.format("Teller: Teller %s(%d) created a new Teller %s(%d) at %s.", 
+									tellerList.get(tellerId).getName(), tellerId, name, newTellerId, new Date().toString()));
 
 							break;
 						}
@@ -1025,8 +1035,8 @@ public class Server {
 								msgReceipt = new TellerMessage(Status.SUCCESS, TellerMessageType.REM_TELLER);
 								writer.writeUnshared(msgReceipt);
 
-								writeLogs(String.format("Teller: Teller %s(%d) removed the Teller %s(%d).", 
-										tellerList.get(tellerId).getName(), tellerId, name, tempTellerId));
+								writeLogs(String.format("Teller: Teller %s(%d) removed the Teller %s(%d) at %s.", 
+										tellerList.get(tellerId).getName(), tellerId, name, tempTellerId, new Date().toString()));
 
 							} else {
 								// send back msgReceipt with ERROR status
@@ -1038,10 +1048,12 @@ public class Server {
 							break;
 						}
 						case VIEW_LOGS: {
-							msgReceipt = new TellerMessage(Status.SUCCESS, logs);
-							writer.writeUnshared(msgReceipt);
 
+							msgReceipt = new TellerMessage(Status.SUCCESS, logs);
+							writer.reset(); // reset object reference to logs
+							writer.writeUnshared(msgReceipt);
 							break;
+							
 						}
 						case TELLERS_INFO: {
 							// if this is admin teller

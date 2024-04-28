@@ -15,6 +15,14 @@ public class TellerGUIClient {
 	Map<Integer, BankAccount> accounts = null; // map of account number to account object
 	Scanner scanner = null;
 
+	public void setTeller(Teller teller) {
+		this.teller = teller;
+	}
+	public Teller getTeller() {
+		return this.teller;
+	}
+	
+	
 	// ATM Functions
 	// Withdraw
 	public void withdraw() {
@@ -754,6 +762,8 @@ public class TellerGUIClient {
 				// wait for loginMessage from server
 				LoginMessage msgReceipt = (LoginMessage) reader.readObject();
 				if ((msgReceipt.getStatus() == Status.SUCCESS)) { // if success, break while loop
+					Teller tell = (Teller) reader.readObject();
+					setTeller(tell);
 					return "SUCCESS";
 				}
 				else {

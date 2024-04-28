@@ -17,7 +17,7 @@ public class TellerGUIClient {
 
 	// ATM Functions
 	// Withdraw
-	public void withdraw() {
+	public void withdraw(int loggedInUserId) {
 		try {
 			// get input acc #, amount, pin
 			scanner = new Scanner(System.in);
@@ -44,9 +44,9 @@ public class TellerGUIClient {
 				// update accounts
 				accounts.put(accountNumber, newAccount);
 				// print out newAccount
-				System.out.println("new Account: " + newAccount);
-				// show updated accounts
-				System.out.println("Updated accounts: " + accounts);
+				System.out.println("New Account info: " + newAccount);
+				// print out all account info
+				System.out.println("Updated user id [" + loggedInUserId + "] accounts: " + accounts);
 
 			} else {
 				System.out.println("Fail to withdraw $" + amount + " from account " + accountNumber);
@@ -59,7 +59,7 @@ public class TellerGUIClient {
 	}
 
 	// Deposit
-	public void deposit() {
+	public void deposit(int loggedInUserId) {
 		try {
 			// get inputs: acc#, amount, pin
 			scanner = new Scanner(System.in);
@@ -88,7 +88,10 @@ public class TellerGUIClient {
 				BankAccount newAccount = (BankAccount) reader.readObject();
 				// update accounts
 				accounts.replace(accountNumber, newAccount);
-				System.out.println("new Account: " + newAccount);
+				// print out result
+				System.out.println("New Account: " + newAccount);
+				// print out all account info
+				System.out.println("Updated user id [" + loggedInUserId + "] accounts: " + accounts);
 			} else {
 
 				System.out.println("Fail to deposit $" + amount + " to account " +
@@ -98,10 +101,10 @@ public class TellerGUIClient {
 			e.printStackTrace();
 		}
 
-	}
+	} // end method deposit
 
 	// Transfer
-	public void transfer() {
+	public void transfer(int loggedInUserId) {
 		try {
 			// get inputs: acc#, amount, pin
 			scanner = new Scanner(System.in);
@@ -138,7 +141,7 @@ public class TellerGUIClient {
 
 				if (msgReceipt.getStatus() == Status.SUCCESS) {
 					// for each user of this account
-					for (int userId : msgReceipt.getUsers()) {
+					for (int userId : toAccountUsers) {
 						// send user info msg to server
 						UserInfoMessage uiMsg = new UserInfoMessage(Status.ONGOING, userId);
 						writer.writeUnshared(uiMsg);
@@ -184,14 +187,14 @@ public class TellerGUIClient {
 				// update accounts
 				accounts.put(fromAccountNumber, newAccount);
 				// print out newAccount
-				System.out.println("new Account: " + newAccount);
+				System.out.println("New Account: " + newAccount);
 				if (toAccountUsers.contains(user.getId())) { // in case transfer between your accounts
 					// expect another bankaccount obj
 					BankAccount recipientAccount = (BankAccount) reader.readObject();
 					accounts.put(toAccountNumber, recipientAccount);
 				}
-				// show updated accounts
-				System.out.println("Updated accounts: " + accounts);
+				// print out all account info
+				System.out.println("Updated user id [" + loggedInUserId + "] accounts: " + accounts);
 			} else {
 				System.out.println("Fail to transfer $" + amount + " from account " + fromAccountNumber + " to account "
 						+ toAccountNumber);
@@ -203,24 +206,256 @@ public class TellerGUIClient {
 
 	} // end of transfer method
 
-	// Teller functions
+
 	public void addTeller() {
 		scanner = new Scanner(System.in);
+
 		System.out.println("Enter name: ");
 		String name = scanner.nextLine();
 
-		scanner = new Scanner(System.in);
 		System.out.println("Enter password: ");
-		String pw = scanner.nextLine();
-	}
+		String password = scanner.nextLine();
+
+		// create new teller message
+		TellerMessage msg = new TellerMessage(Status.ONGOING, name, password);
+		try {
+			// send message to server
+			writer.writeUnshared(msg);
+
+			// wait for success status
+			TellerMessage msgReceipt = (TellerMessage) reader.readObject();
+
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				System.out.println("A new teller account is created successfully.");
+
+				// receive a Teller obj
+				Teller newTeller = (Teller) reader.readObject();
+
+				System.out.println("New teller: \n" +  newTeller);
+			} else {
+				System.out.println("Fail to create a new teller account.");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	} // end method addTeller
+
+	public Map<Integer, String> getTellersInfo() {
+		Map<Integer, String> tellersInfo = new HashMap<>();
+
+		TellerMessage msg = new TellerMessage(Status.ONGOING, TellerMessageType.TELLERS_INFO);
+		try {
+			// send teller message with type TELLERS_INFO
+			writer.writeUnshared(msg);
+
+			// wait for success status
+			TellerMessage msgReceipt = (TellerMessage) reader.readObject();
+
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+
+				Map<String, String> info = msgReceipt.getInfo();
+				for (String key : info.keySet()) {
+					// add info to tellersInfo
+					tellersInfo.put(Integer.parseInt(key), info.get(key)); // tellerId -> teller name
+				}
+
+			} else { // status error
+				System.out.println("Fail to get all tellers info.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return tellersInfo;
+	} // end method getTellersInfo
 
 	public void deleteTeller() {
-		// no inputs are required from Teller
-	}
+
+		scanner = new Scanner(System.in);
+
+		// get the list of tellers: tellerId + name
+		Map<Integer, String> tellersInfo = getTellersInfo();
+		// show only non-admin tellers
+		System.out.println("List of non-admin tellers: \ntellerId:teller name");
+		for (int tellerId : tellersInfo.keySet()) {
+			if (tellerId != teller.getId()) {
+				System.out.println(tellerId + ":" + tellersInfo.get(tellerId));
+			}
+		}
+
+		System.out.println("Please enter the id of the teller to remove: ");
+		int tempTellerId = scanner.nextInt();
+		scanner.nextLine();
+
+		TellerMessage msg = new TellerMessage(Status.ONGOING, tempTellerId);
+		try {
+			// send TellerMessage to server
+			writer.writeUnshared(msg);
+
+			// wait for msgReceipt
+			TellerMessage msgReceipt = (TellerMessage) reader.readObject();
+
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+
+				System.out.println("Successfully remove teller with id: " + tempTellerId);
+
+			} else {
+				System.out.println("Fail to remove teller with id: " + tempTellerId);
+			}
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	} // end method deleteTeller
+
+	public void addUserToAccount(int loggedInUserID) {
+
+		try {
+			while (true ) {
+				scanner = new Scanner(System.in);
+				System.out.println("Enter account number to add a user: ");
+				int accNum = scanner.nextInt();
+				scanner.nextLine();
+				System.out.println("Enter user id to be added: ");
+				int userIdAdd = scanner.nextInt();
+				scanner.nextLine();
+
+				System.out.println("Please type yes to confirm your information below.");
+				System.out.printf("user id: %s\nAccount Number: %s\n", userIdAdd, accNum);
+
+				String userConfirm = scanner.nextLine();
+
+				if (userConfirm.equalsIgnoreCase("YES")) {
+					// check user id is valid.
+					// create UserInfoMessage and send to server to check
+					UserInfoMessage uiMsg = new UserInfoMessage(Status.ONGOING, userIdAdd);
+					writer.writeUnshared(uiMsg);
+					// wait for a user info message receipt
+					UserInfoMessage uiMsgReceipt = (UserInfoMessage) reader.readObject();
+
+					// check if the logged in user owns the account.
+					AccountMessage accMsg = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_OWN, loggedInUserID, accNum);
+					writer.writeUnshared(accMsg);
+					// wait for a user info message receipt
+					AccountMessage accMsgReceipt = (AccountMessage) reader.readObject();
+
+					// send accMsg to check admin status
+					AccountMessage accMsgAdmin = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_ACC_ADM, loggedInUserID, accNum);
+					writer.writeUnshared(accMsgAdmin);
+					// wait for accMsgAdmin receipt
+					AccountMessage accMsgAdminReceipt = (AccountMessage) reader.readObject();
+					
+					// check if the user id is already in the account
+					AccountMessage acmChkDup = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_DUP, loggedInUserID, accNum, userIdAdd);
+					writer.writeUnshared(acmChkDup);
+					// wait for a user info message receipt
+					AccountMessage acmChkDupReceipt = (AccountMessage) reader.readObject();
+
+					if (uiMsgReceipt.getStatus() == Status.SUCCESS
+							&& accMsgReceipt.getStatus() == Status.SUCCESS
+							&& accMsgAdminReceipt.getStatus() == Status.SUCCESS
+							&& acmChkDupReceipt.getStatus() == Status.SUCCESS) {
+
+						accMsg = new AccountMessage(Status.ONGOING, AccountMessageType.ADD_USER_TO_ACC, userIdAdd, accNum);
+						writer.writeUnshared(accMsg);
+						// expect BankUser Object from server
+						BankUser userToadd = (BankUser) reader.readObject();
+						// add user to accounts
+						accounts.get(accNum).addUser(userToadd);
+						// show updated accounts
+						System.out.println("Successfully added user id [" + userIdAdd + "] to the account #" + accNum);
+						// print out all account info
+						System.out.println("Updated user id [" + loggedInUserID + "] accounts: " + accounts);
+					} else { // if user confirm was not YES
+						System.out.println("Fail to add user id [" + userIdAdd + "] to the account #" + accNum);
+					}
+					// break while loop
+					break;
+				} else { // if user confirm was not YES
+					System.out.println("Fail to create a new user. Please try again.");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	} // end method addUserToAccount
+
+	public void deleteUserFromAccount(int loggedInUserID) {
+		try {
+			while (true) {
+				scanner = new Scanner(System.in);
+				System.out.println("Enter account number to delete a user: ");
+				int accNum = scanner.nextInt();
+				scanner.nextLine();
+				System.out.println("Enter user id to be deleted: ");
+				int userIdRem = scanner.nextInt();
+				scanner.nextLine();
+
+				System.out.println("Please type yes to confirm your information below.");
+				System.out.printf("user id: %s\nAccount Number: %s\n", userIdRem, accNum);
+				String userConfirm = scanner.nextLine();
+
+				if (userConfirm.equalsIgnoreCase("YES")) {
+					// check if the logged in user owns the account.
+					AccountMessage acmOwn = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_OWN, loggedInUserID, accNum);
+					writer.writeUnshared(acmOwn);
+					// wait for a user info message receipt
+					AccountMessage acmReceipt = (AccountMessage) reader.readObject();
+
+					// check if removing user owns the account.
+					AccountMessage acmRem = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_OWN, userIdRem, accNum);
+					writer.writeUnshared(acmRem);
+					// wait for a user info message receipt
+					AccountMessage acmRemReceipt = (AccountMessage) reader.readObject();
+
+					// send accMsg to check admin status
+					AccountMessage accMsgAdmin = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_ACC_ADM, loggedInUserID, accNum);
+					writer.writeUnshared(accMsgAdmin);
+					// wait for accMsgAdmin receipt
+					AccountMessage accMsgAdminReceipt = (AccountMessage) reader.readObject();
+					
+					// check if the user is trying to delete itself from account
+					AccountMessage acmChkItself = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_ITSELF, loggedInUserID, accNum, userIdRem);
+					writer.writeUnshared(acmChkItself);
+					// wait for a user info message receipt
+					AccountMessage acmChkItselfReceipt = (AccountMessage) reader.readObject();
+					
+					// check both msgs' status
+					if (acmReceipt.getStatus() == Status.SUCCESS
+							&& acmRemReceipt.getStatus() == Status.SUCCESS
+							&& accMsgAdminReceipt.getStatus() == Status.SUCCESS
+							&& acmChkItselfReceipt.getStatus() == Status.SUCCESS) {
+
+						acmRem = new AccountMessage(Status.ONGOING, AccountMessageType.REM_USER_FROM_ACC, userIdRem, accNum);
+						writer.writeUnshared(acmRem);
+						// expect BankUser Object from server
+						BankUser userRem = (BankUser) reader.readObject();
+						// remove user to accounts
+						accounts.get(accNum).deleteUser(userRem);
+						// show updated accounts
+						System.out.println("Successfully removed user id [" + userIdRem + "] from the account #" + accNum);
+						// print out all account info
+						System.out.println("Updated user id [" + loggedInUserID + "] accounts: " + accounts);
+					} else {
+						System.out.println("Fail to delete user id [" + userIdRem + "] from the account #" + accNum);
+					}
+					break;
+				} else { // if user confirm was not YES
+					System.out.println("Fail to create a new user. Please try again.");
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	} // end method deleteUserFromAccount
 
 	public void createUser() {
 		try {
-
 			while (true) {
 
 				scanner = new Scanner(System.in);
@@ -254,22 +489,58 @@ public class TellerGUIClient {
 						System.out.println("Fail to create a new user. Please try again.");
 						continue;
 					}
-
+					
+					System.out.println(String.format("Log in as %s(%d)\n", user.getName(), user.getId()));
+					
 					// redirect to login in as user page
 					loginUserAccount(user.getId());
-
 					break; // break while loop
+
+				} else { // if userConfirm is not YES
+
+					System.out.println("Fail to create a new user. Please try again.");
+
 				}
 			} // end while loop
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	} // end method createUser
 
 	public void openLogs() {
-		// no inputs are required from Teller
+		TellerMessage msg = new TellerMessage(Status.ONGOING, TellerMessageType.VIEW_LOGS);
+		TellerMessage msgReceipt = null;
+		List<String> logs = null;
+
+		try {
+			// send msg to server
+			writer.writeUnshared(msg);
+
+			// wait for success status
+			msgReceipt = (TellerMessage) reader.readObject();
+
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+
+				logs = msgReceipt.getLogs();
+
+			} else {
+
+				System.out.println("Fail to get logs from server.");
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (logs != null) {
+			System.out.println("Logs: ");
+			for (String s : logs) {
+				System.out.println(s);
+			}
+			System.out.println();
+		}
 	}
 
 	public void loginUserAccount() {
@@ -299,6 +570,7 @@ public class TellerGUIClient {
 
 			getAccountsInfo(); // get all accounts
 			System.out.println("accounts: " + accounts);
+			//System.out.println("accounts: " + user.getAccounts());
 			loginUserAccount(userId);
 
 		} catch (Exception e) {
@@ -316,30 +588,31 @@ public class TellerGUIClient {
 						+ "6-Forget-Password\n7-Withdraw\n8-Deposit\n9-Transfer\n10-Back");
 				int choice = scanner.nextInt();
 				switch (choice) {
-					case 0: createAccount(); break; // create new account
-					case 1: deleteAccount(); break; // remove account
-					case 2: break; // add user to account
-					case 3: break; // remove user from account
-					case 4: transferAdmin(); break; // transfer admin
-					case 5: changePin(); break; // change pin
-					case 6: forgetPassword(); break; // forget password
-					case 7: withdraw(); break; // withdraw
-					case 8: deposit(); break; // deposit
-					case 9: transfer(); break; // transfer
-					case 10:
-						isLoggedOut = true;
-						LogoutMessage msg = logoutRequest();
-						writer.writeUnshared(msg);
-						LogoutMessage msgBack = (LogoutMessage) reader.readObject();
-						if (msgBack.getStatus() == Status.SUCCESS) {
-							System.out.println("Logout was a success.\nReturning to teller main.");
-							break;
-						} else {
-							System.out.println("Logout failed, continue as User ID: " + userId);
-							break;
-						}
-						
-					default: break;
+				case 0: createAccount(userId); break; // create new account
+				case 1: deleteAccount(userId); break; // remove account
+				case 2: addUserToAccount(userId); break; // add user to account
+				case 3: deleteUserFromAccount(userId); break; // remove user from account
+				case 4: transferAdmin(); break; // transfer admin
+				case 5: changePin(); break; // change pin
+				case 6: forgetPassword(); break; // forget password
+				case 7: withdraw(userId); break; // withdraw
+				case 8: deposit(userId); break; // deposit
+				case 9: transfer(userId); break; // transfer
+				case 10:
+					isLoggedOut = true;
+					LogoutMessage msg = logoutRequest();
+					writer.writeUnshared(msg);
+					LogoutMessage msgBack = (LogoutMessage) reader.readObject();
+					if (msgBack.getStatus() == Status.SUCCESS) {
+						System.out.println("Logout was a success.\nReturning to teller main.");
+						accounts.clear();
+						break;
+					} else {
+						System.out.println("Logout failed, continue as User ID: " + userId);
+						break;
+					}
+
+				default: break;
 				}
 			}
 
@@ -354,8 +627,8 @@ public class TellerGUIClient {
 		try {
 			// request info from all accounts of current user
 			for (int accountNumber : user.getAccounts()) {
-//				if (accounts == null || accounts.get(accountNumber) == null) {}// update only when it's not available
-				
+				//				if (accounts == null || accounts.get(accountNumber) == null) {}// update only when it's not available
+
 				// create new AccountMessage requesting account info
 				// int id, Status status, int accountNumber, int currUserId, int pin,
 				// AccountMessageType type
@@ -374,7 +647,7 @@ public class TellerGUIClient {
 					accounts.put(accountNumber, null);
 				}
 
-				
+
 			}
 
 		} catch (Exception e) {
@@ -388,7 +661,7 @@ public class TellerGUIClient {
 		// needs clarification
 	}
 
-	public void createAccount() {
+	public void createAccount(int loggedInUserId) {
 		scanner = new Scanner(System.in);
 		int choice;
 		AccountType accountType;
@@ -426,8 +699,10 @@ public class TellerGUIClient {
 					if (pin > 0) {
 						break;
 					}
-				} catch (Exception e) {}
-				System.out.println("Invalid pin. Please try again.");
+				} catch (Exception e) {
+					System.out.println("Invalid pin. Please try again.");
+					scanner.nextLine(); // consume the invalid input
+				}
 			} // end while loop
 
 			// confirm
@@ -456,7 +731,8 @@ public class TellerGUIClient {
 
 				// getAccountsInfo to get the newly created account to accounts
 				getAccountsInfo();
-				System.out.println("updated accounts: " + accounts);
+				// print out all account info
+				System.out.println("Updated user id [" + loggedInUserId + "] accounts: " + accounts);
 
 			} else {
 				System.out.printf("Fail to create a new %s account.\n", accountType);
@@ -470,108 +746,98 @@ public class TellerGUIClient {
 	} // end method createAccount
 
 	// delete account if the balance is zero, else fail to delete
-	public void deleteAccount() {
+	public void deleteAccount(int loggedInUserId) {
 		scanner = new Scanner(System.in);
 		System.out.println("Enter Account number: ");
 		int accountNumber = scanner.nextInt();
 		scanner.nextLine();
-		
-		
+
+
 		// check if this account number is valid and account balance is not zero and whether the user has admin access to this account
 		if (user.getAccounts().contains(accountNumber) 
 				&& accounts.get(accountNumber).getBalance() == 0
 				&& accounts.get(accountNumber).getAdminID() == user.getId()) {
-			
+
 			// send AccountMessage to server
 			AccountMessage msg = new AccountMessage(Status.ONGOING, accountNumber, user.getId());
 			try {
 				writer.writeUnshared(msg);
 				// wait for success status
 				AccountMessage msgReceipt = (AccountMessage) reader.readObject();
-				
+
 				if (msgReceipt.getStatus() == Status.SUCCESS) {
 					// update accounts, user.accounts
 					user.getAccounts().remove(Integer.valueOf(accountNumber));
 					accounts.remove(accountNumber);
-					System.out.println("Successfully remove account " + accountNumber + ".");
+					// print out success msg
+					System.out.println("Successfully remove account #" + accountNumber + ".");
+					// print out all account info
+					System.out.println("Updated user id [" + loggedInUserId + "] accounts: " + accounts);
 				}
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-			
-			
+
+
+
 		} else {
 			System.out.println("Invalid accountNumber or your balance is not zero or you are not the admin of this account.");
 		}
-		
-		
-		
+
+
+
 	} // end method deleteAccount
 
-	public void addUser() {
-		scanner = new Scanner(System.in);
-		System.out.println("Enter user id: ");
-		String userId = scanner.nextLine();
-
-	}
-
-	public void deleteUser() {
-		scanner = new Scanner(System.in);
-		System.out.println("Enter user id: ");
-		String userId = scanner.nextLine();
-
-	}
 
 	public void forgetPassword() {
 		scanner = new Scanner(System.in);
 		while (true) {
 			System.out.println("Enter birthday: ");
 			String birthday = scanner.nextLine();
-	
+
 			System.out.println("Enter new password: ");
 			String password = scanner.nextLine();
-			
+
 			System.out.println("Please type yes to confirm that your new password is " + password);
 			String input = scanner.nextLine();
 			if (input.equalsIgnoreCase("YES")) {
 				try {
-					
+
 					// create new AccountMessage with type CHG_PWD
 					AccountMessage msg = new AccountMessage(Status.ONGOING, birthday, password);
-					
+
 					// send to server
 					writer.writeUnshared(msg);
-					
+
 					// wait for success status
 					AccountMessage msgReceipt = (AccountMessage) reader.readObject();
-					
+
 					if (msgReceipt.getStatus() == Status.SUCCESS) {
 						System.out.println("Your password is changed successfully.");
 					} else {
 						System.out.println("Wrong birthday. Fail to change your password.");
 					}
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+
 				break; // break the while loop
 			}
 		}
 	}
 
 	public void changePin() {
-		
+
 		scanner = new Scanner(System.in);
 		System.out.println("Choose an account: ");
 		int accountNumber = scanner.nextInt();
-		
+
 		System.out.println("Enter new pin: ");
 		int pin = scanner.nextInt();
 		scanner.nextLine();
-		
+
 		System.out.println("Type Yes to confirm your new pin is " + pin);
 		String input = scanner.nextLine();
 		if (input.equalsIgnoreCase("YES")) {
@@ -579,13 +845,13 @@ public class TellerGUIClient {
 				// create AccountMessage with type CHG_PIN to server
 				// Status status, int userId, int accountNumber, int pin
 				AccountMessage msg = new AccountMessage(Status.ONGOING, user.getId(), accountNumber, pin);
-				
+
 				// send to server
 				writer.writeUnshared(msg);
-				
+
 				// wait for success status
 				AccountMessage msgReceipt = (AccountMessage) reader.readObject();
-				
+
 				if (msgReceipt.getStatus() == Status.SUCCESS) {
 					System.out.println("Your pin is changed successfully.");
 					// update account pin locally (optional)
@@ -593,19 +859,19 @@ public class TellerGUIClient {
 				} else {
 					System.out.println("Fail to change your pin.");
 				}
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
+
 		}
-		
-		
+
+
 	} // end method changePin
 
 	public void transferAdmin() {
 		scanner = new Scanner(System.in);
-		
+
 		// 1. get latest updates of all accounts
 		getAccountsInfo();
 		// initialize map: key: accountNumber -> value: Map<userId, user name>
@@ -632,62 +898,62 @@ public class TellerGUIClient {
 							// add username to adminAccountsInfo
 							adminAccountsInfo.get(accountNumber).put(userId, uiMsgReceipt.getUserName());
 						}
-						
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 
 				} // end for loop
 			}
-			
+
 		}
 		// 1.2 list out all admin accounts
 		System.out.println("Please choose one of the admin accounts to transfer admin: ");
 		System.out.println(adminAccountsInfo.keySet());
-		
-		
+
+
 		// 2. choose admin account
 		int accountNumber = scanner.nextInt();
 		// 2.1 show all users of this account
 		System.out.println("Please choose one of the users to transfer: ");
 		System.out.println(adminAccountsInfo.get(accountNumber));
-		
+
 		// 3. choose recipient user id
 		int recipientId = scanner.nextInt();
-		
+
 		// 4. enter pin
 		System.out.println("Enter account pin: ");
 		int pin = scanner.nextInt();
-		
+
 		// 5. send transfer admin request to server -> AccountMessage of type TXF_ADMIN
 		// Status status, int userId, int accountNumber, int pin, int recipientId
 		AccountMessage msg = new AccountMessage(Status.ONGOING, user.getId(), accountNumber, pin, recipientId);
-		
+
 		try {
 			// send to server
 			writer.writeUnshared(msg);
-			
+
 			// wait for success status
 			AccountMessage msgReceipt = (AccountMessage) reader.readObject();
-			
+
 			if (msgReceipt.getStatus() == Status.SUCCESS) {
-				System.out.printf("For you account %d, the admin is transferred to %s successfully.", accountNumber, adminAccountsInfo.get(accountNumber).get(recipientId));
+				System.out.printf("For you account %d, the admin is transferred to %s successfully.\n", accountNumber, adminAccountsInfo.get(accountNumber).get(recipientId));
 				// update account pin locally (optional)
 				accounts.get(accountNumber).setAccountPin(pin);
-				
+
 				// 6. update account admin locally
 				accounts.get(accountNumber).setAdminID(recipientId);
-				
+
 			} else {
-				System.out.println("Fail to change your pin.");
+				System.out.printf("For you account %d, failed to transfer admin to %s.\n", accountNumber, adminAccountsInfo.get(accountNumber).get(recipientId));
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
+
+
+
 	} // end method transferAdmin
 
 	private boolean setUpConnection() {
@@ -736,68 +1002,160 @@ public class TellerGUIClient {
 
 	}
 
-	public String tellerLoginRequest(String tellerId, String password) {
-		boolean isInt;
-		try {
-            Integer.parseInt(tellerId); // Try parsing the string to an integer
-            isInt = true; // If successful, return true
-        } catch (NumberFormatException e) {
-        	isInt = false; // If an exception is caught, return false
-        }
-		if(isInt) {
+	public void tellerLogin() {
+		scanner = new Scanner(System.in);
+		int tellerId;
+		String password;
+		while (true) {
+			while (true) {
+				System.out.println("Enter your teller id or type exit to quit: ");
+				String input = null;
+				try {
+					input = scanner.nextLine();
+					tellerId = Integer.parseInt(input);
+					break;
+				} catch (Exception e) {
+					if (input.equalsIgnoreCase("EXIT")) {
+						ExitMessage msg = new ExitMessage(Status.ONGOING);
+						try {
+							writer.writeUnshared(msg);
+							// wait for success status
+							ExitMessage msgReceipt = (ExitMessage) reader.readObject();
+							if (msgReceipt.getStatus() == Status.SUCCESS) {
+								System.out.println("Teller client exiting...");
+								// a good way to exit
+								System.exit(0);
+								System.out.println("after system exit");
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+						
+					} else {
+						System.out.println("Error: your teller id is an integer. Please try again.");						
+					}
+				}
+			}
+
+			System.out.println("Enter your password: ");
+			password = scanner.nextLine();
+
+			// create LoginMessage
+			LoginMessage msg = new LoginMessage(Status.ONGOING, tellerId, password);
+
 			try {
-				// create new login message
-				LoginMessage msg = new LoginMessage(Status.ONGOING, Integer.parseInt(tellerId), password);
-				// send login message to server
+				// send LoginMessage to server
 				writer.writeUnshared(msg);
-		
-				// wait for loginMessage from server
+
+				// expect a success LoginMessage returned from the server
 				LoginMessage msgReceipt = (LoginMessage) reader.readObject();
-				if ((msgReceipt.getStatus() == Status.SUCCESS)) { // if success, break while loop
-					return "SUCCESS";
+
+				if (msgReceipt.getStatus() == Status.SUCCESS) {
+					// wait for Teller object
+					teller = (Teller) reader.readObject();
+					System.out.println(teller);
+					break; // break the while loop
+				} else {
+					System.out.println("Wrong teller id or password. Please try again.");
 				}
-				else {
-					return "ONGOING";
-	//				System.out.println("Wrong user id or password. Please try again.\n");
-				}
-			}catch (Exception e) {
+
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
+
 		}
-		return "ERROR";
+
 	}
 
 	public void newSession() {
-		teller = null;
-		user = null;
+
+		tellerLogin();
+
+		tellerMenu();
 	}
 
 	public void tellerMenu() {
 		scanner = new Scanner(System.in);
 		accounts = new HashMap<>();
-		// if (teller.getAdmin()) { // if this is an admin teller
-		// // switch statement for admin teller
-		//
-		// } else {}
-		// switch statement for normal teller
 		boolean flag = false; // flag to quit the session
-		while (!flag) {
-			System.out.println("0-Create-New_User\n1-Login-User-Account\n2-LogOut");
-			int choice = scanner.nextInt();
-			switch (choice) {
-			case 0:
-				createUser();
-				break; // create new user
-			case 1:
-				loginUserAccount();
-				break;
-			case 2:
-				flag = true;
-				break;
-			default:
-				break;
-			}
+		if (teller.getAdmin()) { // if this is an admin teller
+			// switch statement for admin teller
+			while (!flag) {
+				System.out.println("0-Add-New-Teller\n1-Delete-Teller\n2-View-logs\n3-Create-New-User\n4-Login-User-Account\n5-LogOut");
+				int choice = scanner.nextInt();
+				scanner.nextLine();
 
+				switch (choice) {
+				case 0: addTeller(); break; // add teller
+				case 1: deleteTeller(); break; // delete teller
+				case 2: openLogs(); break; // view logs
+				case 3: createUser(); break; // create new user
+				case 4: loginUserAccount(); break; // login user account
+				case 5:
+					
+
+					try {
+
+						LogoutMessage logoutMsg = new LogoutMessage(Status.ONGOING, LogoutMessageType.TELLER);
+						writer.writeUnshared(logoutMsg);
+						LogoutMessage logoutMsgReceipt = (LogoutMessage) reader.readObject();
+
+						if (logoutMsgReceipt.getStatus() == Status.SUCCESS) {
+							flag = true;
+							System.out.println("Logout was a success.\nReturning to teller login.\n");
+						} else {
+							System.out.println("Logout failed.");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					newSession();
+
+					break; // logout
+					
+				default: break;
+				}
+
+			} // end while loop
+		} else {
+			// switch statement for normal teller
+			while (!flag) {
+				System.out.println("0-Create-New_User\n1-Login-User-Account\n2-LogOut");
+				int choice = scanner.nextInt();
+				scanner.nextLine();
+
+				switch (choice) {
+				case 0: createUser(); break; // create new user
+				case 1: loginUserAccount(); break;
+				case 2:
+					
+
+					try {
+
+						LogoutMessage logoutMsg = new LogoutMessage(Status.ONGOING, LogoutMessageType.TELLER);
+						writer.writeUnshared(logoutMsg);
+						LogoutMessage logoutMsgReceipt = (LogoutMessage) reader.readObject();
+
+						if (logoutMsgReceipt.getStatus() == Status.SUCCESS) {
+							flag = true;
+							System.out.println("Logout was a success.\nReturning to teller login.");
+						} else {
+							System.out.println("Logout failed.");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					System.out.println("Hit newSession");
+					newSession();
+					System.out.println("after newSession");
+					
+					break;
+				default: break;
+				}
+
+			} // end while loop
 		}
 	}
 
@@ -806,20 +1164,20 @@ public class TellerGUIClient {
 			// start client
 			setUpConnection();
 
-			int id = 0;
 			// handshake with server: Teller client hello
 			handshake();
-			
+
 			newSession();
+
 			// close client
-			// closeConnection();
+			closeConnection();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
-	
+
 	public LogoutMessage logoutRequest() {
 
 		return new LogoutMessage(Status.ONGOING);

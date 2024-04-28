@@ -122,12 +122,12 @@ public class MainPage {
 				String status = getClient().logoutRequest();
 				if (status == "SUCCESS") {
 					AccountSelection AS = new AccountSelection(getClient());
-				MainPage MP = new MainPage(getClient(), AS, false);
-				ATMLogin AL = new ATMLogin(getClient(), MP);
-				AL.createWindow();
+					MainPage MP = new MainPage(getClient(), AS, false);
+					ATMLogin AL = new ATMLogin(getClient(), MP);
+					AL.createWindow();
 				}
 				else {
-					JOptionPane.showMessageDialog(frame, "Invaild ID or password. Try again");
+					JOptionPane.showMessageDialog(frame, "Failed to Logout, try again!!");
 				}
 				
 			}

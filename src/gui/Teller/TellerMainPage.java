@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import gui.ATM.ATMLogin;
+import gui.ATM.AccountSelection;
+import gui.ATM.MainPage;
 import main.TellerGUIClient;
 import message.LogoutMessage;
 import message.Status;
@@ -69,7 +72,7 @@ public class TellerMainPage {
 			public void actionPerformed(ActionEvent e) {
 				// add code needed before moving to next page
 				frame.setVisible(false);
-				new TellerCreateUser(GetTellerClient()).createWindow();;
+				new TellerCreateUser(getTellerClient()).createWindow();
 			}
 		});
 		
@@ -77,7 +80,15 @@ public class TellerMainPage {
 			public void actionPerformed(ActionEvent e) {
 				// add code needed before moving to next page
 				frame.setVisible(false);
-				// add code to move to next page
+				String status = getTellerClient().logoutRequest();
+				if (status == "SUCCESS") {
+					TellerMainPage tellerMainPage = new TellerMainPage(getTellerClient());
+					TellerLogin tellerLogin = new TellerLogin(getTellerClient(), tellerMainPage);
+					tellerLogin.createWindow(); // start teller login
+				}
+				else {
+					JOptionPane.showMessageDialog(frame, "Failed to Logout, try again!!");
+				}
 			}
 		});
 		

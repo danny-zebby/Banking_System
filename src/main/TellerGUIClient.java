@@ -580,7 +580,7 @@ public class TellerGUIClient {
 				case 9: transfer(userId); break; // transfer
 				case 10:
 					isLoggedOut = true;
-					LogoutMessage msg = logoutRequest();
+					LogoutMessage msg = new LogoutMessage(Status.ONGOING);
 					writer.writeUnshared(msg);
 					LogoutMessage msgBack = (LogoutMessage) reader.readObject();
 					if (msgBack.getStatus() == Status.SUCCESS) {
@@ -1113,10 +1113,22 @@ public class TellerGUIClient {
 
 	}
 
-	public LogoutMessage logoutRequest() {
+	public String logoutRequest() {
 
-		return new LogoutMessage(Status.ONGOING);
+		try {
+			LogoutMessage logoutMsg = new LogoutMessage(Status.ONGOING, LogoutMessageType.TELLER);
+			writer.writeUnshared(logoutMsg);
+			LogoutMessage logoutMsgReceipt = (LogoutMessage) reader.readObject();
 
+			if (logoutMsgReceipt.getStatus() == Status.SUCCESS) {
+				return "SUCCESS"; // "Logout was a success.\nReturning to teller login.\n";
+			} else {
+				return "Logout failed.";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "Fail";
 	}
 
 	// Driver

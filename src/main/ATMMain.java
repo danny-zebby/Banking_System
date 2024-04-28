@@ -25,12 +25,9 @@ public class ATMMain extends JFrame {
 		MainPage MP = new MainPage(client, AS, false);
 		ATMLogin AL = new ATMLogin(client, MP);
 		
-		client.go();
-		//Login Gui
-		AL.createWindow();
+		client.go(); // setup connection + handshake
 		
-		// Open 
-		
+		AL.createWindow(); //start Login Gui
 		
    }
 }

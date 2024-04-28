@@ -209,11 +209,6 @@ public class ATMGUIClient {
 			// start client
 			setUpConnection();
 			handshake(); // handshake with server
-//
-//			newSession();
-//
-//			// close client
-//			closeConnection();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -225,51 +220,6 @@ public class ATMGUIClient {
 		// reset variables
 		user = null;
 		accounts = new HashMap<Integer, BankAccount>();
-
-		try {
-
-
-//			// ATM functions
-//			while (true) {
-//				System.out.println("0-Withdraw\n1-Deposit\n2-Transfer\n3-LogOut");
-//				int choice = scanner.nextInt();
-//				switch (choice) {
-//				case 0:
-//					withdraw();
-//					break;
-//				case 1:
-//					deposit();
-//					break;
-//				case 2:
-//					transfer();
-//					break;
-//				case 3:
-//					LogoutMessage msg = logoutRequest();
-//					writer.writeUnshared(msg);
-//					LogoutMessage msgBack = (LogoutMessage) reader.readObject();
-//					if (msgBack.getStatus() == Status.SUCCESS) {
-//						System.out.println("Logout was a success\nReturning to Login Screen:");
-//						newSession();
-//						break;
-//					} else {
-//						System.out.println("Logout failed contiune as User ID:" + user.getId());
-//						break;
-//					}
-//				}
-//			}
-
-			// codes go here...
-			// while loop
-			// two options: ATM Login, exit
-
-			// exit
-
-			// ATM login: while loop
-			// Four options: deposit, withdraw, transfer, logout
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
 	}
 

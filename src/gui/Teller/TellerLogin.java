@@ -8,32 +8,34 @@ import main.TellerGUIClient;
 
 public class TellerLogin {
 	
-	public static TellerGUIClient client;
-	public static TellerMainPage mainpage;
+	public TellerGUIClient client;
+	public TellerMainPage mainpage;
 	
 	public TellerLogin (TellerGUIClient client, TellerMainPage mainpage) {
 		this.client = client;
 		this.mainpage = mainpage;
 	}
 	
-	public static TellerGUIClient getClient() {
-		return client;
+	public TellerGUIClient getClient() {
+		return this.client;
 	}
 	
-	public static TellerMainPage getMainPage() {
-		return mainpage;
+	public TellerMainPage getMainPage() {
+		return this.mainpage;
 	}
 	
-	public static void createWindow() {
+	public void createWindow() {
 	    JFrame frame = new JFrame("Teller Login");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    TellerLoginUI(frame);
+	    
+	    tellerLoginUI(frame);
+	    
 	    frame.setSize(300, 200);
 	    frame.setLocationRelativeTo(null);
 	    frame.setVisible(true);
 	}
 		
-	private static void TellerLoginUI(final JFrame frame){
+	private void tellerLoginUI(final JFrame frame){
 		// creates a new panel
 		JPanel panel = new JPanel();
 		LayoutManager layout = new FlowLayout();

@@ -236,27 +236,26 @@ public class ATMGUIClient {
 			System.out.println(user);
 			// request info from all accounts of current user
 			for (int accountNumber : user.getAccounts()) {
-				if (accounts == null || accounts.get(accountNumber) == null) { // update only when it's not available
 
-					// create new AccountMessage requesting account info
-					// int id, Status status, int accountNumber, int currUserId, int pin,
-					// AccountMessageType type
-					AccountMessage msg = new AccountMessage(Status.ONGOING, accountNumber, user.getId(), -1,
-							AccountMessageType.ACCOUNT_INFO);
-					// send message
-					writer.writeObject(msg);
-					// wait for message receipt
-					AccountMessage msgReceipt = (AccountMessage) reader.readObject();
-					if (msgReceipt.getStatus() == Status.SUCCESS) {
-						// wait for BankAccount object
-						BankAccount acc = (BankAccount) reader.readObject();
-						// add to accounts
-						accounts.put(accountNumber, acc);
-					} else {
-						accounts.put(accountNumber, null);
-					}
-
+				// create new AccountMessage requesting account info
+				// int id, Status status, int accountNumber, int currUserId, int pin,
+				// AccountMessageType type
+				AccountMessage msg = new AccountMessage(Status.ONGOING, accountNumber, user.getId(), -1,
+						AccountMessageType.ACCOUNT_INFO);
+				// send message
+				writer.writeObject(msg);
+				// wait for message receipt
+				AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+				if (msgReceipt.getStatus() == Status.SUCCESS) {
+					// wait for BankAccount object
+					BankAccount acc = (BankAccount) reader.readObject();
+					// add to accounts
+					accounts.put(accountNumber, acc);
+				} else {
+					accounts.put(accountNumber, null);
 				}
+
+				
 			}
 			setAccounts(accounts);
 		} catch (Exception e) {

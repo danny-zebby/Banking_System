@@ -72,7 +72,7 @@ public class TellerMainPage {
 			public void actionPerformed(ActionEvent e) {
 				// add code needed before moving to next page
 				frame.setVisible(false);
-				// add code to move to next page
+				new TellerCreateUser(GetTellerClient()).createWindow();;
 			}
 		});
 		

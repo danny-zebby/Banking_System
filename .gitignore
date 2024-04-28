@@ -13,3 +13,4 @@ replit.nix
 src/main/*.class
 src/message/*.class
 src/test/*.class
+logs.txt

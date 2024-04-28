@@ -492,7 +492,38 @@ public class TellerClient {
 	} // end method createUser
 
 	public void openLogs() {
-		// no inputs are required from Teller
+		TellerMessage msg = new TellerMessage(Status.ONGOING, TellerMessageType.VIEW_LOGS);
+		TellerMessage msgReceipt = null;
+		List<String> logs = null;
+		
+		try {
+			// send msg to server
+			writer.writeUnshared(msg);
+			
+			// wait for success status
+			msgReceipt = (TellerMessage) reader.readObject();
+			
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				
+				logs = msgReceipt.getLogs();
+				
+			} else {
+				
+				System.out.println("Fail to get logs from server.");
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if (logs != null) {
+			System.out.println("Logs: ");
+			for (String s : logs) {
+				System.out.println(s);
+			}
+			System.out.println();
+		}
 	}
 
 	public void loginUserAccount() {

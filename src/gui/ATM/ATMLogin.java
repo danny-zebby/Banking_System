@@ -8,23 +8,23 @@ import java.awt.event.*;
 
 public class ATMLogin {
 	
-	public static ATMGUIClient client;
-	public static MainPage mainpage;
+	public ATMGUIClient client;
+	public MainPage mainpage;
 	
 	public ATMLogin (ATMGUIClient client, MainPage mainpage) {
 		this.client = client;
 		this.mainpage = mainpage;
 	}
 	
-	public static ATMGUIClient getClient() {
-		return client;
+	public ATMGUIClient getClient() {
+		return this.client;
 	}
 	
-	public static MainPage getMainPage() {
-		return mainpage;
+	public MainPage getMainPage() {
+		return this.mainpage;
 	}
 	
-	public static void createWindow() {
+	public void createWindow() {
 	    JFrame frame = new JFrame("ATM Login");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    LoginUI(frame);
@@ -33,7 +33,7 @@ public class ATMLogin {
 	    frame.setVisible(true);
 	}
 		
-	private static void LoginUI(final JFrame frame){
+	private void LoginUI(final JFrame frame){
 		// creates a new panel
 		JPanel panel = new JPanel();
 		LayoutManager layout = new FlowLayout();

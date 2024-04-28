@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Vector;
 
 import main.*;
-import message.*;
 
 
 public class MainPage {
@@ -20,8 +19,8 @@ public class MainPage {
 	boolean show = true;
 	boolean AccIn = false;
 	
-	public static ATMGUIClient client;
-	public static AccountSelection accsel;
+	public ATMGUIClient client;
+	public AccountSelection accsel;
 	
 	public MainPage(ATMGUIClient client, AccountSelection accsel, boolean AccIn){
 		this.client = client;
@@ -31,12 +30,12 @@ public class MainPage {
 		this.accsel.setMainPage(this);
 	}
 	
-	public static ATMGUIClient getClient() {
-		return client;
+	public ATMGUIClient getClient() {
+		return this.client;
 	}
 	
-	public static AccountSelection getAccSel() {
-		return accsel;
+	public AccountSelection getAccSel() {
+		return this.accsel;
 	}
 	
 	public void go() {
@@ -134,29 +133,7 @@ public class MainPage {
 	
 	class showButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			if(show == false) {
-				entries.clear();
-				String[] input = {"alpha", 
-						"beta", 
-						"gamma", "sigma", "phi", "omega"};
-				
-				for (String s : input) {
-					entries.add(s);
-				}; // end of for
-				frame.repaint();
-				show = true;
-			} // end of if
-			else {
-				entries.clear();
-				entries.add("A");
-				entries.add("B");
-				entries.add("G");
-				entries.add("S");
-				entries.add("P");
-				entries.add("W");
-				frame.repaint();
-				show = false;
-			} // end of else
+			
 			
 		} // end of action
 	} // end of show

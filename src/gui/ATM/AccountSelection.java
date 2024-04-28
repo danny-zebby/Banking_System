@@ -19,14 +19,14 @@ public class AccountSelection {
 	JList<String> list = null;
 	MainPage mainpage = null;
 
-	public static ATMGUIClient client;
+	public ATMGUIClient client = null;
 	private String operation = null;
 
 	public AccountSelection(ATMGUIClient client) {
 		this.client = client;
 	}
 
-	public static ATMGUIClient getClient() {
+	public ATMGUIClient getClient() {
 		return client;
 	}
 
@@ -153,12 +153,13 @@ public class AccountSelection {
 				} else {
 					out = "Failed";
 				}
+				
+				// display operation result
 				JOptionPane.showMessageDialog(null, out);
+				
+				// going back to main page
+				operation = null;
 				frame.setVisible(false);
-//				ATMGUIClient client = new ATMGUIClient();
-//				AccountSelection AS = new AccountSelection(getClient());
-//				MainPage MP = new MainPage(getClient(), AS, true);
-//				MP.go();
 				mainpage.go();
 			}
 		}

@@ -685,8 +685,10 @@ public class TellerClient {
 					if (pin > 0) {
 						break;
 					}
-				} catch (Exception e) {}
-				System.out.println("Invalid pin. Please try again.");
+				} catch (Exception e) {
+					System.out.println("Invalid pin. Please try again.");
+					scanner.nextLine(); // consume the invalid input
+				}
 			} // end while loop
 
 			// confirm
@@ -929,7 +931,7 @@ public class TellerClient {
 				accounts.get(accountNumber).setAdminID(recipientId);
 
 			} else {
-				System.out.println("Fail to change your pin.");
+				System.out.printf("For you account %d, failed to transfer admin to %s.\n", accountNumber, adminAccountsInfo.get(accountNumber).get(recipientId));
 			}
 
 		} catch (Exception e) {
@@ -1108,7 +1110,7 @@ public class TellerClient {
 				System.out.println("0-Create-New_User\n1-Login-User-Account\n2-LogOut");
 				int choice = scanner.nextInt();
 				scanner.nextLine();
-				System.out.println("choice: " + choice);
+
 				switch (choice) {
 				case 0: createUser(); break; // create new user
 				case 1: loginUserAccount(); break;

@@ -50,12 +50,12 @@ public class BankUser implements Serializable {
   }
 
   public void addAccount(BankAccount account) {
-    this.accounts.add(account.getAccountNumber());
+    this.accounts.add(Integer.valueOf(account.getAccountNumber()));
     account.addUser(this);
   }
 
   public boolean deleteAccount(BankAccount account) {
-    this.accounts.remove(account.getAccountNumber());
+    this.accounts.remove(Integer.valueOf(account.getAccountNumber()));
     return true;
   }
 

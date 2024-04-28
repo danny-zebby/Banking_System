@@ -45,7 +45,6 @@ public class Server {
 		BankAccount acc3 = addAccount(3333, AccountType.CHECKING, user2, 10000);
 		BankAccount acc4 = addAccount(4444, AccountType.CHECKING, user2, 10000);
 		
-		acc1.addUser(user2);
 		user2.addAccount(acc1);
 		
 		Teller tel1 = addTeller("Alice", "letmein", true); // this is the admin
@@ -334,14 +333,15 @@ public class Server {
 		}
 
 		private void closeActiveAccounts(int userId) {
-			List<Integer> accounts = userList.get(userId).getAccounts();
+			if (userList.containsKey(userId)) {
+				List<Integer> accounts = userList.get(userId).getAccounts();
 
-			synchronized (activeAccounts) {
-				for (int accountNumber : accounts) {
-					activeAccounts.replace(accountNumber, false);
+				synchronized (activeAccounts) {
+					for (int accountNumber : accounts) {
+						activeAccounts.replace(accountNumber, false);
+					}
 				}
 			}
-
 			synchronized (activeUsers) {
 				activeUsers.replace(userId, false);
 			}
@@ -872,6 +872,24 @@ public class Server {
 
 							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with removing BankUser %d from Account %d.", 
 									tellerList.get(tellerId).getName(), tellerId, userList.get(tempUserId).getName(), tempUserId, userIdToRemove, accountNumber));
+							
+							break;
+						}
+						case CHK_ACC_ADM: {
+							int tempUserId = Integer.parseInt(info.get("userId"));
+							Integer tempIdObj = Integer.valueOf(tempUserId);
+							int accountNumber = Integer.parseInt(info.get("accountNumber"));
+							Integer accNumObj = Integer.valueOf(accountNumber);
+							if (accountList.get(accNumObj).getAdminID() == tempIdObj) {
+								msgReceipt = new AccountMessage(Status.SUCCESS, AccountMessageType.CHK_ACC_ADM);
+								writer.writeUnshared(msgReceipt);
+								System.out.println("CHK_ACC_ADM SUCCESS msg sent.");
+							} else {
+								msgReceipt = new AccountMessage(Status.ERROR, AccountMessageType.CHK_ACC_ADM);
+								writer.writeUnshared(msgReceipt);
+								System.out.println("CHK_ACC_ADM ERROR msg sent.");
+							}
+							
 							
 							break;
 						}

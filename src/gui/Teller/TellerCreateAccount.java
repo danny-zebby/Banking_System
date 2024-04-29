@@ -18,16 +18,23 @@ import java.util.*;
 import java.net.*;
 import message.*;
 public class TellerCreateAccount {
-	public static TellerGUIClient client;
+	static TellerUserAccount tellerUserAccount = null;
+	static TellerGUIClient tellerGUIClient = null;
+	static TellerMainPage tellerMainPage = null;
 	public static int id;
 	
-	public TellerCreateAccount (TellerGUIClient client, int id) {
-		this.client = client;
+	public TellerCreateAccount (TellerUserAccount tellerUserAccount, int id) {
+		this.tellerUserAccount = tellerUserAccount;
+		this.tellerGUIClient = tellerUserAccount.getClient();
+		this.tellerMainPage = tellerUserAccount.getMain();
 		this.id = id;
 	}
 	
-	public static TellerGUIClient getClient() {
-		return client;
+	public TellerGUIClient getClient() {
+		return this.tellerGUIClient;
+	}
+	public TellerUserAccount getUserAcc() {
+		return this.tellerUserAccount;
 	}
 	
 	public static void createWindow() {
@@ -63,17 +70,19 @@ public class TellerCreateAccount {
 			        int randomPin = 1000 + random.nextInt(9000);
 			        pin = String.valueOf(randomPin);
 				}
-				String status = getClient().checkPin(pin);
+				String status = tellerGUIClient.checkPin(pin);
 				if(status.equalsIgnoreCase("VALID")){
 					String userConfirm = JOptionPane.showInputDialog("You are creating a savings account with pin " + pin
 							+ "\nPlease enter yes to confirm.");
 					if (userConfirm.equalsIgnoreCase("YES")) {
 						int intPin = Integer.parseInt(pin);
 						AccountType saving = AccountType.SAVING;
-						String stat = getClient().createAccount(id, intPin, saving);
+						String stat = tellerGUIClient.createAccount(id, intPin, saving);
 						if(stat.equalsIgnoreCase("SUCCESS")) {
 							JOptionPane.showMessageDialog(frame,"Updated user id ["
-						+ id + "] accounts: " + getClient().getAccounts());
+						+ id + "] accounts: " + tellerGUIClient.getAccounts());
+						frame.setVisible(false);
+			            new TellerUserAccount(tellerMainPage, id).run();
 						}
 					}else {
 						JOptionPane.showMessageDialog(frame, "Fail to create a new SAVINGS.\n");
@@ -95,17 +104,19 @@ public class TellerCreateAccount {
 			        int randomPin = 1000 + random.nextInt(9000);
 			        pin = String.valueOf(randomPin);
 				}
-				String status = getClient().checkPin(pin);
+				String status = tellerGUIClient.checkPin(pin);
 				if(status.equalsIgnoreCase("VALID")){
 					String userConfirm = JOptionPane.showInputDialog("You are creating a checking account with pin " + pin
 							+ "\nPlease enter yes to confirm.");
 					if (userConfirm.equalsIgnoreCase("YES")) {
 						int intPin = Integer.parseInt(pin);
 						AccountType saving = AccountType.CHECKING;
-						String stat = getClient().createAccount(id, intPin, saving);
+						String stat = tellerGUIClient.createAccount(id, intPin, saving);
 						if(stat.equalsIgnoreCase("SUCCESS")) {
 							JOptionPane.showMessageDialog(frame,"Updated user id ["
-						+ id + "] accounts: " + getClient().getAccounts());
+						+ id + "] accounts: " + tellerGUIClient.getAccounts());
+							frame.setVisible(false);
+				            new TellerUserAccount(tellerMainPage, id).run();
 						}
 					}else {
 						JOptionPane.showMessageDialog(frame, "Fail to create a new CHECKINGS.\n");
@@ -121,7 +132,7 @@ public class TellerCreateAccount {
 	             JOptionPane.showMessageDialog(frame, "Back to user page.");
 	             //closes TellerCreateUser
 	             frame.setVisible(false);
-	             // go back to Teller User page
+	             new TellerUserAccount(tellerMainPage, id).run();
 	          }
 		});
 		
@@ -135,3 +146,6 @@ public class TellerCreateAccount {
 		
 	}
 }
+
+
+

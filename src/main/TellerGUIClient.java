@@ -780,6 +780,7 @@ public class TellerGUIClient {
 
 	public String tellerLoginRequest(String tellerId, String password) {
 		boolean isInt;
+		accounts = new HashMap<>();
 		try {
 
 			Integer.parseInt(tellerId); // Try parsing the string to an integer

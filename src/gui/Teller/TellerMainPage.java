@@ -14,6 +14,7 @@ import message.Status;
 public class TellerMainPage {
 	JFrame frame;
 	public TellerGUIClient client;
+	public TellerUserAccount tca;
 	TellerAddTellerPage tellerAddTellerPage = null;
 
 	public TellerMainPage(TellerGUIClient client) {
@@ -28,6 +29,10 @@ public class TellerMainPage {
 		return this;
 	}
 
+	public TellerUserAccount getTellerUserAccount() {
+		return this.tca;
+	}
+	
 	public void run() {
 		frame = new JFrame("Teller MainPage");
 		JPanel NorthPanel = new JPanel();
@@ -63,9 +68,14 @@ public class TellerMainPage {
 
 		userLoginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// add code needed before moving to next page
-				frame.setVisible(false);
-				// add code to move to next page
+				String userID = JOptionPane.showInputDialog("Enter User ID: ");
+				String status = getTellerClient().loginUserAccount(userID);
+				if (status == "SUCCESS") {
+					frame.setVisible(false);
+					tca.run();
+				} else {
+					JOptionPane.showMessageDialog(frame, "Error, User does not exist. Try again");
+				}
 			}
 		});
 

@@ -111,6 +111,7 @@ public class AccountSelection {
 				
 				// Get Amount
 				String Amount = JOptionPane.showInputDialog("Enter Amount to " + operation + ":");
+				if (Amount == null) return;
 				double amount = Double.parseDouble(Amount);
 				Amount = String.format("%.2f", amount);
 				double AccBal = Double.parseDouble(Amount);
@@ -120,12 +121,15 @@ public class AccountSelection {
 				int accountPin;
 				if (getOperation() == "withdraw") {
 					SAP = JOptionPane.showInputDialog("Enter the account pin: ");
+					if (SAP == null) return;
 					accountPin = Integer.parseInt(SAP);
+	
 					out = getClient().withdraw(accnum, amount, accountPin);
 				} else if (getOperation() == "transfer") {
 					int ToAccNum;
 					while (true) {
 						String ToAN = JOptionPane.showInputDialog("Enter recipient account number: ");
+						if (ToAN == null) return;
 						ToAccNum = Integer.parseInt(ToAN);
 						out1 = getClient().transfer1(accnum, amount, ToAccNum);
 						String YNC = JOptionPane.showInputDialog(out1);
@@ -148,6 +152,7 @@ public class AccountSelection {
 					
 				} else if (getOperation() == "deposit") {
 					SAP = JOptionPane.showInputDialog("Enter the account pin: ");
+					if (SAP == null) return;
 					accountPin = Integer.parseInt(SAP);
 					out = getClient().deposit(accnum, amount, accountPin);
 				} else {

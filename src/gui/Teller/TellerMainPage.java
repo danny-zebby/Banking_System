@@ -13,7 +13,7 @@ import message.Status;
 public class TellerMainPage {
 	JFrame frame;
 	public TellerGUIClient client;
-	
+	TellerAddTellerPage tellerAddTellerPage = null;
 	public TellerMainPage(TellerGUIClient client) {
 		this.client = client;
 	}
@@ -22,8 +22,12 @@ public class TellerMainPage {
 		return this.client;
 	}
 	
+	public TellerMainPage getTellerMainPage() {
+		return this;
+	}
+	
 	public void run() {
-		JFrame frame = new JFrame("Teller MainPage");
+		frame = new JFrame("Teller MainPage");
 		JPanel NorthPanel = new JPanel();
 		
 		JButton userLoginButton = new JButton("Login as User");
@@ -86,6 +90,7 @@ public class TellerMainPage {
 				// add code needed before moving to next page
 				frame.setVisible(false);
 				// add code to move to next page
+				
 			}
 		});
 		
@@ -94,6 +99,7 @@ public class TellerMainPage {
 				// add code needed before moving to next page
 				frame.setVisible(false);
 				// add code to move to next page
+				new TellerAddTellerPage(getTellerMainPage()).createWindow();
 			}
 		});
 		
@@ -102,8 +108,13 @@ public class TellerMainPage {
 				// add code needed before moving to next page
 				frame.setVisible(false);
 				// add code to move to next page
+				
+				new TellerSelectionPage(getTellerMainPage()).go();
+				
 			}
 		});
 		
-	}
+	} // end method run
+	
+
 }

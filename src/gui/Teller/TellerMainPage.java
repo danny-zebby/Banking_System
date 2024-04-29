@@ -13,7 +13,7 @@ import message.Status;
 public class TellerMainPage {
 	JFrame frame;
 	public TellerGUIClient client;
-	
+	TellerAddTellerPage tellerAddTellerPage = null;
 	public TellerMainPage(TellerGUIClient client) {
 		this.client = client;
 	}
@@ -105,6 +105,7 @@ public class TellerMainPage {
 				// add code needed before moving to next page
 				frame.setVisible(false);
 				// add code to move to next page
+				new TellerAddTellerPage(getTellerMainPage()).createWindow();
 			}
 		});
 		
@@ -113,11 +114,14 @@ public class TellerMainPage {
 				// add code needed before moving to next page
 				frame.setVisible(false);
 				// add code to move to next page
+				
+				new TellerSelectionPage(getTellerMainPage()).go();
+				
 			}
 		});
-		
-	}
+
+	} // end method run
+	
+
 }
-
-
 

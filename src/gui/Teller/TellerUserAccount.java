@@ -10,7 +10,8 @@ import java.awt.event.*;
 import java.util.Map;
 
 public class TellerUserAccount {
-	JButton button, button2, addUserButton, button4, forgetPasswordButton, button7, button8, button9, button10, button11, backButton;
+
+	JButton button, button2, addUserButton, deleteUserButton, forgetPasswordButton, button7, button8, button9, button10, button11, backButton;
 	JLabel label;
 	JFrame frame;
 	JPanel panel = null;
@@ -53,7 +54,7 @@ public class TellerUserAccount {
 		button = new JButton("Create Account");
 		button2 = new JButton("Delete Account");
 		addUserButton = new JButton("Add User");
-		button4 = new JButton("Delete User");
+		deleteUserButton = new JButton("Delete User");
 		forgetPasswordButton = new JButton("Forget Password");
 		button7 = new JButton("Change PIN");
 		button8 = new JButton("Transfer Admin");
@@ -74,7 +75,7 @@ public class TellerUserAccount {
 		panel2.add(button);
 		panel2.add(button2);
 		panel2.add(addUserButton);
-		panel2.add(button4);
+		panel2.add(deleteUserButton);
 		panel2.add(forgetPasswordButton);
 		panel2.add(button7);
 		panel2.add(button8);
@@ -108,13 +109,17 @@ public class TellerUserAccount {
 				// insert code here
 				frame.setVisible(false); // hide current window
 				// jump to the TellerSelectAccountPage
-				new TellerSelectAccountPage(getTellerUserAccount()).go();
+				new TellerSelectAccountForAddUserPage(getTellerUserAccount()).go();
 			}
 		});
 
-		button4.addActionListener(new ActionListener() {
+		deleteUserButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// insert code here
+				// insert code here
+				frame.setVisible(false); // hide current window
+				// jump to the TellerSelectAccountDelPage
+				new TellerSelectAccountForDelUserPage(getTellerUserAccount()).go();
 			}
 		});
 

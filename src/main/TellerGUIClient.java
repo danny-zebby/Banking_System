@@ -352,20 +352,11 @@ public class TellerGUIClient {
 		return "ERROR";
 	} // end method addUserToAccount
 
-	public void deleteUserFromAccount(int loggedInUserID) {
+	public String deleteUserFromAccount(int accNum, int userIdRem) {
 		try {
-			while (true) {
-				scanner = new Scanner(System.in);
-				System.out.println("Enter account number to delete a user: ");
-				int accNum = scanner.nextInt();
-				scanner.nextLine();
-				System.out.println("Enter user id to be deleted: ");
-				int userIdRem = scanner.nextInt();
-				scanner.nextLine();
-				System.out.println("Please type yes to confirm your information below.");
-				System.out.printf("user id: %s\nAccount Number: %s\n", userIdRem, accNum);
-				String userConfirm = scanner.nextLine();
-				if (userConfirm.equalsIgnoreCase("YES")) {
+			
+			int loggedInUserID = user.getId();
+				
 					// check if the logged in user owns the account.
 					AccountMessage acmOwn = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_OWN,
 							loggedInUserID, accNum);
@@ -406,21 +397,14 @@ public class TellerGUIClient {
 						// remove user to accounts
 						accounts.get(accNum).deleteUser(userRem);
 						// show updated accounts
-						System.out.println(
-								"Successfully removed user id [" + userIdRem + "] from the account #" + accNum);
-						// print out all account info
-						System.out.println("Updated user id [" + loggedInUserID + "] accounts: " + accounts);
+						return "Successfully removed user id [" + userIdRem + "] from the account #" + accNum;
 					} else {
-						System.out.println("Fail to delete user id [" + userIdRem + "] from the account #" + accNum);
+						return "Fail to delete user id [" + userIdRem + "] from the account #" + accNum;
 					}
-					break;
-				} else { // if user confirm was not YES
-					System.out.println("Fail to create a new user. Please try again.");
-				}
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "ERROR";
 	} // end method deleteUserFromAccount
 
 	public String createUser(String name, String birthday, String password) {

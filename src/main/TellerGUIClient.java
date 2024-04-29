@@ -600,34 +600,25 @@ public class TellerGUIClient {
 
 	} // end method deleteAccount
 
-	public void forgetPassword() {
-		scanner = new Scanner(System.in);
-		while (true) {
-			System.out.println("Enter birthday: ");
-			String birthday = scanner.nextLine();
-			System.out.println("Enter new password: ");
-			String password = scanner.nextLine();
-			System.out.println("Please type yes to confirm that your new password is " + password);
-			String input = scanner.nextLine();
-			if (input.equalsIgnoreCase("YES")) {
-				try {
-					// create new AccountMessage with type CHG_PWD
-					AccountMessage msg = new AccountMessage(Status.ONGOING, birthday, password);
-					// send to server
-					writer.writeUnshared(msg);
-					// wait for success status
-					AccountMessage msgReceipt = (AccountMessage) reader.readObject();
-					if (msgReceipt.getStatus() == Status.SUCCESS) {
-						System.out.println("Your password is changed successfully.");
-					} else {
-						System.out.println("Wrong birthday. Fail to change your password.");
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				break; // break the while loop
+	public String forgetPassword(String birthday, String password) {
+		
+		try {
+			// create new AccountMessage with type CHG_PWD
+			AccountMessage msg = new AccountMessage(Status.ONGOING, birthday, password);
+			// send to server
+			writer.writeUnshared(msg);
+			// wait for success status
+			AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				return "Your password is changed successfully.";
+			} else {
+				return "Wrong birthday. Fail to change your password.";
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		
+		return "ERROR";
 	}
 
 	public void changePin() {

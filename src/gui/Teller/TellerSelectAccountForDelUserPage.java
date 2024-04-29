@@ -107,6 +107,7 @@ public class TellerSelectAccountForDelUserPage {
 			int userIdAdd;
 			while (true) {
 				String input = JOptionPane.showInputDialog("Enter user id to delete");
+				if (input == null) return; // if the user clicks cancel
 				try {
 					userIdAdd = Integer.parseInt(input);
 					break;

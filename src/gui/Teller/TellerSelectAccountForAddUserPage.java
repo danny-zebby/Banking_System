@@ -102,9 +102,10 @@ public class TellerSelectAccountForAddUserPage {
 			String number = parts[0].substring(9);
 			// Convert the number to an integer
 			int accountNumber = Integer.parseInt(number);
-			int userIdAdd;
+			int userIdAdd = 0;
 			while (true) {
 				String input = JOptionPane.showInputDialog("Enter user id to add");
+				if (input == null) return; // if the user clicks cancel
 				try {
 					userIdAdd = Integer.parseInt(input);
 					break;

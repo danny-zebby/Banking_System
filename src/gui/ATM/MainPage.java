@@ -1,20 +1,15 @@
 package gui.ATM;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.Map;
 import java.util.Vector;
-
 import main.*;
-
-
 public class MainPage {
 	JFrame frame = null;
 	JPanel southPanel = null;
 	JPanel centerPanel = null;
 	JPanel eastPanel = null;
-
 	Vector<String> entries = null;
 	boolean show = true;
 	boolean AccIn = false;
@@ -46,7 +41,6 @@ public class MainPage {
 		southPanel = new JPanel();
 		centerPanel = new JPanel();
 		eastPanel = new JPanel();
-
 		JButton showButton = new JButton("Show");
 		eastPanel.setLayout(new FlowLayout());
 		eastPanel.add(showButton);
@@ -122,19 +116,18 @@ public class MainPage {
 				String status = getClient().logoutRequest();
 				if (status == "SUCCESS") {
 					AccountSelection AS = new AccountSelection(getClient());
-				MainPage MP = new MainPage(getClient(), AS, false);
-				ATMLogin AL = new ATMLogin(getClient(), MP);
-				AL.createWindow();
+					MainPage MP = new MainPage(getClient(), AS, false);
+					ATMLogin AL = new ATMLogin(getClient(), MP);
+					AL.createWindow();
 				}
 				else {
-					JOptionPane.showMessageDialog(frame, "Invaild ID or password. Try again");
+					JOptionPane.showMessageDialog(frame, "Failed to Logout, try again!!");
 				}
 				
 			}
 		});
 		
 	}
-
 	
 	class showButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
@@ -143,3 +136,6 @@ public class MainPage {
 		} // end of action
 	} // end of show
 }
+
+
+

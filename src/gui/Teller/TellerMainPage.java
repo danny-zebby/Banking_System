@@ -10,6 +10,7 @@ import main.TellerGUIClient;
 import message.LogoutMessage;
 import message.Status;
 
+
 public class TellerMainPage {
 	JFrame frame;
 	public TellerGUIClient client;
@@ -22,8 +23,12 @@ public class TellerMainPage {
 		return this.client;
 	}
 	
+	public TellerMainPage getTellerMainPage() {
+		return this;
+	}
+	
 	public void run() {
-		JFrame frame = new JFrame("Teller MainPage");
+		frame = new JFrame("Teller MainPage");
 		JPanel NorthPanel = new JPanel();
 		
 		JButton userLoginButton = new JButton("Login as User");
@@ -85,7 +90,7 @@ public class TellerMainPage {
 			public void actionPerformed(ActionEvent e) {
 				// add code needed before moving to next page
 				frame.setVisible(false);
-				// add code to move to next page
+				new TellerViewLogsPage(getTellerMainPage()).go();
 			}
 		});
 		

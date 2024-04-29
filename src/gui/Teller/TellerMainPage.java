@@ -75,7 +75,7 @@ public class TellerMainPage {
 					if (result == null) {
 						// jump to TellerUserAccount page
 						frame.setVisible(false); // hide current page
-						new TellerUserAccount(getTellerMainPage()).run();
+						new TellerUserAccount(getTellerMainPage(),userId).run();
 						
 					} else { // ERROR or fail to login BankUser
 						JOptionPane.showMessageDialog(frame, result);						

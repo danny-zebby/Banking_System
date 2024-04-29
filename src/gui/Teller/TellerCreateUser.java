@@ -78,7 +78,7 @@ public class TellerCreateUser {
 							JOptionPane.showMessageDialog(frame,"new User info: \n" + getClient().getUser());
 							frame.setVisible(false);
 							// jump to TellerUserAccount page
-							new TellerUserAccount(tellerMainPage).run();
+							new TellerUserAccount(tellerMainPage, getClient().getUser().getId()).run();
 						}else {
 							JOptionPane.showMessageDialog(frame, "Invaild ID or password. Try again");
 						}

@@ -19,14 +19,22 @@ public class TellerUserAccount {
 	boolean AccIn = false;
 	TellerMainPage tellerMainPage = null;
 	TellerGUIClient tellerGUIClient = null;
+	int ID;
 	
-	public TellerUserAccount(TellerMainPage tellerMainPage) {
+	public TellerUserAccount(TellerMainPage tellerMainPage, int ID) {
 		this.tellerMainPage = tellerMainPage;
 		this.tellerGUIClient = tellerMainPage.getTellerClient();
+		this.ID = ID;
 	}
 
 	public TellerGUIClient getClient() {
-		return this.client;
+		return this.tellerGUIClient;
+	}
+	public TellerMainPage getMain() {
+		return this.tellerMainPage;
+	}
+	public TellerUserAccount getUserAcc() {
+		return this;
 	}
 
 	public void run() {
@@ -78,7 +86,8 @@ public class TellerUserAccount {
 
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// insert code here
+				frame.setVisible(false);
+				new TellerCreateAccount(getUserAcc(), ID).createWindow();;
 			}
 		});
 

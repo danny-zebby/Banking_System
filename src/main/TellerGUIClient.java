@@ -590,6 +590,7 @@ public class TellerGUIClient {
 				} else {
 					accounts.put(accountNumber, null);
 				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

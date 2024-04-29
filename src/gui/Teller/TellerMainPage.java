@@ -1,11 +1,11 @@
 package gui.Teller;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
-
+import gui.ATM.ATMLogin;
+import gui.ATM.AccountSelection;
+import gui.ATM.MainPage;
 import main.TellerGUIClient;
 import message.LogoutMessage;
 import message.Status;
@@ -33,7 +33,7 @@ public class TellerMainPage {
 		JButton userLoginButton = new JButton("Login as User");
 		JButton createUserButton = new JButton("Create a User");
 		JButton logoutButton = new JButton("Logout");
-		JButton openLogsButton = new JButton("Open logs"); 
+		JButton openLogsButton = new JButton("Open logs");
 		JButton addNewTellerButton = new JButton("Add New Teller");
 		JButton deleteTellerButton = new JButton("Delete a Teller");
 			
@@ -48,7 +48,6 @@ public class TellerMainPage {
 		NorthPanel.add(createUserButton);
 		NorthPanel.add(logoutButton);
 		
-
 		if(getTellerClient().getTeller().getAdmin()) {
 			JLabel admin = new JLabel("Admin");
 			JPanel SouthPanel = new JPanel();
@@ -59,7 +58,7 @@ public class TellerMainPage {
 			SouthPanel.add(openLogsButton);
 			SouthPanel.add(addNewTellerButton);
 			SouthPanel.add(deleteTellerButton);
-		} 
+		}
 		
 		userLoginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -73,7 +72,7 @@ public class TellerMainPage {
 			public void actionPerformed(ActionEvent e) {
 				// add code needed before moving to next page
 				frame.setVisible(false);
-				// add code to move to next page
+				new TellerCreateUser(getTellerClient()).createWindow();
 			}
 		});
 		
@@ -81,7 +80,15 @@ public class TellerMainPage {
 			public void actionPerformed(ActionEvent e) {
 				// add code needed before moving to next page
 				frame.setVisible(false);
-				// add code to move to next page
+				String status = getTellerClient().logoutRequest();
+				if (status == "SUCCESS") {
+					TellerMainPage tellerMainPage = new TellerMainPage(getTellerClient());
+					TellerLogin tellerLogin = new TellerLogin(getTellerClient(), tellerMainPage);
+					tellerLogin.createWindow(); // start teller login
+				}
+				else {
+					JOptionPane.showMessageDialog(frame, "Failed to Logout, try again!!");
+				}
 			}
 		});
 		
@@ -89,8 +96,7 @@ public class TellerMainPage {
 			public void actionPerformed(ActionEvent e) {
 				// add code needed before moving to next page
 				frame.setVisible(false);
-				// add code to move to next page
-				
+				new TellerViewLogsPage(getTellerMainPage()).go();
 			}
 		});
 		
@@ -113,8 +119,9 @@ public class TellerMainPage {
 				
 			}
 		});
-		
+
 	} // end method run
 	
 
 }
+

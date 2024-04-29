@@ -969,7 +969,7 @@ public class Server {
 							writer.writeUnshared(newUser);
 
 							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with adding BankUser %d to Account %d at %s.", 
-									tellerList.get(tellerId).getName(), tellerId, userList.get(tempUserId).getName(), tempUserId, userIdToAdd, accountNumber, new Date().toString()));
+									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, userIdToAdd, accountNumber, new Date().toString()));
 
 							break;
 						}
@@ -985,7 +985,7 @@ public class Server {
 							writer.writeUnshared(remUser);
 
 							writeLogs(String.format("Teller: Teller %s(%d) assisted BankUser %s(%d) with removing BankUser %d from Account %d at %s.", 
-									tellerList.get(tellerId).getName(), tellerId, userList.get(tempUserId).getName(), tempUserId, userIdToRemove, accountNumber, new Date().toString()));
+									tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, userIdToRemove, accountNumber, new Date().toString()));
 
 							break;
 						}

@@ -10,12 +10,11 @@ import java.awt.event.*;
 import java.util.Map;
 
 public class TellerUserAccount {
-	JButton button, button2, button3, button4, button5, button6, button7, button8, button9, button10, button11, backButton;
+	JButton button, button2, addUserButton, button4, button6, button7, button8, button9, button10, button11, backButton;
 	JLabel label;
 	JFrame frame;
 	JPanel panel = null;
 	JPanel panel2 = null;
-	public TellerGUIClient client;
 	boolean AccIn = false;
 	TellerMainPage tellerMainPage = null;
 	TellerGUIClient tellerGUIClient = null;
@@ -25,10 +24,13 @@ public class TellerUserAccount {
 		this.tellerGUIClient = tellerMainPage.getTellerClient();
 	}
 
-	public TellerGUIClient getClient() {
-		return this.client;
+	public TellerGUIClient getTellerGUIClient() {
+		return this.tellerGUIClient;
 	}
 
+	public TellerUserAccount getTellerUserAccount() {
+		return this;
+	}
 	public void run() {
 		frame = new JFrame("Teller(User)");
 		Container contentPane = frame.getContentPane(); 
@@ -36,9 +38,8 @@ public class TellerUserAccount {
 		
 		button = new JButton("Create Account");
 		button2 = new JButton("Delete Account");
-		button3 = new JButton("Add User");
+		addUserButton = new JButton("Add User");
 		button4 = new JButton("Delete User");
-		button5 = new JButton("Back");
 		button6 = new JButton("Forget Password");
 		button7 = new JButton("Change PIN");
 		button8 = new JButton("Transfer Admin");
@@ -58,9 +59,8 @@ public class TellerUserAccount {
 		panel2.setLayout(new GridLayout(3, 4));
 		panel2.add(button);
 		panel2.add(button2);
-		panel2.add(button3);
+		panel2.add(addUserButton);
 		panel2.add(button4);
-		panel2.add(button5);
 		panel2.add(button6);
 		panel2.add(button7);
 		panel2.add(button8);
@@ -88,9 +88,12 @@ public class TellerUserAccount {
 			}
 		});
 
-		button3.addActionListener(new ActionListener() {
+		addUserButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// insert code here
+				frame.setVisible(false); // hide current window
+				// jump to the TellerSelectAccountPage
+				new TellerSelectAccountPage(getTellerUserAccount()).go();
 			}
 		});
 
@@ -100,11 +103,6 @@ public class TellerUserAccount {
 			}
 		});
 
-		button5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// insert code here
-			}
-		});
 
 		button6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

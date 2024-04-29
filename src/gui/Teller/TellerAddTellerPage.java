@@ -23,24 +23,24 @@ public class TellerAddTellerPage {
 		this.tellerMainPage = tellerMainPage;
 		this.tellerGuiClient = tellerMainPage.getTellerClient();
 	}
-	
+
 	public void createWindow() {
-	    JFrame frame = new JFrame("Add Teller");
-	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    
-	    createUI(frame);
-	    
-	    frame.setSize(300, 200);
-	    frame.setLocationRelativeTo(null);
-	    frame.setVisible(true);
+		JFrame frame = new JFrame("Add Teller");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		createUI(frame);
+
+		frame.setSize(300, 200);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
 	}
-		
+
 	private void createUI(final JFrame frame){
 		// creates a new panel
 		JPanel panel = new JPanel();
 		LayoutManager layout = new FlowLayout();
 		frame.add(panel);
-		
+
 		JButton okButton = new JButton("OK");
 		okButton.setSize(200,200);
 		JButton cancelButton = new JButton("Cancel");
@@ -49,7 +49,7 @@ public class TellerAddTellerPage {
 		JTextField textField2 = new JTextField(21);
 		JLabel label1 = new JLabel("Name:");
 		JLabel label2 = new JLabel("Password:");
-		
+
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//textField getters
@@ -60,7 +60,7 @@ public class TellerAddTellerPage {
 					JOptionPane.showMessageDialog(frame, "Please type in name or password.");
 				} else {
 					String result = tellerGuiClient.addTeller(name, password);
-					
+
 					// pop-up confirm page
 					JOptionPane.showMessageDialog(frame, result);
 
@@ -68,19 +68,19 @@ public class TellerAddTellerPage {
 					// put away input page
 					frame.setVisible(false);
 					tellerMainPage.run();
-					
+
 				}
 			}
 		} );
-		
+
 		cancelButton.addActionListener(new ActionListener() {
-	          public void actionPerformed(ActionEvent e) {
-	             JOptionPane.showMessageDialog(frame, "Goodbye");
-	             //closes TellerLogin
-	             System.exit(0);
-	          }
+			public void actionPerformed(ActionEvent e) {
+				// put away input page
+				frame.setVisible(false);
+				tellerMainPage.run();
+			}
 		});
-		
+
 		panel.add(label1);
 		panel.add(textField);
 		panel.add(label2);
@@ -88,8 +88,8 @@ public class TellerAddTellerPage {
 		panel.add(okButton);
 		panel.add(cancelButton);
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		
+
 	}
-	
+
 
 }

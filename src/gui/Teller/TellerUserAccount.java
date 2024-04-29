@@ -10,7 +10,8 @@ import java.awt.event.*;
 import java.util.Map;
 
 public class TellerUserAccount {
-	JButton button, button2, addUserButton, deleteUserButton, button6, button7, button8, button9, button10, button11, backButton;
+
+	JButton button, button2, addUserButton, deleteUserButton, forgetPasswordButton, button7, button8, button9, button10, button11, backButton;
 	JLabel label;
 	JFrame frame;
 	JPanel panel = null;
@@ -54,7 +55,7 @@ public class TellerUserAccount {
 		button2 = new JButton("Delete Account");
 		addUserButton = new JButton("Add User");
 		deleteUserButton = new JButton("Delete User");
-		button6 = new JButton("Forget Password");
+		forgetPasswordButton = new JButton("Forget Password");
 		button7 = new JButton("Change PIN");
 		button8 = new JButton("Transfer Admin");
 		button9 = new JButton("Withdraw");
@@ -75,7 +76,7 @@ public class TellerUserAccount {
 		panel2.add(button2);
 		panel2.add(addUserButton);
 		panel2.add(deleteUserButton);
-		panel2.add(button6);
+		panel2.add(forgetPasswordButton);
 		panel2.add(button7);
 		panel2.add(button8);
 		panel2.add(button9);
@@ -123,9 +124,11 @@ public class TellerUserAccount {
 		});
 
 
-		button6.addActionListener(new ActionListener() {
+		forgetPasswordButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// insert code here
+				frame.setVisible(false);
+				new TellerForgetPasswordPage(getTellerUserAccount()).go();
 			}
 		});
 

@@ -410,7 +410,9 @@ public class TellerGUIClient {
 			e.printStackTrace();
 		}return "Fail";
 	} // end method createUser
-	public void openLogs() {
+
+	public List<String> getLogs() {
+
 		TellerMessage msg = new TellerMessage(Status.ONGOING, TellerMessageType.VIEW_LOGS);
 		TellerMessage msgReceipt = null;
 		List<String> logs = null;
@@ -421,20 +423,15 @@ public class TellerGUIClient {
 			msgReceipt = (TellerMessage) reader.readObject();
 			if (msgReceipt.getStatus() == Status.SUCCESS) {
 				logs = msgReceipt.getLogs();
-			} else {
-				System.out.println("Fail to get logs from server.");
-			}
+			} 
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (logs != null) {
-			System.out.println("Logs: ");
-			for (String s : logs) {
-				System.out.println(s);
-			}
-			System.out.println();
-		}
-	}
+
+		return logs;
+	} // end method getLogs
+	
 	public void loginUserAccount() {
 		try {
 			int userId;
@@ -834,77 +831,7 @@ public class TellerGUIClient {
 		}
 		return "ERROR";
 	}
-	public void tellerMenu() {
-		scanner = new Scanner(System.in);
-		accounts = new HashMap<>();
-		boolean flag = false; // flag to quit the session
-		if (teller.getAdmin()) { // if this is an admin teller
-			// switch statement for admin teller
-			while (!flag) {
-				System.out.println("0-Add-New-Teller\n1-Delete-Teller\n2-View-logs\n3-Create-New-User\n4-Login-User-Account\n5-LogOut");
-				int choice = scanner.nextInt();
-				scanner.nextLine();
-				switch (choice) {
-				case 0: addTeller(); break; // add teller
-				case 1: deleteTeller(); break; // delete teller
-				case 2: openLogs(); break; // view logs
-//				case 3: createUser(); break; // create new user
-				case 4: loginUserAccount(); break; // login user account
-				case 5:
-					
-					try {
-						LogoutMessage logoutMsg = new LogoutMessage(Status.ONGOING, LogoutMessageType.TELLER);
-						writer.writeUnshared(logoutMsg);
-						LogoutMessage logoutMsgReceipt = (LogoutMessage) reader.readObject();
-						if (logoutMsgReceipt.getStatus() == Status.SUCCESS) {
-							flag = true;
-							System.out.println("Logout was a success.\nReturning to teller login.\n");
-						} else {
-							System.out.println("Logout failed.");
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					
-					break; // logout
-					
-				default: break;
-				}
-			} // end while loop
-		} else {
-			// switch statement for normal teller
-			while (!flag) {
-				System.out.println("0-Create-New_User\n1-Login-User-Account\n2-LogOut");
-				int choice = scanner.nextInt();
-				scanner.nextLine();
-				switch (choice) {
-//				case 0: createUser(); break; // create new user
-				case 1: loginUserAccount(); break;
-				case 2:
-					
-					try {
-						LogoutMessage logoutMsg = new LogoutMessage(Status.ONGOING, LogoutMessageType.TELLER);
-						writer.writeUnshared(logoutMsg);
-						LogoutMessage logoutMsgReceipt = (LogoutMessage) reader.readObject();
-						if (logoutMsgReceipt.getStatus() == Status.SUCCESS) {
-							flag = true;
-							System.out.println("Logout was a success.\nReturning to teller login.");
-						} else {
-							System.out.println("Logout failed.");
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					
-					System.out.println("Hit newSession");
-					System.out.println("after newSession");
-					
-					break;
-				default: break;
-				}
-			} // end while loop
-		}
-	}
+
 	public void go() {
 		try {
 			// start client

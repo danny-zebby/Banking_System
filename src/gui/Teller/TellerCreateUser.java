@@ -17,26 +17,28 @@ import gui.Teller.TellerMainPage;
 import main.TellerGUIClient;
 
 public class TellerCreateUser {
-	public static TellerGUIClient client;
+	public TellerMainPage tellerMainPage;
+	public TellerGUIClient client;
 	
-	public TellerCreateUser (TellerGUIClient client) {
-		this.client = client;
+	public TellerCreateUser (TellerMainPage tellerMainPage) {
+		this.tellerMainPage = tellerMainPage;
+		this.client = tellerMainPage.getTellerClient();
 	}
 	
-	public static TellerGUIClient getClient() {
-		return client;
+	public TellerGUIClient getClient() {
+		return this.client;
 	}
 	
-	public static void createWindow() {
+	public void createWindow() {
 	    JFrame frame = new JFrame("Create a Bank User");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    TellerLoginUI(frame);
+	    tellerLoginUI(frame);
 	    frame.setSize(450,300);
 	    frame.setLocationRelativeTo(null);
 	    frame.setVisible(true);
 	}
 		
-	private static void TellerLoginUI(final JFrame frame){
+	private void tellerLoginUI(final JFrame frame){
 		// creates a new panel
 		JPanel panel = new JPanel();
 		LayoutManager layout = new FlowLayout();
@@ -75,7 +77,8 @@ public class TellerCreateUser {
 						if (status == "SUCCESS") {
 							JOptionPane.showMessageDialog(frame,"new User info: \n" + getClient().getUser());
 							frame.setVisible(false);
-							// go to telleruserpage
+							// jump to TellerUserAccount page
+							new TellerUserAccount(tellerMainPage).run();
 						}else {
 							JOptionPane.showMessageDialog(frame, "Invaild ID or password. Try again");
 						}

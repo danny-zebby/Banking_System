@@ -1,5 +1,3 @@
-// TellerSelectAccountForDelUserPage
-
 package gui.Teller;
 
 import java.awt.BorderLayout;
@@ -18,10 +16,12 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 
+import gui.Teller.TellerSelectAccountForAddUserPage.cancelButtonListener;
+import gui.Teller.TellerSelectAccountForAddUserPage.confirmButtonListener;
+import main.BankAccount;
+import main.TellerGUIClient;
 
-import main.*;
-
-public class TellerSelectAccountForDelUserPage {
+public class TellerSelectAccountForChangePinPage {
 	JFrame frame = null;
 	JPanel centerPanel = null;
 	JPanel southPanel = null;
@@ -31,7 +31,7 @@ public class TellerSelectAccountForDelUserPage {
 
 	public TellerGUIClient tellerGUIClient = null;
 
-	public TellerSelectAccountForDelUserPage(TellerUserAccount tellerUserAccount) {
+	public TellerSelectAccountForChangePinPage(TellerUserAccount tellerUserAccount) {
 		this.tellerUserAccount = tellerUserAccount;
 		this.tellerGUIClient = tellerUserAccount.getTellerGUIClient();
 	}
@@ -103,26 +103,27 @@ public class TellerSelectAccountForDelUserPage {
 			String number = parts[0].substring(9);
 			// Convert the number to an integer
 			int accountNumber = Integer.parseInt(number);
-			int userIdAdd;
+			int pin = 0;
+			String input;
 			while (true) {
-				String input = JOptionPane.showInputDialog("Enter user id to delete");
+				input = JOptionPane.showInputDialog("Enter new Pin: ");
 				if (input == null) return; // if the user clicks cancel
 				try {
-					userIdAdd = Integer.parseInt(input);
+					pin = Integer.parseInt(input);
 					break;
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "User id is an integer, please try again.");
+					JOptionPane.showMessageDialog(null, "Pin is an integer, please try again.");
 				}
 			}
 
 			int choice = JOptionPane.showConfirmDialog(frame, String
-					.format("Please confirm that you want to delete user id %d from account #%d", userIdAdd, accountNumber),
+					.format("Please confirm that your new pin is %s", input),
 					"Confirmation", JOptionPane.OK_CANCEL_OPTION);
 
 			if (choice == JOptionPane.CANCEL_OPTION) {
 				return;
 			} else if (choice == JOptionPane.OK_OPTION) {
-				String result = tellerGUIClient.deleteUserFromAccount(accountNumber, userIdAdd);
+				String result = tellerGUIClient.changePin(accountNumber, pin);
 				JOptionPane.showMessageDialog(null, result);
 				frame.setVisible(false);
 				tellerUserAccount.run();

@@ -32,7 +32,6 @@ public class TellerSelectAccountForAddUserPage {
 	public TellerSelectAccountForAddUserPage(TellerUserAccount tellerUserAccount) {
 		this.tellerUserAccount = tellerUserAccount;
 		this.tellerGUIClient = tellerUserAccount.getTellerGUIClient();
-		System.out.println(tellerGUIClient);
 	}
 
 	public void go() {

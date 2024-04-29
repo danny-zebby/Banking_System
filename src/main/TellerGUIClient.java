@@ -478,98 +478,26 @@ public class TellerGUIClient {
 		return logs;
 	} // end method getLogs
 
-	public void loginUserAccount() {
+	public String loginUserAccount(int userId) {
+		
+		// send AccountMessage with type USER_INFO to get BankUser object
+		AccountMessage msg = new AccountMessage(Status.ONGOING, userId);
 		try {
-			int userId;
-			while (true) {
-				scanner = new Scanner(System.in);
-				System.out.println("Enter user id: ");
-				userId = scanner.nextInt();
-				scanner.nextLine();
-				// send AccountMessage with type USER_INFO to get BankUser object
-				AccountMessage msg = new AccountMessage(Status.ONGOING, userId);
-				writer.writeUnshared(msg);
-				// wait for success status
-				AccountMessage msgReceipt = (AccountMessage) reader.readObject();
-				if (msgReceipt.getStatus() == Status.SUCCESS) {
-					// wait for BankUser obj
-					user = (BankUser) reader.readObject();
-					userId = user.getId();
-					break; // break while loop
-				} else {
-					System.out.printf("User id %d does not exist. Please try again.\n", userId);
-				}
-			} // end while loop
-			getAccountsInfo(); // get all accounts
-			System.out.println("accounts: " + accounts);
-			// System.out.println("accounts: " + user.getAccounts());
-			loginUserAccount(userId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void loginUserAccount(int userId) {
-		try {
-			boolean isLoggedOut = false;
-			while (!isLoggedOut) {
-				System.out.println("0-Create-New-Account\n1-Remove-Account\n2-Add-User-to-Account\n"
-						+ "3-Remove-User-from-Account\n4-Transfer-Admin\n5-Change-Pin\n"
-						+ "6-Forget-Password\n7-Withdraw\n8-Deposit\n9-Transfer\n10-Back");
-				int choice = scanner.nextInt();
-				switch (choice) {
-				case 0:
-//					createAccount(userId);
-					break; // create new account
-				case 1:
-					deleteAccount(userId);
-					break; // remove account
-				case 2:
-					addUserToAccount(userId);
-					break; // add user to account
-				case 3:
-					deleteUserFromAccount(userId);
-					break; // remove user from account
-				case 4:
-					transferAdmin();
-					break; // transfer admin
-				case 5:
-					changePin();
-					break; // change pin
-				case 6:
-					forgetPassword();
-					break; // forget password
-				case 7:
-					withdraw(userId);
-					break; // withdraw
-				case 8:
-					deposit(userId);
-					break; // deposit
-				case 9:
-					transfer(userId);
-					break; // transfer
-				case 10:
-					isLoggedOut = true;
-					LogoutMessage msg = new LogoutMessage(Status.ONGOING);
-					writer.writeUnshared(msg);
-					LogoutMessage msgBack = (LogoutMessage) reader.readObject();
-					if (msgBack.getStatus() == Status.SUCCESS) {
-						System.out.println("Logout was a success.\nReturning to teller main.");
-						accounts.clear();
-						break;
-					} else {
-						System.out.println("Logout failed, continue as User ID: " + userId);
-						break;
-					}
-
-				default:
-					break;
-				}
+			writer.writeUnshared(msg);
+			// wait for success status
+			AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				// wait for BankUser obj
+				user = (BankUser) reader.readObject();
+				return null;
+			} else {
+				return String.format("User id %d does not exist. Please try again.\n", userId);
 			}
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "ERROR";
 	}
 
 	public void getAccountsInfo() {

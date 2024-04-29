@@ -1,3 +1,5 @@
+// TellerSelectAccountForDelUserPage
+
 package gui.Teller;
 
 import java.awt.BorderLayout;
@@ -19,7 +21,7 @@ import javax.swing.ScrollPaneConstants;
 
 import main.*;
 
-public class TellerSelectAccountPage {
+public class TellerSelectAccountForDelUserPage {
 	JFrame frame = null;
 	JPanel centerPanel = null;
 	JPanel southPanel = null;
@@ -29,7 +31,7 @@ public class TellerSelectAccountPage {
 
 	public TellerGUIClient tellerGUIClient = null;
 
-	public TellerSelectAccountPage(TellerUserAccount tellerUserAccount) {
+	public TellerSelectAccountForDelUserPage(TellerUserAccount tellerUserAccount) {
 		this.tellerUserAccount = tellerUserAccount;
 		this.tellerGUIClient = tellerUserAccount.getTellerGUIClient();
 		System.out.println(tellerGUIClient);
@@ -104,7 +106,7 @@ public class TellerSelectAccountPage {
 			int accountNumber = Integer.parseInt(number);
 			int userIdAdd;
 			while (true) {
-				String input = JOptionPane.showInputDialog("Enter user id to add");
+				String input = JOptionPane.showInputDialog("Enter user id to delete");
 				try {
 					userIdAdd = Integer.parseInt(input);
 					break;
@@ -114,13 +116,13 @@ public class TellerSelectAccountPage {
 			}
 
 			int choice = JOptionPane.showConfirmDialog(frame, String
-					.format("Please confirm that you want to add user id %d to account #%d", userIdAdd, accountNumber),
+					.format("Please confirm that you want to delete user id %d from account #%d", userIdAdd, accountNumber),
 					"Confirmation", JOptionPane.OK_CANCEL_OPTION);
 
 			if (choice == JOptionPane.CANCEL_OPTION) {
 				return;
 			} else if (choice == JOptionPane.OK_OPTION) {
-				String result = tellerGUIClient.addUserToAccount(accountNumber, userIdAdd);
+				String result = tellerGUIClient.deleteUserFromAccount(accountNumber, userIdAdd);
 				JOptionPane.showMessageDialog(null, result);
 				frame.setVisible(false);
 				tellerUserAccount.run();
@@ -136,5 +138,4 @@ public class TellerSelectAccountPage {
 			tellerUserAccount.run(); // going back to mainpage
 		}
 	}
-
 }

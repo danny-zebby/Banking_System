@@ -16,29 +16,30 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 
-import gui.Teller.TellerSelectAccountForAddUserPage.cancelButtonListener;
-import gui.Teller.TellerSelectAccountForAddUserPage.confirmButtonListener;
+import gui.Teller.TellerSelectAccountForChangePinPage.cancelButtonListener;
+import gui.Teller.TellerSelectAccountForChangePinPage.confirmButtonListener;
 import main.BankAccount;
 import main.TellerGUIClient;
 
-public class TellerSelectAccountForChangePinPage {
+public class TellerSelectAccountForTransferAdminPage {
 	JFrame frame = null;
 	JPanel centerPanel = null;
 	JPanel southPanel = null;
 	Vector<String> entries = null;
 	JList<String> list = null;
 	TellerUserAccount tellerUserAccount = null;
+	TellerGUIClient tellerGUIClient = null;
+	Map<Integer, Map<Integer, String>> adminAccountsInfo = null;
+	Map<Integer, BankAccount> accountsInfo = null;
 
-	public TellerGUIClient tellerGUIClient = null;
-
-	public TellerSelectAccountForChangePinPage(TellerUserAccount tellerUserAccount) {
+	public TellerSelectAccountForTransferAdminPage(TellerUserAccount tellerUserAccount) {
 		this.tellerUserAccount = tellerUserAccount;
 		this.tellerGUIClient = tellerUserAccount.getTellerGUIClient();
 	}
 
 	public void go() {
 		// create new frame
-		frame = new JFrame("Choose an account");
+		frame = new JFrame("Choose an admin account");
 
 		// create new panel
 		centerPanel = new JPanel();
@@ -68,9 +69,10 @@ public class TellerSelectAccountForChangePinPage {
 		// add list to panel
 		entries = new Vector<String>();
 		tellerGUIClient.getAccountsInfo();
-		Map<Integer, BankAccount> accountsInfo = tellerGUIClient.getAccounts();
-
-		for (int accountNumber : accountsInfo.keySet()) {
+		adminAccountsInfo = tellerGUIClient.getAdminAccountsInfo();
+		accountsInfo = tellerGUIClient.getAccounts();
+		
+		for (int accountNumber : adminAccountsInfo.keySet()) {
 			entries.add(String.format("Account #%d : $%.2f", accountNumber, accountsInfo.get(accountNumber).getBalance()));
 		}
 
@@ -102,32 +104,10 @@ public class TellerSelectAccountForChangePinPage {
 			String number = parts[0].substring(9);
 			// Convert the number to an integer
 			int accountNumber = Integer.parseInt(number);
-			int pin = 0;
-			String input;
-			while (true) {
-				input = JOptionPane.showInputDialog("Enter new Pin: ");
-				if (input == null) return; // if the user clicks cancel
-				try {
-					pin = Integer.parseInt(input);
-					break;
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Pin is an integer, please try again.");
-				}
-			}
-
-			int choice = JOptionPane.showConfirmDialog(frame, String
-					.format("Please confirm that your new pin is %s", input),
-					"Confirmation", JOptionPane.OK_CANCEL_OPTION);
-
-			if (choice == JOptionPane.CANCEL_OPTION) {
-				return;
-			} else if (choice == JOptionPane.OK_OPTION) {
-				String result = tellerGUIClient.changePin(accountNumber, pin);
-				JOptionPane.showMessageDialog(null, result);
-				frame.setVisible(false);
-				tellerUserAccount.run();
-
-			}
+			
+			// jump to TellerSelectUserForTransferAdminPage
+			frame.setVisible(false);
+			new TellerSelectUserForTransferAdminPage(tellerUserAccount, accountNumber, adminAccountsInfo).go();
 		}
 	}
 
@@ -135,7 +115,7 @@ public class TellerSelectAccountForChangePinPage {
 		public void actionPerformed(ActionEvent event) {
 
 			frame.setVisible(false);
-			tellerUserAccount.run(); // going back to mainpage
+			tellerUserAccount.run(); // going back to tellerUserAccount page
 		}
 	}
 }

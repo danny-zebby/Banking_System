@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class TellerUserAccount {
 
-	JButton button, button2, addUserButton, deleteUserButton, forgetPasswordButton, changePinButton, button8, button9, button10, button11, backButton;
+	JButton button, button2, addUserButton, deleteUserButton, forgetPasswordButton, changePinButton, transferAdminButton, button9, button10, button11, backButton;
 	JLabel label;
 	JFrame frame;
 	JPanel panel = null;
@@ -57,7 +57,7 @@ public class TellerUserAccount {
 		deleteUserButton = new JButton("Delete User");
 		forgetPasswordButton = new JButton("Forget Password");
 		changePinButton = new JButton("Change PIN");
-		button8 = new JButton("Transfer Admin");
+		transferAdminButton = new JButton("Transfer Admin");
 		button9 = new JButton("Withdraw");
 		button10 = new JButton("Deposit");
 		button11 = new JButton("Transfer");
@@ -78,7 +78,7 @@ public class TellerUserAccount {
 		panel2.add(deleteUserButton);
 		panel2.add(forgetPasswordButton);
 		panel2.add(changePinButton);
-		panel2.add(button8);
+		panel2.add(transferAdminButton);
 		panel2.add(button9);
 		panel2.add(button10);
 		panel2.add(button11);
@@ -140,9 +140,11 @@ public class TellerUserAccount {
 			}
 		});
 
-		button8.addActionListener(new ActionListener() {
+		transferAdminButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// insert code here
+				frame.setVisible(false);
+				new TellerSelectAccountForTransferAdminPage(getTellerUserAccount()).go();
 			}
 		});
 

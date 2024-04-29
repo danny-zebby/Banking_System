@@ -14,6 +14,9 @@ public class TellerGUIClient {
 	Map<Integer, BankAccount> accounts = null; // map of account number to account object
 	Scanner scanner = null;
 
+	public TellerGUIClient() {
+		accounts = new HashMap<>();
+	}
 	public void setTeller(Teller teller) {
 		this.teller = teller;
 	}
@@ -111,7 +114,7 @@ public class TellerGUIClient {
 			e.printStackTrace();
 		}
 	} // end method deposit
-		// Transfer
+	// Transfer
 
 	public void transfer(int loggedInUserId) {
 		try {
@@ -292,75 +295,61 @@ public class TellerGUIClient {
 
 	} // end method deleteTeller
 
-	public void addUserToAccount(int loggedInUserID) {
+	public String addUserToAccount(int accountNumber, int userIdAdd) {
 		try {
-			while (true) {
-				scanner = new Scanner(System.in);
-				System.out.println("Enter account number to add a user: ");
-				int accNum = scanner.nextInt();
-				scanner.nextLine();
-				System.out.println("Enter user id to be added: ");
-				int userIdAdd = scanner.nextInt();
-				scanner.nextLine();
-				System.out.println("Please type yes to confirm your information below.");
-				System.out.printf("user id: %s\nAccount Number: %s\n", userIdAdd, accNum);
-				String userConfirm = scanner.nextLine();
-				if (userConfirm.equalsIgnoreCase("YES")) {
-					// check user id is valid.
-					// create UserInfoMessage and send to server to check
-					UserInfoMessage uiMsg = new UserInfoMessage(Status.ONGOING, userIdAdd);
-					writer.writeUnshared(uiMsg);
-					// wait for a user info message receipt
-					UserInfoMessage uiMsgReceipt = (UserInfoMessage) reader.readObject();
-					// check if the logged in user owns the account.
-					AccountMessage accMsg = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_OWN,
-							loggedInUserID, accNum);
-					writer.writeUnshared(accMsg);
-					// wait for a user info message receipt
-					AccountMessage accMsgReceipt = (AccountMessage) reader.readObject();
-					// send accMsg to check admin status
-					AccountMessage accMsgAdmin = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_ACC_ADM,
-							loggedInUserID, accNum);
-					writer.writeUnshared(accMsgAdmin);
-					// wait for accMsgAdmin receipt
-					AccountMessage accMsgAdminReceipt = (AccountMessage) reader.readObject();
 
-					// check if the user id is already in the account
-					AccountMessage acmChkDup = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_DUP,
-							loggedInUserID, accNum, userIdAdd);
-					writer.writeUnshared(acmChkDup);
-					// wait for a user info message receipt
-					AccountMessage acmChkDupReceipt = (AccountMessage) reader.readObject();
+			int loggedInUserID = user.getId();
+			// check user id is valid.
+			// create UserInfoMessage and send to server to check
+			UserInfoMessage uiMsg = new UserInfoMessage(Status.ONGOING, userIdAdd);
+			writer.writeUnshared(uiMsg);
+			// wait for a user info message receipt
+			UserInfoMessage uiMsgReceipt = (UserInfoMessage) reader.readObject();
+			// check if the logged in user owns the account.
+			AccountMessage accMsg = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_OWN,
+					loggedInUserID, accountNumber);
+			writer.writeUnshared(accMsg);
+			// wait for a user info message receipt
+			AccountMessage accMsgReceipt = (AccountMessage) reader.readObject();
+			// send accMsg to check admin status
+			AccountMessage accMsgAdmin = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_ACC_ADM,
+					loggedInUserID, accountNumber);
+			writer.writeUnshared(accMsgAdmin);
+			// wait for accMsgAdmin receipt
+			AccountMessage accMsgAdminReceipt = (AccountMessage) reader.readObject();
 
-					if (uiMsgReceipt.getStatus() == Status.SUCCESS && accMsgReceipt.getStatus() == Status.SUCCESS
+			// check if the user id is already in the account
+			AccountMessage acmChkDup = new AccountMessage(Status.ONGOING, AccountMessageType.CHK_DUP,
+					loggedInUserID, accountNumber, userIdAdd);
+			writer.writeUnshared(acmChkDup);
+			// wait for a user info message receipt
+			AccountMessage acmChkDupReceipt = (AccountMessage) reader.readObject();
 
-							&& accMsgAdminReceipt.getStatus() == Status.SUCCESS
-							&& acmChkDupReceipt.getStatus() == Status.SUCCESS) {
+			if (uiMsgReceipt.getStatus() == Status.SUCCESS && accMsgReceipt.getStatus() == Status.SUCCESS
 
-						accMsg = new AccountMessage(Status.ONGOING, AccountMessageType.ADD_USER_TO_ACC, userIdAdd,
-								accNum);
+					&& accMsgAdminReceipt.getStatus() == Status.SUCCESS
+					&& acmChkDupReceipt.getStatus() == Status.SUCCESS) {
 
-						writer.writeUnshared(accMsg);
-						// expect BankUser Object from server
-						BankUser userToadd = (BankUser) reader.readObject();
-						// add user to accounts
-						accounts.get(accNum).addUser(userToadd);
-						// show updated accounts
-						System.out.println("Successfully added user id [" + userIdAdd + "] to the account #" + accNum);
-						// print out all account info
-						System.out.println("Updated user id [" + loggedInUserID + "] accounts: " + accounts);
-					} else { // if user confirm was not YES
-						System.out.println("Fail to add user id [" + userIdAdd + "] to the account #" + accNum);
-					}
-					// break while loop
-					break;
-				} else { // if user confirm was not YES
-					System.out.println("Fail to create a new user. Please try again.");
-				}
+				accMsg = new AccountMessage(Status.ONGOING, AccountMessageType.ADD_USER_TO_ACC, userIdAdd,
+						accountNumber);
+
+				writer.writeUnshared(accMsg);
+				// expect BankUser Object from server
+				BankUser userToadd = (BankUser) reader.readObject();
+				// add user to accounts
+				accounts.get(accountNumber).addUser(userToadd);
+				// show updated accounts
+				return "Successfully added user id [" + userIdAdd + "] to the account #" + accountNumber;
+
+			} else { 
+				return "Fail to add user id [" + userIdAdd + "] to the account #" + accountNumber;
 			}
+			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "ERROR";
 	} // end method addUserToAccount
 
 	public void deleteUserFromAccount(int loggedInUserID) {
@@ -479,7 +468,7 @@ public class TellerGUIClient {
 	} // end method getLogs
 
 	public String loginUserAccount(int userId) {
-		
+
 		// send AccountMessage with type USER_INFO to get BankUser object
 		AccountMessage msg = new AccountMessage(Status.ONGOING, userId);
 		try {
@@ -493,7 +482,7 @@ public class TellerGUIClient {
 			} else {
 				return String.format("User id %d does not exist. Please try again.\n", userId);
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

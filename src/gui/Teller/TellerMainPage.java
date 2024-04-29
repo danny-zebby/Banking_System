@@ -14,7 +14,7 @@ import message.Status;
 public class TellerMainPage {
 	JFrame frame;
 	public TellerGUIClient client;
-	public TellerUserAccount tca;
+	public TellerUserAccount tellerUserAccount;
 	TellerAddTellerPage tellerAddTellerPage = null;
 
 	public TellerMainPage(TellerGUIClient client) {
@@ -30,7 +30,7 @@ public class TellerMainPage {
 	}
 
 	public TellerUserAccount getTellerUserAccount() {
-		return this.tca;
+		return this.tellerUserAccount;
 	}
 	
 	public void run() {
@@ -68,13 +68,21 @@ public class TellerMainPage {
 
 		userLoginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String userID = JOptionPane.showInputDialog("Enter User ID: ");
-				String status = getTellerClient().loginUserAccount(userID);
-				if (status == "SUCCESS") {
-					frame.setVisible(false);
-					tca.run();
-				} else {
-					JOptionPane.showMessageDialog(frame, "Error, User does not exist. Try again");
+				String input = JOptionPane.showInputDialog("Enter User ID: ");
+				try {
+					int userId = Integer.parseInt(input);
+					String result = client.loginUserAccount(userId);
+					if (result == null) {
+						// jump to TellerUserAccount page
+						frame.setVisible(false); // hide current page
+						new TellerUserAccount(getTellerMainPage()).run();
+						
+					} else { // ERROR or fail to login BankUser
+						JOptionPane.showMessageDialog(frame, result);						
+					}
+					
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(frame, "User ID is an integer, try again!!");
 				}
 			}
 		});

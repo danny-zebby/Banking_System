@@ -10,17 +10,19 @@ import java.awt.event.*;
 import java.util.Map;
 
 public class TellerUserAccount {
-	JButton button, button2, button3, button4, button5, button6, button7, button8, button9, button10, button11;
+	JButton button, button2, button3, button4, button5, button6, button7, button8, button9, button10, button11, backButton;
 	JLabel label;
 	JFrame frame;
 	JPanel panel = null;
 	JPanel panel2 = null;
 	public TellerGUIClient client;
 	boolean AccIn = false;
-
-	public static void main(String[] args) {
-		TellerUserAccount tellerUser = new TellerUserAccount();
-		tellerUser.run();
+	TellerMainPage tellerMainPage = null;
+	TellerGUIClient tellerGUIClient = null;
+	
+	public TellerUserAccount(TellerMainPage tellerMainPage) {
+		this.tellerMainPage = tellerMainPage;
+		this.tellerGUIClient = tellerMainPage.getTellerClient();
 	}
 
 	public TellerGUIClient getClient() {
@@ -43,7 +45,7 @@ public class TellerUserAccount {
 		button9 = new JButton("Withdraw");
 		button10 = new JButton("Deposit");
 		button11 = new JButton("Transfer");
-
+		backButton = new JButton("Back");
 		JPanel panel = new JPanel();
 		/*
 		 * Placeholder Comment for Acc list of user to go into textArea
@@ -65,7 +67,8 @@ public class TellerUserAccount {
 		panel2.add(button9);
 		panel2.add(button10);
 		panel2.add(button11);
-
+		panel2.add(backButton);
+		
 		frame.setSize(600, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(BorderLayout.NORTH, panel);
@@ -137,6 +140,11 @@ public class TellerUserAccount {
 			public void actionPerformed(ActionEvent e) {
 				// insert code here
 			}
+		});
+		
+		backButton.addActionListener((e) -> {
+			frame.setVisible(false); // hide current page
+			tellerMainPage.run(); // jump back to TellerMainPage
 		});
 	}
 }

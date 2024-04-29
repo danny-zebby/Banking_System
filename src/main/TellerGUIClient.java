@@ -30,6 +30,10 @@ public class TellerGUIClient {
 		return this.user;
 	}
 
+	public Map<Integer, BankAccount> getAccounts() {
+		return this.accounts;
+	}
+
 	// ATM Functions
 	// Withdraw
 	public void withdraw(int loggedInUserId) {
@@ -515,7 +519,7 @@ public class TellerGUIClient {
 				int choice = scanner.nextInt();
 				switch (choice) {
 				case 0:
-					createAccount(userId);
+//					createAccount(userId);
 					break; // create new account
 				case 1:
 					deleteAccount(userId);
@@ -602,59 +606,23 @@ public class TellerGUIClient {
 		// needs clarification
 	}
 
-	public void createAccount(int loggedInUserId) {
-		scanner = new Scanner(System.in);
-		int choice;
-		AccountType accountType;
-		int pin;
-		while (true) {
-			// prompt the user to choose account type
-			while (true) {
-				System.out.println("Choose an account type or enter 2 to cancel: \n0-checking\n1-saving");
-				try {
-					choice = scanner.nextInt();
-					scanner.nextLine();
-					if (choice == 0) { // checking account
-						accountType = AccountType.CHECKING;
-						break; // break the while loop
-					} else if (choice == 1) {
-						accountType = AccountType.SAVING;
-						break;
-					} else if (choice == 2) { // quit createAccount method
-						return;
-					}
+	public String checkPin(String pin) {
+		boolean isInt;
 
-				} catch (Exception e) {
-				} // do nothing
+		try {
+			Integer.parseInt(pin); // Try parsing the string to an integer
+			isInt = true; // If successful, return true
+		} catch (NumberFormatException e) {
+			isInt = false; // If an exception is caught, return false
+		}
+		if (isInt) {
+			return "VALID";
+		} else {
+			return "INVALID";
+		}
+	}
 
-				System.out.println("Invalid input. Please enter 0 or 1.");
-			} // end while loop
-
-			// enter pin
-			while (true) {
-				System.out.println("Enter pin (only digits): ");
-				try {
-					pin = scanner.nextInt();
-					scanner.nextLine();
-					if (pin > 0) {
-						break;
-					}
-				} catch (Exception e) {
-					System.out.println("Invalid pin. Please try again.");
-					scanner.nextLine(); // consume the invalid input
-				}
-			} // end while loop
-				// confirm
-			System.out.printf("You are creating a %s account with pin %d.\n", accountType, pin);
-			System.out.println("Please enter yes to confirm.");
-			String userInput = scanner.nextLine();
-			if (userInput.equalsIgnoreCase("YES")) {
-				break; // if user confirms, break outer while loop
-			} else {
-				continue;
-			}
-		} // end outer while loop
-
+	public String createAccount(int loggedInUserId, int pin, AccountType accountType) {
 		try {
 			// send AccountMessage of to server: Status status, AccountType accountType, int
 			// pin
@@ -668,17 +636,17 @@ public class TellerGUIClient {
 				// getAccountsInfo to get the newly created account to accounts
 				getAccountsInfo();
 				// print out all account info
-				System.out.println("Updated user id [" + loggedInUserId + "] accounts: " + accounts);
+				return "SUCCESS";
 			} else {
-				System.out.printf("Fail to create a new %s account.\n", accountType);
-				return;
+				return "Fail";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "Fail";
 	} // end method createAccount
-		// delete account if the balance is zero, else fail to delete
 
+	// delete account if the balance is zero, else fail to delete
 	public void deleteAccount(int loggedInUserId) {
 		scanner = new Scanner(System.in);
 		System.out.println("Enter Account number: ");

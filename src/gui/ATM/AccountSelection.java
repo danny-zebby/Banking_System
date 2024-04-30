@@ -117,7 +117,8 @@ public class AccountSelection {
 				double AccBal = Double.parseDouble(Amount);
 				
 				// Three operation
-				String out, out1, SAP;
+				String out = null;
+				String out1, SAP;
 				int accountPin;
 				if (getOperation() == "withdraw") {
 					SAP = JOptionPane.showInputDialog("Enter the account pin: ");
@@ -126,29 +127,40 @@ public class AccountSelection {
 	
 					out = getClient().withdraw(accnum, amount, accountPin);
 				} else if (getOperation() == "transfer") {
+					// get account number
 					int ToAccNum;
+					String input;
 					while (true) {
-						String ToAN = JOptionPane.showInputDialog("Enter recipient account number: ");
-						if (ToAN == null) return;
-						ToAccNum = Integer.parseInt(ToAN);
-						out1 = getClient().transfer1(accnum, amount, ToAccNum);
-						String YNC = JOptionPane.showInputDialog(out1);
-						if (YNC.equalsIgnoreCase("YES")) {
+						input = JOptionPane.showInputDialog("Enter recipient account number: ");
+						if (input == null) return;
+						try {
+							ToAccNum = Integer.parseInt(input);
 							break;
-						} else if (YNC.equalsIgnoreCase("No")) {
-							JOptionPane.showMessageDialog(null, "Transfer Cancelled, try again.");
+						} catch (Exception e) {
+							JOptionPane.showMessageDialog(null, "Invalid recipient account number. Please try again.");
+						}
+						
+					}
+					// check if it is possible to transfer
+					out1 = getClient().transfer1(accnum, amount, ToAccNum);
+					
+					if (out1 != null) {
+						
+						input = JOptionPane.showInputDialog(out1);
+						if (input.equalsIgnoreCase("YES")) {
+							SAP = JOptionPane.showInputDialog("Enter the account pin: ");
+							accountPin = Integer.parseInt(SAP);
+							out = getClient().tranfer2(accnum, amount, ToAccNum, accountPin);
 						} else {
 							JOptionPane.showMessageDialog(null, "Transfer Cancelled");
-							frame.setVisible(false);
-							ATMGUIClient client = new ATMGUIClient();
-							AccountSelection AS = new AccountSelection(getClient());
-							MainPage MP = new MainPage(getClient(), AS, true);
-							MP.go();
+							return;
 						}
-					} // end of while
-					SAP = JOptionPane.showInputDialog("Enter the account pin: ");
-					accountPin = Integer.parseInt(SAP);
-					out = getClient().tranfer2(accnum, amount, ToAccNum, accountPin);
+					} else { // fail checkTransfer
+						JOptionPane.showMessageDialog(null, String.format("Fail to transfer %.2f from account #%d to account #%d", amount, accnum, ToAccNum));
+						return;
+					}
+					
+					
 					
 				} else if (getOperation() == "deposit") {
 					SAP = JOptionPane.showInputDialog("Enter the account pin: ");

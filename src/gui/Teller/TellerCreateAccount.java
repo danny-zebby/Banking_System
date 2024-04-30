@@ -71,7 +71,8 @@ public class TellerCreateAccount {
 			        pin = String.valueOf(randomPin);
 				}
 				String status = tellerGUIClient.checkPin(pin);
-				if(status.equalsIgnoreCase("VALID")){
+				
+				if(status.equalsIgnoreCase("VALID")){ // if it is a valid pin
 					String userConfirm = JOptionPane.showInputDialog("You are creating a savings account with pin " + pin
 							+ "\nPlease enter yes to confirm.");
 					if (userConfirm.equalsIgnoreCase("YES")) {
@@ -82,10 +83,9 @@ public class TellerCreateAccount {
 							JOptionPane.showMessageDialog(frame,"Updated user id ["
 						+ id + "] accounts: " + tellerGUIClient.getAccounts());
 						frame.setVisible(false);
-//			            new TellerUserAccount(tellerMainPage, id).run();
 						tellerUserAccount.run(); // going back to main page
 						}
-					}else {
+					} else {
 						JOptionPane.showMessageDialog(frame, "Fail to create a new SAVINGS.\n");
 					}
 				}

@@ -217,7 +217,23 @@ public class ATMGUIClient {
 		}
 
 	}
-
+	
+	public void atmExit() {
+		ExitMessage msg = new ExitMessage(Status.ONGOING);
+		try {
+			writer.writeUnshared(msg);
+			// wait for success status
+			ExitMessage msgReceipt = (ExitMessage) reader.readObject();
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				System.out.println("ATM is shutting down...");
+				// a good way to exit
+				System.exit(0);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 	public void newSession() {
 		// reset variables
 		user = null;

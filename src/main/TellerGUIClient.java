@@ -692,7 +692,24 @@ public class TellerGUIClient {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void tellerExit() {
+		ExitMessage msg = new ExitMessage(Status.ONGOING);
+		try {
+			writer.writeUnshared(msg);
+			// wait for success status
+			ExitMessage msgReceipt = (ExitMessage) reader.readObject();
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				System.out.println("Teller client exiting...");
+				// a good way to exit
+				System.exit(0);
+				System.out.println("after system exit");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 	public String tellerLoginRequest(String tellerId, String password) {
 		boolean isInt;
 		accounts = new HashMap<>();
@@ -755,7 +772,25 @@ public class TellerGUIClient {
 		}
 		return "Fail";
 	}
+	
+	public void logoutUser() {
+		LogoutMessage msg = new LogoutMessage(Status.ONGOING);
+		try {
+			writer.writeUnshared(msg);
+			LogoutMessage msgBack = (LogoutMessage) reader.readObject();
+			if (msgBack.getStatus() == Status.SUCCESS) {
+//				System.out.println("Logout was a success.\nReturning to teller main.");
+				accounts.clear();
+			} else {
+//				System.out.println("Logout failed, continue as User ID: " + userId);
 
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	// Driver
 	public static void main(String[] args) {
 		// create new tellerclient

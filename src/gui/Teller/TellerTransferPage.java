@@ -5,6 +5,7 @@ package gui.Teller;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -75,8 +76,7 @@ public class TellerTransferPage {
 		Map<Integer, BankAccount> accountsInfo = tellerGUIClient.getAccounts();
 
 		for (int accountNumber : accountsInfo.keySet()) {
-			entries.add(
-					String.format("Account #%d : $%.2f", accountNumber, accountsInfo.get(accountNumber).getBalance()));
+			entries.add(String.format("Account #%d : $%.2f", accountNumber, accountsInfo.get(accountNumber).getBalance()));
 		}
 
 		list = new JList<>(entries);
@@ -108,26 +108,62 @@ public class TellerTransferPage {
 			// Convert the number to an integer
 			int accountNumber = Integer.parseInt(number);
 			
+			int toAccountNumber;
+			String input;
+			while (true) {
+				
+				input = JOptionPane.showInputDialog("Enter recipient account number: ");
+				if (input == null) return; // if the user clicks cancel
+				try {
+					toAccountNumber = Integer.parseInt(input);
+					break;
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Invalid account number. Please try again.");
+				}
+				
+			}
+			
 			// get amount
 			double amount;
-			String input = JOptionPane.showInputDialog("Enter amount to deposit");
-			if (input == null) return; // if the user clicks cancel
-			amount = Double.parseDouble(input);
+			while (true) {
+				input = JOptionPane.showInputDialog("Enter amount to transfer");
+				if (input == null) return; // if the user clicks cancel
+				try {
+					amount = Double.parseDouble(input);
+					break;
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Invalid amount. Please try again.");
+				}
 				
-			// get pin
-			int pin;
-			input = JOptionPane.showInputDialog("Enter the account pin");
-			if (input == null) return; // if the user clicks cancel
-			pin = Integer.parseInt(input);
+			}
+			
+			// get recipientNames
+			List<String> recipientNames = tellerGUIClient.getRecipientNames(toAccountNumber);
 			
 			int choice = JOptionPane.showConfirmDialog(frame, String
-					.format("Please confirm that depositing $%.2f from account #%d", amount, accountNumber),
+					.format("Please confirm that you are transferring $%.2f to account %d, which has users %s.\n", amount,
+							toAccountNumber, recipientNames),
 					"Confirmation", JOptionPane.OK_CANCEL_OPTION);
 
 			if (choice == JOptionPane.CANCEL_OPTION) {
 				return;
 			} else if (choice == JOptionPane.OK_OPTION) {
-				String result = tellerGUIClient.deposit(accountNumber, amount, pin);
+				
+				// get pin
+				int pin;
+				while (true) {
+					input = JOptionPane.showInputDialog("Enter the account pin");
+					if (input == null) return; // if the user clicks cancel
+					try {
+						pin = Integer.parseInt(input);
+						break;
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, "Invalid pin. Please try again.");
+					}
+					
+				}
+				
+				String result = tellerGUIClient.transfer(toAccountNumber, amount, pin);
 				JOptionPane.showMessageDialog(null, result);
 				frame.setVisible(false);
 				tellerUserAccount.run();

@@ -191,7 +191,7 @@ public class TellerUserAccount {
 			public void actionPerformed(ActionEvent e) {
 				// insert code here
 				frame.setVisible(false);
-				
+				new TellerTransferPage(getTellerUserAccount()).go();
 			}
 		});
 		

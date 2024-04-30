@@ -95,68 +95,60 @@ public class TellerGUIClient {
 		return "ERROR";
 	} // end method deposit
 	// Transfer
-
-	public void transfer(int loggedInUserId) {
+	
+	
+	public List<String> getRecipientNames(int toAccountNumber) {
+		
+		List<Integer> toAccountUsers = null;
+		ArrayList<String> recipentNames = new ArrayList<>();
+		// verify from server the recipient's info
+		// send an account info message to the server: int id, int currUserId, int
+		// accountNumber, Status status
 		try {
-			// get inputs: acc#, amount, pin
-			scanner = new Scanner(System.in);
-			System.out.println("Enter your account number: ");
-			int fromAccountNumber;
-			fromAccountNumber = scanner.nextInt();
-			scanner.nextLine();
-			List<Integer> toAccountUsers = null;
-			int toAccountNumber;
-			double amount;
-			while (true) {
-				System.out.println("Enter recipient account number: ");
-				toAccountNumber = scanner.nextInt();
-				scanner.nextLine();
-				System.out.println("Enter the amount to transfer: ");
-				amount = scanner.nextDouble();
-				scanner.nextLine();
-				// verify from server the recipient's info
-				// send an account info message to the server: int id, int currUserId, int
-				// accountNumber, Status status
-				AccountInfoMessage msg = new AccountInfoMessage(Status.ONGOING, toAccountNumber);
-				writer.writeUnshared(msg);
-				// expected an SUCCESS status of account info msg, containing all users linked
-				// to this recipent's account
-				AccountInfoMessage msgReceipt = (AccountInfoMessage) reader.readObject();
-				toAccountUsers = msgReceipt.getUsers();
-				System.out.println("Received Account Info Message with users: " + msgReceipt.getUsers());
-				// init list of string to store user names
-				ArrayList<String> recipentNames = new ArrayList<>();
-				if (msgReceipt.getStatus() == Status.SUCCESS) {
-					// for each user of this account
-					for (int userId : toAccountUsers) {
-						// send user info msg to server
-						UserInfoMessage uiMsg = new UserInfoMessage(Status.ONGOING, userId);
-						writer.writeUnshared(uiMsg);
-						// expected SUCCESS of user info msg, which contains user name
-						UserInfoMessage uiMsgReceipt = (UserInfoMessage) reader.readObject();
-						if (uiMsgReceipt.getStatus() == Status.SUCCESS) {
-							recipentNames.add(uiMsgReceipt.getUserName()); // add user name to list
-						}
-					}
-					// show the confirmation msg with all the user names and amount of money
-					System.out.printf("You are transferring $%.2f to account %d, which has users %s.\n", amount,
-							toAccountNumber, recipentNames);
-					System.out.println("Please enter yes to confirm.");
-					String userInput = scanner.nextLine();
-					if (userInput.equalsIgnoreCase("YES")) {
-						break; // if user confirms, break the while loop
-					} else {
-						continue;
+			AccountInfoMessage msg = new AccountInfoMessage(Status.ONGOING, toAccountNumber);
+			writer.writeUnshared(msg);
+			// expected an SUCCESS status of account info msg, containing all users linked
+			// to this recipent's account
+			AccountInfoMessage msgReceipt = (AccountInfoMessage) reader.readObject();
+			toAccountUsers = msgReceipt.getUsers();
+			System.out.println("Received Account Info Message with users: " + msgReceipt.getUsers());
+			// init list of string to store user names
+			
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				// for each user of this account
+				for (int userId : toAccountUsers) {
+					// send user info msg to server
+					UserInfoMessage uiMsg = new UserInfoMessage(Status.ONGOING, userId);
+					writer.writeUnshared(uiMsg);
+					// expected SUCCESS of user info msg, which contains user name
+					UserInfoMessage uiMsgReceipt = (UserInfoMessage) reader.readObject();
+					if (uiMsgReceipt.getStatus() == Status.SUCCESS) {
+						recipentNames.add(uiMsgReceipt.getUserName()); // add user name to list
 					}
 				}
-			} // end while loop
-			System.out.println("Enter the account pin: ");
-			int accountPin = scanner.nextInt();
-			scanner.nextLine();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return recipentNames;
+	}
+	
+	public String transfer(int toAccountNumber, double amount, int pin) {
+		int fromAccountNumber = user.getId();
+		List<Integer> toAccountUsers = null;
+		
+		try {
+			// get toAcccountUsers
+			AccountInfoMessage msg = new AccountInfoMessage(Status.ONGOING, toAccountNumber);
+			writer.writeUnshared(msg);
+			// expected an SUCCESS status of account info msg, containing all users linked
+			// to this recipent's account
+			AccountInfoMessage msgReceipt = (AccountInfoMessage) reader.readObject();
+			toAccountUsers = msgReceipt.getUsers();
+			
 			// create a transfer message
 			// int id, Status status, int accountNumber, double transferAmount, int pin
-			TransferMessage txMsg = new TransferMessage(Status.ONGOING, fromAccountNumber, toAccountNumber, amount,
-					accountPin);
+			TransferMessage txMsg = new TransferMessage(Status.ONGOING, fromAccountNumber, toAccountNumber, amount, pin);
 			// send a message to server
 			writer.writeUnshared(txMsg);
 			// wait for a transfer message receipt
@@ -166,22 +158,24 @@ public class TellerGUIClient {
 				BankAccount newAccount = (BankAccount) reader.readObject();
 				// update accounts
 				accounts.put(fromAccountNumber, newAccount);
-				// print out newAccount
-				System.out.println("New Account: " + newAccount);
+
 				if (toAccountUsers.contains(user.getId())) { // in case transfer between your accounts
 					// expect another bankaccount obj
 					BankAccount recipientAccount = (BankAccount) reader.readObject();
 					accounts.put(toAccountNumber, recipientAccount);
 				}
-				// print out all account info
-				System.out.println("Updated user id [" + loggedInUserId + "] accounts: " + accounts);
+				return "New Account: " + newAccount;
+				
+			
 			} else {
-				System.out.println("Fail to transfer $" + amount + " from account " + fromAccountNumber + " to account "
-						+ toAccountNumber);
+				return "Fail to transfer $" + amount + " from account " + fromAccountNumber + " to account "
+						+ toAccountNumber;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return "ERROR";
 	} // end of transfer method
 
 	public String addTeller(String name, String password) {

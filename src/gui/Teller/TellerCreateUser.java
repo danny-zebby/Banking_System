@@ -28,7 +28,7 @@ public class TellerCreateUser {
 	public TellerGUIClient getClient() {
 		return this.client;
 	}
-	
+
 	public void createWindow() {
 	    JFrame frame = new JFrame("Create a Bank User");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,9 +48,9 @@ public class TellerCreateUser {
 		okButton.setSize(200,200);
 		JButton exitButton = new JButton("EXIT");
 		exitButton.setSize(100,100);
-		JTextField textField = new JTextField(25);
-		JTextField textField2 = new JTextField(21);
-		JTextField textField3 = new JTextField(21);
+		JTextField textField = new JTextField(35);
+		JTextField textField2 = new JTextField(25);
+		JTextField textField3 = new JTextField(32);
 		JLabel label1 = new JLabel("Enter name: ");
 		JLabel label2 = new JLabel("Enter date of birth (**/**/****): ");
 		JLabel label3 = new JLabel("Enter password: ");

@@ -1,5 +1,3 @@
-// TellerDepositPage
-
 package gui.Teller;
 
 import java.awt.BorderLayout;
@@ -18,26 +16,26 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 
-import gui.Teller.TellerWithdrawPage.cancelButtonListener;
-import gui.Teller.TellerWithdrawPage.confirmButtonListener;
-import main.BankAccount;
-import main.TellerGUIClient;
 
-public class TellerDepositPage {
+import main.*;
 
+public class TellerSelectAccountForDelAccount {
 	JFrame frame = null;
 	JPanel centerPanel = null;
 	JPanel southPanel = null;
 	Vector<String> entries = null;
 	JList<String> list = null;
 	TellerUserAccount tellerUserAccount = null;
+	private BankUser user;
+	Map<Integer, BankAccount> accounts = null;
 
 	public TellerGUIClient tellerGUIClient = null;
 
-	public TellerDepositPage(TellerUserAccount tellerUserAccount) {
+	public TellerSelectAccountForDelAccount(TellerUserAccount tellerUserAccount) {
 		this.tellerUserAccount = tellerUserAccount;
 		this.tellerGUIClient = tellerUserAccount.getTellerGUIClient();
-		System.out.println(tellerGUIClient);
+		this.user = tellerGUIClient.getUser();
+		this.accounts = tellerGUIClient.getAccounts();
 	}
 
 	public void go() {
@@ -98,7 +96,6 @@ public class TellerDepositPage {
 				JOptionPane.showMessageDialog(frame, "Please select an account.");
 				return;
 			}
-
 			// one line
 			String selectionItem = list.getSelectedValue();
 			// split the line into two parts
@@ -107,30 +104,25 @@ public class TellerDepositPage {
 			String number = parts[0].substring(9);
 			// Convert the number to an integer
 			int accountNumber = Integer.parseInt(number);
-			
-			// get amount
-			double amount;
-			String input = JOptionPane.showInputDialog("Enter amount to deposit");
-			if (input == null) return; // if the user clicks cancel
-			amount = Double.parseDouble(input);
-				
-			// get pin
-			int pin;
-			input = JOptionPane.showInputDialog("Enter the account pin");
-			if (input == null) return; // if the user clicks cancel
-			pin = Integer.parseInt(input);
-			
-			int choice = JOptionPane.showConfirmDialog(frame, String
-					.format("Please confirm that depositing $%.2f from account #%d", amount, accountNumber),
+			if (user.getAccounts().contains(accountNumber) 
+					&& accounts.get(accountNumber).getBalance() == 0
+					&& accounts.get(accountNumber).getAdminID() == user.getId()) {
+				int choice = JOptionPane.showConfirmDialog(frame, String
+					.format("Please confirm that you want to delete account #%d", accountNumber),
 					"Confirmation", JOptionPane.OK_CANCEL_OPTION);
 
-			if (choice == JOptionPane.CANCEL_OPTION) {
-				return;
-			} else if (choice == JOptionPane.OK_OPTION) {
-				String result = tellerGUIClient.deposit(accountNumber, amount, pin);
-				JOptionPane.showMessageDialog(null, result);
-				frame.setVisible(false);
-				tellerUserAccount.run();
+				if (choice == JOptionPane.CANCEL_OPTION) {
+					return;
+				}else if (choice == JOptionPane.OK_OPTION) {
+					String result = tellerGUIClient.deleteAccount(accountNumber);
+					JOptionPane.showMessageDialog(null, result);
+					frame.setVisible(false);
+					tellerUserAccount.run();
+				}
+			
+			}else {
+				JOptionPane.showMessageDialog(frame, "Invalid accountNumber" 
+						+ "or your balance is not zero or you are not the admin of this account.");
 			}
 		}
 	}
@@ -142,4 +134,5 @@ public class TellerDepositPage {
 			tellerUserAccount.run(); // going back to mainpage
 		}
 	}
+
 }

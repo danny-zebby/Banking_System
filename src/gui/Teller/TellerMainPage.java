@@ -32,7 +32,7 @@ public class TellerMainPage {
 	public TellerUserAccount getTellerUserAccount() {
 		return this.tellerUserAccount;
 	}
-	
+
 	public void run() {
 		frame = new JFrame("Teller MainPage");
 		JPanel NorthPanel = new JPanel();
@@ -69,20 +69,25 @@ public class TellerMainPage {
 		userLoginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String input = JOptionPane.showInputDialog("Enter User ID: ");
-				try {
-					int userId = Integer.parseInt(input);
-					String result = client.loginUserAccount(userId);
-					if (result == null) {
-						// jump to TellerUserAccount page
-						frame.setVisible(false); // hide current page
-						new TellerUserAccount(getTellerMainPage(),userId).run();
+				//if cancel is hit, a message dialog pops up
+				if (input == null) {
+					JOptionPane.showMessageDialog(frame, "Going back to Main Page");
+				} else {
+					try {
+						int userId = Integer.parseInt(input);
+						String result = client.loginUserAccount(userId);
+						if (result == null) {
+							// jump to TellerUserAccount page
+							frame.setVisible(false); // hide current page
+							new TellerUserAccount(getTellerMainPage(), userId).run();
+							
+						} else { // ERROR or fail to login BankUser
+							JOptionPane.showMessageDialog(frame, result);						
+						}
 						
-					} else { // ERROR or fail to login BankUser
-						JOptionPane.showMessageDialog(frame, result);						
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(frame, "User ID is an integer, try again!!");
 					}
-					
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(frame, "User ID is an integer, try again!!");
 				}
 			}
 		});

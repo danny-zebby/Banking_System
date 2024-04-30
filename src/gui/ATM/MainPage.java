@@ -15,6 +15,7 @@ public class MainPage {
 	Vector<String> entries = null;
 	boolean show = true;
 	boolean AccIn = false;
+	boolean click = true;
 	
 	public ATMGUIClient client;
 	public AccountSelection accsel;
@@ -75,6 +76,18 @@ public class MainPage {
 		frame.setSize(500, 300);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+
+		showButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (click) {
+					textArea.setText("test");
+					click = false;
+				} else {
+					textArea.setText(acc);
+					click = true;
+				}
+			} // end of action
+		}); // end of show
 	}
 	
 	public void createUIView() {
@@ -130,13 +143,6 @@ public class MainPage {
 		});
 		
 	}
-	
-	class showButtonActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-			
-			
-		} // end of action
-	} // end of show
 }
 
 

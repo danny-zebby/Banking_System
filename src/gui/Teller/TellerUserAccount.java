@@ -2,6 +2,7 @@ package gui.Teller;
 
 import javax.swing.*;
 
+import gui.ATM.AccountSelection;
 import main.BankAccount;
 import main.TellerGUIClient;
 
@@ -11,7 +12,8 @@ import java.util.Map;
 
 public class TellerUserAccount {
 
-	JButton button, button2, addUserButton, deleteUserButton, forgetPasswordButton, changePinButton, transferAdminButton, withdrawButton, depositButton, transferButton, backButton;
+
+	JButton createAccountButton, deleteAccountButton, addUserbuttonButton, deleteUserbutton, forgetPasswordbutton, changePinbutton, transferAdminbutton, withdrawButton, depositButton, transferButton, backbutton;
 	JLabel label;
 	JFrame frame;
 	JPanel panel = null;
@@ -19,6 +21,8 @@ public class TellerUserAccount {
 	boolean AccIn = false;
 	TellerMainPage tellerMainPage = null;
 	TellerGUIClient tellerGUIClient = null;
+
+	public AccountSelection accsel;
 
 	int ID;
 	
@@ -40,71 +44,79 @@ public class TellerUserAccount {
 	}
 	public TellerUserAccount getUserAcc() {
 		return this;
-
 	}
-
 	public TellerUserAccount getTellerUserAccount() {
 		return this;
 	}
+	public AccountSelection getAccSel() {
+		return this.accsel;
+	}
+	
 	public void run() {
 		frame = new JFrame("Teller(User)");
-		Container contentPane = frame.getContentPane(); 
-		contentPane.setLayout(new FlowLayout());
+		panel = new JPanel(); 
+		panel.setLayout(new FlowLayout());
 		
-		button = new JButton("Create Account");
-		button2 = new JButton("Delete Account");
-		addUserButton = new JButton("Add User");
-		deleteUserButton = new JButton("Delete User");
-		forgetPasswordButton = new JButton("Forget Password");
-		changePinButton = new JButton("Change PIN");
-		transferAdminButton = new JButton("Transfer Admin");
+		createAccountButton = new JButton("Create Account");
+		deleteAccountButton = new JButton("Delete Account");
+		addUserbuttonButton = new JButton("Add User");
+		deleteUserbutton = new JButton("Delete User");
+		forgetPasswordbutton = new JButton("Forget Password");
+		changePinbutton = new JButton("Change PIN");
+		transferAdminbutton = new JButton("Transfer Admin");
 		withdrawButton = new JButton("Withdraw");
 		depositButton = new JButton("Deposit");
 		transferButton = new JButton("Transfer");
-		backButton = new JButton("Back");
+		backbutton = new JButton("Back");
 		JPanel panel = new JPanel();
-		/*
-		 * Placeholder Comment for Acc list of user to go into textArea
-		 */
-		JTextArea textArea = new JTextArea("test");
-		contentPane.add(textArea);
+		
+		if(AccIn == false){
+			getClient().getAccountsInfo();
+			AccIn = true;
+		}
+		Map<Integer, BankAccount> accounts = getClient().getAccounts();
+		String acc = "Bank Account Infomation:\n" + accounts;
+		JTextArea textArea = new JTextArea(acc);
+		panel.add(textArea);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new GridLayout(3, 4));
-		panel2.add(button);
-		panel2.add(button2);
-		panel2.add(addUserButton);
-		panel2.add(deleteUserButton);
-		panel2.add(forgetPasswordButton);
-		panel2.add(changePinButton);
-		panel2.add(transferAdminButton);
+
+		panel2.add(createAccountButton);
+		panel2.add(deleteAccountButton);
+		panel2.add(addUserbuttonButton);
+		panel2.add(deleteUserbutton);
+		panel2.add(forgetPasswordbutton);
+		panel2.add(changePinbutton);
+		panel2.add(transferAdminbutton);
 		panel2.add(withdrawButton);
 		panel2.add(depositButton);
 		panel2.add(transferButton);
-		panel2.add(backButton);
+		panel2.add(backbutton);
 		
-		frame.setSize(600, 300);
+		frame.setSize(600, 350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(BorderLayout.NORTH, panel);
 		frame.getContentPane().add(BorderLayout.SOUTH, panel2);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
-		button.addActionListener(new ActionListener() {
+		createAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
 				new TellerCreateAccount(getUserAcc(), ID).createWindow();;
 			}
 		});
 
-		button2.addActionListener(new ActionListener() {
+		deleteAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// insert code here
+				frame.setVisible(false);
+				new TellerSelectAccountForDelAccount(getTellerUserAccount()).go();;
 			}
 		});
 
-		addUserButton.addActionListener(new ActionListener() {
+		addUserbuttonButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// insert code here
 				frame.setVisible(false); // hide current window
@@ -113,7 +125,7 @@ public class TellerUserAccount {
 			}
 		});
 
-		deleteUserButton.addActionListener(new ActionListener() {
+		deleteUserbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// insert code here
 				frame.setVisible(false); // hide current window
@@ -123,7 +135,7 @@ public class TellerUserAccount {
 		});
 
 
-		forgetPasswordButton.addActionListener(new ActionListener() {
+		forgetPasswordbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// insert code here
 				frame.setVisible(false);
@@ -131,7 +143,7 @@ public class TellerUserAccount {
 			}
 		});
 
-		changePinButton.addActionListener(new ActionListener() {
+		changePinbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// insert code here
 				frame.setVisible(false);
@@ -139,7 +151,7 @@ public class TellerUserAccount {
 			}
 		});
 
-		transferAdminButton.addActionListener(new ActionListener() {
+		transferAdminbutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// insert code here
 				frame.setVisible(false);
@@ -147,8 +159,10 @@ public class TellerUserAccount {
 			}
 		});
 
+
 		// ATM methods
 		withdrawButton.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				// insert code here
 				frame.setVisible(false); // hide current window
@@ -157,10 +171,11 @@ public class TellerUserAccount {
 		});
 
 		depositButton.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				// insert code here
 				frame.setVisible(false);
-				
+				new TellerDepositPage(getTellerUserAccount()).go();
 			}
 		});
 
@@ -172,7 +187,7 @@ public class TellerUserAccount {
 			}
 		});
 		
-		backButton.addActionListener((e) -> {
+		backbutton.addActionListener((e) -> {
 			frame.setVisible(false); // hide current page
 			tellerMainPage.run(); // jump back to TellerMainPage
 		});

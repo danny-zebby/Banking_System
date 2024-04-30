@@ -528,16 +528,9 @@ public class TellerGUIClient {
 	} // end method createAccount
 
 	// delete account if the balance is zero, else fail to delete
-	public void deleteAccount(int loggedInUserId) {
-		scanner = new Scanner(System.in);
-		System.out.println("Enter Account number: ");
-		int accountNumber = scanner.nextInt();
-		scanner.nextLine();
-
+	public String deleteAccount(int accountNumber ) {
 		// check if this account number is valid and account balance is not zero and
 		// whether the user has admin access to this account
-		if (user.getAccounts().contains(accountNumber) && accounts.get(accountNumber).getBalance() == 0
-				&& accounts.get(accountNumber).getAdminID() == user.getId()) {
 			// send AccountMessage to server
 			AccountMessage msg = new AccountMessage(Status.ONGOING, accountNumber, user.getId());
 			try {
@@ -549,20 +542,17 @@ public class TellerGUIClient {
 					user.getAccounts().remove(Integer.valueOf(accountNumber));
 					accounts.remove(accountNumber);
 					// print out success msg
-					System.out.println("Successfully remove account #" + accountNumber + ".");
+					String out = "Successfully remove account #" + accountNumber + ".";
 					// print out all account info
-					System.out.println("Updated user id [" + loggedInUserId + "] accounts: " + accounts);
+					return out + "\nUpdated user id [" + user.getId() + "] accounts: " + accounts;
+				}else {
+					return "Delete Account Failed";
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
-
-		} else {
-			System.out.println(
-					"Invalid accountNumber or your balance is not zero or you are not the admin of this account.");
-		}
-
+			}return "Delete Account Failed";
 	} // end method deleteAccount
+
 
 	public String forgetPassword(String birthday, String password) {
 		

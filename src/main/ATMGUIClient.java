@@ -36,7 +36,7 @@ public class ATMGUIClient {
 
 	private boolean setUpConnection() {
 		try {
-			sock = new Socket("127.0.0.1", 50000);
+			sock = new Socket("134.154.55.183", 56555);
 			System.out.println("Connected to 127.0.0.1:50000.");
 			// set up reader and writer
 			writer = new ObjectOutputStream(sock.getOutputStream());

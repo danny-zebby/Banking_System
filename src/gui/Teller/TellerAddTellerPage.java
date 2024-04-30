@@ -45,7 +45,7 @@ public class TellerAddTellerPage {
 		okButton.setSize(200,200);
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setSize(100,100);
-		JTextField textField = new JTextField(25);
+		JTextField textField = new JTextField(23);
 		JTextField textField2 = new JTextField(21);
 		JLabel label1 = new JLabel("Name:");
 		JLabel label2 = new JLabel("Password:");

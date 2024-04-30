@@ -196,6 +196,7 @@ public class TellerUserAccount {
 		
 		backbutton.addActionListener((e) -> {
 			frame.setVisible(false); // hide current page
+			tellerGUIClient.logoutUser();
 			tellerMainPage.run(); // jump back to TellerMainPage
 		});
 	}

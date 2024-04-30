@@ -1146,10 +1146,15 @@ public class Server {
 				
 				if (userId > 0 && activeUsers.containsKey(userId)) {
 					// CLOSE ACTIVE ACCOUNTS
-					closeActiveAccounts(userId);
-					writeLogs(String.format("Teller: teller %s(%d) logged out BankUser %s(%d) at %s.", 
-							tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, new Date().toString()));
-					userId = 0;
+					if (userId != 0) {
+						closeActiveAccounts(userId);
+						userId = 0;
+					}
+					if (tellerId != 0) {
+						writeLogs(String.format("Teller: teller %s(%d) logged out BankUser %s(%d) at %s.", 
+								tellerList.get(tellerId).getName(), tellerId, userList.get(userId).getName(), userId, new Date().toString()));
+					}
+					
 				}
 			}
 

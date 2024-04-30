@@ -1,5 +1,3 @@
-// TellerSelectAccountForDelUserPage
-
 package gui.Teller;
 
 import java.awt.BorderLayout;
@@ -18,27 +16,33 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 
+import gui.Teller.TellerSelectAccountForChangePinPage.cancelButtonListener;
+import gui.Teller.TellerSelectAccountForChangePinPage.confirmButtonListener;
+import main.BankAccount;
+import main.TellerGUIClient;
 
-import main.*;
-
-public class TellerSelectAccountForDelUserPage {
+public class TellerSelectUserForTransferAdminPage {
 	JFrame frame = null;
 	JPanel centerPanel = null;
 	JPanel southPanel = null;
 	Vector<String> entries = null;
 	JList<String> list = null;
 	TellerUserAccount tellerUserAccount = null;
+	int accountNumber = 0;
+	Map<Integer, Map<Integer, String>> adminAccountsInfo = null;
 
 	public TellerGUIClient tellerGUIClient = null;
 
-	public TellerSelectAccountForDelUserPage(TellerUserAccount tellerUserAccount) {
+	public TellerSelectUserForTransferAdminPage(TellerUserAccount tellerUserAccount, int accountNumber, Map<Integer, Map<Integer, String>> adminAccountsInfo) {
 		this.tellerUserAccount = tellerUserAccount;
 		this.tellerGUIClient = tellerUserAccount.getTellerGUIClient();
+		this.accountNumber = accountNumber;
+		this.adminAccountsInfo = adminAccountsInfo;
 	}
 
 	public void go() {
 		// create new frame
-		frame = new JFrame("Choose an account");
+		frame = new JFrame("Choose a user");
 
 		// create new panel
 		centerPanel = new JPanel();
@@ -67,12 +71,9 @@ public class TellerSelectAccountForDelUserPage {
 	public void createScrollList() {
 		// add list to panel
 		entries = new Vector<String>();
-		tellerGUIClient.getAccountsInfo();
-		Map<Integer, BankAccount> accountsInfo = tellerGUIClient.getAccounts();
-
-		for (int accountNumber : accountsInfo.keySet()) {
-			entries.add(
-					String.format("Account #%d : $%.2f", accountNumber, accountsInfo.get(accountNumber).getBalance()));
+		
+		for (int userId : adminAccountsInfo.get(accountNumber).keySet()) {
+			entries.add(String.format("User #%d : %s", userId, adminAccountsInfo.get(accountNumber).get(userId)));
 		}
 
 		list = new JList<>(entries);
@@ -91,7 +92,7 @@ public class TellerSelectAccountForDelUserPage {
 	class confirmButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if (list.isSelectionEmpty()) { // if nothing is selected
-				JOptionPane.showMessageDialog(frame, "Please select an account.");
+				JOptionPane.showMessageDialog(frame, "Please select a user.");
 				return;
 			}
 
@@ -100,29 +101,31 @@ public class TellerSelectAccountForDelUserPage {
 			// split the line into two parts
 			String[] parts = selectionItem.split(" :");
 			// Extract the number part
-			String number = parts[0].substring(9);
+			String number = parts[0].substring(6);
 			// Convert the number to an integer
-			int accountNumber = Integer.parseInt(number);
-			int userIdAdd;
+			int recipientId = Integer.parseInt(number);
+			String recipientName = adminAccountsInfo.get(accountNumber).get(recipientId);
+			int pin = 0;
+			String input;
 			while (true) {
-				String input = JOptionPane.showInputDialog("Enter user id to delete");
+				input = JOptionPane.showInputDialog("Enter account Pin: ");
 				if (input == null) return; // if the user clicks cancel
 				try {
-					userIdAdd = Integer.parseInt(input);
+					pin = Integer.parseInt(input);
 					break;
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "User id is an integer, please try again.");
+					JOptionPane.showMessageDialog(null, "Pin is an integer, please try again.");
 				}
 			}
 
 			int choice = JOptionPane.showConfirmDialog(frame, String
-					.format("Please confirm that you want to delete user id %d from account #%d", userIdAdd, accountNumber),
+					.format("Please confirm that you are transferring your admin of account %d to user %d(%s).", accountNumber, recipientId, recipientName),
 					"Confirmation", JOptionPane.OK_CANCEL_OPTION);
 
 			if (choice == JOptionPane.CANCEL_OPTION) {
 				return;
 			} else if (choice == JOptionPane.OK_OPTION) {
-				String result = tellerGUIClient.deleteUserFromAccount(accountNumber, userIdAdd);
+				String result = tellerGUIClient.transferAdmin(accountNumber, pin, recipientId, recipientName);
 				JOptionPane.showMessageDialog(null, result);
 				frame.setVisible(false);
 				tellerUserAccount.run();

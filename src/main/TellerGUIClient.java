@@ -67,19 +67,9 @@ public class TellerGUIClient {
 	} // end method withdraw
 
 	// Deposit
-	public void deposit(int loggedInUserId) {
+	public String deposit(int accountNumber, double amount, int accountPin) {
 		try {
-			// get inputs: acc#, amount, pin
-			scanner = new Scanner(System.in);
-			System.out.println("Enter the account number: ");
-			int accountNumber = scanner.nextInt();
-			scanner.nextLine();
-			System.out.println("Enter the amount to deposit: ");
-			double amount = scanner.nextDouble();
-			scanner.nextLine();
-			System.out.println("Enter the account pin: ");
-			int accountPin = scanner.nextInt();
-			scanner.nextLine();
+			int loggedInUserID = user.getId();
 			// create a deposit message
 			// int id, Status status, int accountNumber, double depositAmount, int pin
 			DepositMessage msg = new DepositMessage(Status.ONGOING, accountNumber, amount, accountPin);
@@ -93,17 +83,16 @@ public class TellerGUIClient {
 				// update accounts
 				accounts.replace(accountNumber, newAccount);
 				// print out result
-				System.out.println("New Account: " + newAccount);
-				// print out all account info
-				System.out.println("Updated user id [" + loggedInUserId + "] accounts: " + accounts);
+				return "New Account: " + newAccount;
 			} else {
 
-				System.out.println("Fail to deposit $" + amount + " to account " + accountNumber);
+				return "Fail to deposit $" + amount + " to account " + accountNumber;
 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "ERROR";
 	} // end method deposit
 	// Transfer
 
@@ -596,40 +585,31 @@ public class TellerGUIClient {
 		return "ERROR";
 	}
 
-	public void changePin() {
-		scanner = new Scanner(System.in);
-		System.out.println("Choose an account: ");
-		int accountNumber = scanner.nextInt();
-		System.out.println("Enter new pin: ");
-		int pin = scanner.nextInt();
-		scanner.nextLine();
-		System.out.println("Type Yes to confirm your new pin is " + pin);
-		String input = scanner.nextLine();
-		if (input.equalsIgnoreCase("YES")) {
-			try {
-				// create AccountMessage with type CHG_PIN to server
-				// Status status, int userId, int accountNumber, int pin
-				AccountMessage msg = new AccountMessage(Status.ONGOING, user.getId(), accountNumber, pin);
-				// send to server
-				writer.writeUnshared(msg);
-				// wait for success status
-				AccountMessage msgReceipt = (AccountMessage) reader.readObject();
-				if (msgReceipt.getStatus() == Status.SUCCESS) {
-					System.out.println("Your pin is changed successfully.");
-					// update account pin locally (optional)
-					accounts.get(accountNumber).setAccountPin(pin);
-				} else {
-					System.out.println("Fail to change your pin.");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
+	public String changePin(int accountNumber, int pin) {
+		
+		try {
+			// create AccountMessage with type CHG_PIN to server
+			// Status status, int userId, int accountNumber, int pin
+			AccountMessage msg = new AccountMessage(Status.ONGOING, user.getId(), accountNumber, pin);
+			// send to server
+			writer.writeUnshared(msg);
+			// wait for success status
+			AccountMessage msgReceipt = (AccountMessage) reader.readObject();
+			if (msgReceipt.getStatus() == Status.SUCCESS) {
+				// update account pin locally (optional)
+				accounts.get(accountNumber).setAccountPin(pin);
+				return "Your pin is changed successfully.";
+			} else {
+				return "Fail to change your pin.";
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
+		
+		return "ERROR";
 	} // end method changePin
-
-	public void transferAdmin() {
-		scanner = new Scanner(System.in);
+	
+	public Map<Integer, Map<Integer, String>> getAdminAccountsInfo() {
 		// 1. get latest updates of all accounts
 		getAccountsInfo();
 		// initialize map: key: accountNumber -> value: Map<userId, user name>
@@ -660,21 +640,12 @@ public class TellerGUIClient {
 				} // end for loop
 			}
 		}
-		// 1.2 list out all admin accounts
-		System.out.println("Please choose one of the admin accounts to transfer admin: ");
-		System.out.println(adminAccountsInfo.keySet());
-
-		// 2. choose admin account
-		int accountNumber = scanner.nextInt();
-		// 2.1 show all users of this account
-		System.out.println("Please choose one of the users to transfer: ");
-		System.out.println(adminAccountsInfo.get(accountNumber));
-		// 3. choose recipient user id
-		int recipientId = scanner.nextInt();
-		// 4. enter pin
-		System.out.println("Enter account pin: ");
-		int pin = scanner.nextInt();
-		// 5. send transfer admin request to server -> AccountMessage of type TXF_ADMIN
+		return adminAccountsInfo;
+	}
+	
+	public String transferAdmin(int accountNumber, int pin, int recipientId, String recipientName) {
+		
+		// send transfer admin request to server -> AccountMessage of type TXF_ADMIN
 		// Status status, int userId, int accountNumber, int pin, int recipientId
 		AccountMessage msg = new AccountMessage(Status.ONGOING, user.getId(), accountNumber, pin, recipientId);
 		try {
@@ -683,19 +654,18 @@ public class TellerGUIClient {
 			// wait for success status
 			AccountMessage msgReceipt = (AccountMessage) reader.readObject();
 			if (msgReceipt.getStatus() == Status.SUCCESS) {
-				System.out.printf("For you account %d, the admin is transferred to %s successfully.\n", accountNumber,
-						adminAccountsInfo.get(accountNumber).get(recipientId));
 				// update account pin locally (optional)
 				accounts.get(accountNumber).setAccountPin(pin);
 				// 6. update account admin locally
 				accounts.get(accountNumber).setAdminID(recipientId);
+				return String.format("For you account %d, the admin is transferred to %s successfully.\n", accountNumber, recipientName);
 			} else {
-				System.out.printf("For you account %d, failed to transfer admin to %s.\n", accountNumber,
-						adminAccountsInfo.get(accountNumber).get(recipientId));
+				return String.format("For you account %d, failed to transfer admin to %s.\n", accountNumber, recipientName);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "ERROR";
 
 	} // end method transferAdmin
 

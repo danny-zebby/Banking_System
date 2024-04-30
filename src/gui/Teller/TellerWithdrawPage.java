@@ -105,33 +105,28 @@ public class TellerWithdrawPage {
 			int accountNumber = Integer.parseInt(number);
 			
 			// get amount
-			doulbe amount;
-			while (true) {
-				String input = JOptionPane.showInputDialog("Enter user id to delete");
-				try {
-					userIdAdd = Integer.parseInt(input);
-					break;
-				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "User id is an integer, please try again.");
-				}
-			}
-			
+			double amount;
+			String input = JOptionPane.showInputDialog("Enter amount to withdraw");
+			if (input == null) return; // if the user clicks cancel
+			amount = Double.parseDouble(input);
+				
 			// get pin
 			int pin;
-			String input = JOptionPane.showInputDialog("Enter user id to delete");
-
+			input = JOptionPane.showInputDialog("Enter the account pin");
+			if (input == null) return; // if the user clicks cancel
+			pin = Integer.parseInt(input);
+			
 			int choice = JOptionPane.showConfirmDialog(frame, String
-					.format("Please confirm that you want to delete user id %d from account #%d", userIdAdd, accountNumber),
+					.format("Please confirm that withdrawing $%.2f from account #%d", amount, accountNumber),
 					"Confirmation", JOptionPane.OK_CANCEL_OPTION);
 
 			if (choice == JOptionPane.CANCEL_OPTION) {
 				return;
 			} else if (choice == JOptionPane.OK_OPTION) {
-				String result = tellerGUIClient.withdraw(accountNumber, userIdAdd);
+				String result = tellerGUIClient.withdraw(accountNumber, amount, pin);
 				JOptionPane.showMessageDialog(null, result);
 				frame.setVisible(false);
 				tellerUserAccount.run();
-
 			}
 		}
 	}

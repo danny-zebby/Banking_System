@@ -1,10 +1,12 @@
 package gui.ATM;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.Map;
 import java.util.Vector;
 import main.*;
+
 public class MainPage {
 	JFrame frame = null;
 	JPanel southPanel = null;

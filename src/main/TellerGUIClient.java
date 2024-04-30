@@ -39,21 +39,12 @@ public class TellerGUIClient {
 
 	// ATM Functions
 	// Withdraw
-	public void withdraw(int loggedInUserId) {
+	public String withdraw(int accNum, double amount, int accPin) {
 		try {
-			// get input acc #, amount, pin
-			scanner = new Scanner(System.in);
-			System.out.println("Enter the account number: ");
-			int accountNumber = scanner.nextInt();
-			scanner.nextLine();
-			System.out.println("Enter the amount to withdraw: ");
-			double amount = scanner.nextDouble();
-			scanner.nextLine();
-			System.out.println("Enter the account pin: ");
-			int accountPin = scanner.nextInt();
-			scanner.nextLine();
+			int loggedInUserID = user.getId();
+			
 			// create a withdraw message
-			WithdrawMessage msg = new WithdrawMessage(Status.ONGOING, accountNumber, amount, accountPin);
+			WithdrawMessage msg = new WithdrawMessage(Status.ONGOING, accNum, amount, accPin);
 			// send msg to server
 			writer.writeUnshared(msg);
 			// wait for withdraw msg receipt
@@ -62,33 +53,23 @@ public class TellerGUIClient {
 				// expect a new Account object
 				BankAccount newAccount = (BankAccount) reader.readObject();
 				// update accounts
-				accounts.put(accountNumber, newAccount);
+				accounts.put(accNum, newAccount);
 				// print out newAccount
-				System.out.println("New Account info: " + newAccount);
-				// print out all account info
-				System.out.println("Updated user id [" + loggedInUserId + "] accounts: " + accounts);
+				return "new Account: " + newAccount + "\n\n" + "Updated accounts: " + accounts;
+			
 			} else {
-				System.out.println("Fail to withdraw $" + amount + " from account " + accountNumber);
+				return "Fail to withdraw $" + amount + " from account " + accNum;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+		return "ERROR";
+	} // end method withdraw
 
 	// Deposit
-	public void deposit(int loggedInUserId) {
+	public String deposit(int accountNumber, double amount, int accountPin) {
 		try {
-			// get inputs: acc#, amount, pin
-			scanner = new Scanner(System.in);
-			System.out.println("Enter the account number: ");
-			int accountNumber = scanner.nextInt();
-			scanner.nextLine();
-			System.out.println("Enter the amount to deposit: ");
-			double amount = scanner.nextDouble();
-			scanner.nextLine();
-			System.out.println("Enter the account pin: ");
-			int accountPin = scanner.nextInt();
-			scanner.nextLine();
+			int loggedInUserID = user.getId();
 			// create a deposit message
 			// int id, Status status, int accountNumber, double depositAmount, int pin
 			DepositMessage msg = new DepositMessage(Status.ONGOING, accountNumber, amount, accountPin);
@@ -102,17 +83,16 @@ public class TellerGUIClient {
 				// update accounts
 				accounts.replace(accountNumber, newAccount);
 				// print out result
-				System.out.println("New Account: " + newAccount);
-				// print out all account info
-				System.out.println("Updated user id [" + loggedInUserId + "] accounts: " + accounts);
+				return "New Account: " + newAccount;
 			} else {
 
-				System.out.println("Fail to deposit $" + amount + " to account " + accountNumber);
+				return "Fail to deposit $" + amount + " to account " + accountNumber;
 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "ERROR";
 	} // end method deposit
 	// Transfer
 

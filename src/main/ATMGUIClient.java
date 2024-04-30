@@ -123,6 +123,7 @@ public class ATMGUIClient {
 
 	} // end method deposit
 
+	// difference?
 	public String transfer1(int fromaccountNumber, double amount, int toAccountNumber) {
 		try {
 			// get inputs: acc#, amount, pin
@@ -167,7 +168,8 @@ public class ATMGUIClient {
 		}
 		return "";
 	} // end method transfer
-
+	
+	// difference?
 	public String tranfer2(int fromAccountNumber, double amount, int toAccountNumber, int accountPin){
 		try {
 			// create a transfer message

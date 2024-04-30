@@ -43,17 +43,17 @@ public class MainPage {
 		// create new panel
 		southPanel = new JPanel();
 		centerPanel = new JPanel();
-		eastPanel = new JPanel();
-		JButton showButton = new JButton("Show");
-		eastPanel.setLayout(new FlowLayout());
-		eastPanel.add(showButton);
+//		eastPanel = new JPanel();
+//		JButton showButton = new JButton("Show");
+//		eastPanel.setLayout(new FlowLayout());
+//		eastPanel.add(showButton);
 		
 		if(AccIn == false){
 			getClient().getAccountsInfo();
 			AccIn = true;
 		}
 		Map<Integer, BankAccount> accounts = getClient().getAccounts();
-		String acc = "Bank Account Infomation:\n" + accounts + "\nSelect a command\n";
+		String acc = "Bank Account Infomation:\n" + accounts;
 		JTextArea textArea = new JTextArea(acc);
 		textArea.setEditable(false);
 		JScrollPane scroller = new JScrollPane(textArea);
@@ -69,7 +69,7 @@ public class MainPage {
 		// add components to frame
 		frame.getContentPane().add(BorderLayout.CENTER, centerPanel);
 		frame.getContentPane().add(BorderLayout.SOUTH, southPanel);
-		frame.getContentPane().add(BorderLayout.EAST, eastPanel);
+//		frame.getContentPane().add(BorderLayout.EAST, eastPanel);
 		
 		// show frame
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,17 +77,17 @@ public class MainPage {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
-		showButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (click) {
-					textArea.setText("test");
-					click = false;
-				} else {
-					textArea.setText(acc);
-					click = true;
-				}
-			} // end of action
-		}); // end of show
+//		showButton.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				if (click) {
+//					textArea.setText("test");
+//					click = false;
+//				} else {
+//					textArea.setText(acc);
+//					click = true;
+//				}
+//			} // end of action
+//		}); // end of show
 	}
 	
 	public void createUIView() {

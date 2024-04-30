@@ -485,15 +485,11 @@ public class TellerGUIClient {
 
 		try {
 			Integer.parseInt(pin); // Try parsing the string to an integer
-			isInt = true; // If successful, return true
-		} catch (NumberFormatException e) {
-			isInt = false; // If an exception is caught, return false
-		}
-		if (isInt) {
 			return "VALID";
-		} else {
-			return "INVALID";
+		} catch (NumberFormatException e) {
+			return "INVALID"; // If an exception is caught, return false
 		}
+		
 	}
 
 	public String createAccount(int loggedInUserId, int pin, AccountType accountType) {

@@ -16,8 +16,8 @@ public class TellerUserAccount {
 	JButton createAccountButton, deleteAccountButton, addUserbuttonButton, deleteUserbutton, forgetPasswordbutton, changePinbutton, transferAdminbutton, withdrawButton, depositButton, transferButton, backbutton;
 	JLabel label;
 	JFrame frame;
-	JPanel panel = null;
-	JPanel panel2 = null;
+	JPanel centerPanel = null;
+	JPanel southPanel = null;
 	boolean AccIn = false;
 	TellerMainPage tellerMainPage = null;
 	TellerGUIClient tellerGUIClient = null;
@@ -54,8 +54,7 @@ public class TellerUserAccount {
 	
 	public void run() {
 		frame = new JFrame("Teller(User)");
-		panel = new JPanel(); 
-		panel.setLayout(new FlowLayout());
+		centerPanel = new JPanel(); 
 		
 		createAccountButton = new JButton("Create Account");
 		deleteAccountButton = new JButton("Delete Account");
@@ -68,7 +67,6 @@ public class TellerUserAccount {
 		depositButton = new JButton("Deposit");
 		transferButton = new JButton("Transfer");
 		backbutton = new JButton("Back");
-		JPanel panel = new JPanel();
 		
 		if(AccIn == false){
 			getClient().getAccountsInfo();
@@ -81,32 +79,33 @@ public class TellerUserAccount {
 		String acc = "Bank Account Infomation: \n" + accounts;
 		JTextArea textArea = new JTextArea(acc);
 		textArea.setEditable(false);
+		
 		JScrollPane scroller = new JScrollPane(textArea);
 		scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		panel.add(scroller);
+		scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		centerPanel.add(scroller);
+		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+
 		
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		southPanel = new JPanel();
+		southPanel.setLayout(new GridLayout(3, 4));
 
-		JPanel panel2 = new JPanel();
-		panel2.setLayout(new GridLayout(3, 4));
-
-		panel2.add(createAccountButton);
-		panel2.add(deleteAccountButton);
-		panel2.add(addUserbuttonButton);
-		panel2.add(deleteUserbutton);
-		panel2.add(forgetPasswordbutton);
-		panel2.add(changePinbutton);
-		panel2.add(transferAdminbutton);
-		panel2.add(withdrawButton);
-		panel2.add(depositButton);
-		panel2.add(transferButton);
-		panel2.add(backbutton);
+		southPanel.add(createAccountButton);
+		southPanel.add(deleteAccountButton);
+		southPanel.add(addUserbuttonButton);
+		southPanel.add(deleteUserbutton);
+		southPanel.add(forgetPasswordbutton);
+		southPanel.add(changePinbutton);
+		southPanel.add(transferAdminbutton);
+		southPanel.add(withdrawButton);
+		southPanel.add(depositButton);
+		southPanel.add(transferButton);
+		southPanel.add(backbutton);
 		
 		frame.setSize(600, 350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(BorderLayout.NORTH, panel);
-		frame.getContentPane().add(BorderLayout.SOUTH, panel2);
+		frame.getContentPane().add(BorderLayout.CENTER, centerPanel);
+		frame.getContentPane().add(BorderLayout.SOUTH, southPanel);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 

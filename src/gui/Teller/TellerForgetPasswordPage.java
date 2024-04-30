@@ -73,7 +73,7 @@ public class TellerForgetPasswordPage {
 				} else {
 					// show confirm dialog
 					int choice = JOptionPane.showConfirmDialog(null,
-							"Please type yes to confirm your new password: " + password, "Confirmation",
+							"Please confirm your new password: " + password, "Confirmation",
 							JOptionPane.OK_CANCEL_OPTION);
 					switch (choice) {
 					case JOptionPane.OK_OPTION: {

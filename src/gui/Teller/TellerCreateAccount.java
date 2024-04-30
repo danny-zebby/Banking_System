@@ -18,10 +18,10 @@ import java.util.*;
 import java.net.*;
 import message.*;
 public class TellerCreateAccount {
-	static TellerUserAccount tellerUserAccount = null;
-	static TellerGUIClient tellerGUIClient = null;
-	static TellerMainPage tellerMainPage = null;
-	public static int id;
+	TellerUserAccount tellerUserAccount = null;
+	TellerGUIClient tellerGUIClient = null;
+	TellerMainPage tellerMainPage = null;
+	int id;
 	
 	public TellerCreateAccount (TellerUserAccount tellerUserAccount, int id) {
 		this.tellerUserAccount = tellerUserAccount;
@@ -37,7 +37,7 @@ public class TellerCreateAccount {
 		return this.tellerUserAccount;
 	}
 	
-	public static void createWindow() {
+	public void createWindow() {
 	    JFrame frame = new JFrame("Create a Bank User");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    TellerCreateAccountUI(frame);
@@ -46,7 +46,7 @@ public class TellerCreateAccount {
 	    frame.setVisible(true);
 	}
 		
-	private static void TellerCreateAccountUI(final JFrame frame){
+	private void TellerCreateAccountUI(final JFrame frame){
 		// creates a new panel
 		JPanel panel = new JPanel();
 		LayoutManager layout = new FlowLayout();
@@ -71,7 +71,8 @@ public class TellerCreateAccount {
 			        pin = String.valueOf(randomPin);
 				}
 				String status = tellerGUIClient.checkPin(pin);
-				if(status.equalsIgnoreCase("VALID")){
+				
+				if(status.equalsIgnoreCase("VALID")){ // if it is a valid pin
 					String userConfirm = JOptionPane.showInputDialog("You are creating a savings account with pin " + pin
 							+ "\nPlease enter yes to confirm.");
 					if (userConfirm.equalsIgnoreCase("YES")) {
@@ -82,9 +83,9 @@ public class TellerCreateAccount {
 							JOptionPane.showMessageDialog(frame,"Updated user id ["
 						+ id + "] accounts: " + tellerGUIClient.getAccounts());
 						frame.setVisible(false);
-			            new TellerUserAccount(tellerMainPage, id).run();
+						tellerUserAccount.run(); // going back to main page
 						}
-					}else {
+					} else {
 						JOptionPane.showMessageDialog(frame, "Fail to create a new SAVINGS.\n");
 					}
 				}
@@ -116,7 +117,8 @@ public class TellerCreateAccount {
 							JOptionPane.showMessageDialog(frame,"Updated user id ["
 						+ id + "] accounts: " + tellerGUIClient.getAccounts());
 							frame.setVisible(false);
-				            new TellerUserAccount(tellerMainPage, id).run();
+//				            new TellerUserAccount(tellerMainPage, id).run();
+							tellerUserAccount.run(); // going back to main page
 						}
 					}else {
 						JOptionPane.showMessageDialog(frame, "Fail to create a new CHECKINGS.\n");
@@ -132,7 +134,8 @@ public class TellerCreateAccount {
 	             JOptionPane.showMessageDialog(frame, "Back to user page.");
 	             //closes TellerCreateUser
 	             frame.setVisible(false);
-	             new TellerUserAccount(tellerMainPage, id).run();
+//	             new TellerUserAccount(tellerMainPage, id).run();
+	             tellerUserAccount.run(); // going back to main page
 	          }
 		});
 		

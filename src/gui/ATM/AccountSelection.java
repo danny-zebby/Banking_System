@@ -110,26 +110,41 @@ public class AccountSelection {
 				int accnum = Integer.parseInt(number);
 				
 				// Get Amount
-				String Amount = JOptionPane.showInputDialog("Enter Amount to " + operation + ":");
-				if (Amount == null) return;
-				double amount = Double.parseDouble(Amount);
-				Amount = String.format("%.2f", amount);
-				double AccBal = Double.parseDouble(Amount);
+				double amount;
+				String input;
+				while (true) {
+					
+					input = JOptionPane.showInputDialog("Enter Amount to " + operation + ":");
+					if (input == null) return;
+					try {
+						amount = Double.parseDouble(input);
+						break;
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, "Invalid amount of money. Please try again.");
+					}
+				}
 				
 				// Three operation
 				String out = null;
-				String out1, SAP;
+				String out1;
 				int accountPin;
 				if (getOperation() == "withdraw") {
-					SAP = JOptionPane.showInputDialog("Enter the account pin: ");
-					if (SAP == null) return;
-					accountPin = Integer.parseInt(SAP);
+					while (true) {
+						input = JOptionPane.showInputDialog("Enter the account pin: ");
+						if (input == null) return;
+						try {
+							accountPin = Integer.parseInt(input);
+							break;
+						} catch (Exception e) {
+							JOptionPane.showMessageDialog(null, "Invalid pin. Please try again.");
+						}
+						
+					}
 	
 					out = getClient().withdraw(accnum, amount, accountPin);
 				} else if (getOperation() == "transfer") {
 					// get account number
 					int ToAccNum;
-					String input;
 					while (true) {
 						input = JOptionPane.showInputDialog("Enter recipient account number: ");
 						if (input == null) return;
@@ -148,8 +163,17 @@ public class AccountSelection {
 						
 						input = JOptionPane.showInputDialog(out1);
 						if (input.equalsIgnoreCase("YES")) {
-							SAP = JOptionPane.showInputDialog("Enter the account pin: ");
-							accountPin = Integer.parseInt(SAP);
+							while (true) {
+								input = JOptionPane.showInputDialog("Enter the account pin: ");
+								if (input == null) return;
+								try {
+									accountPin = Integer.parseInt(input);
+									break;
+								} catch (Exception e) {
+									JOptionPane.showMessageDialog(null, "Invalid pin. Please try again.");
+								}
+								
+							}
 							out = getClient().tranfer2(accnum, amount, ToAccNum, accountPin);
 						} else {
 							JOptionPane.showMessageDialog(null, "Transfer Cancelled");
@@ -163,9 +187,17 @@ public class AccountSelection {
 					
 					
 				} else if (getOperation() == "deposit") {
-					SAP = JOptionPane.showInputDialog("Enter the account pin: ");
-					if (SAP == null) return;
-					accountPin = Integer.parseInt(SAP);
+					while (true) {
+						input = JOptionPane.showInputDialog("Enter the account pin: ");
+						if (input == null) return;
+						try {
+							accountPin = Integer.parseInt(input);
+							break;
+						} catch (Exception e) {
+							JOptionPane.showMessageDialog(null, "Invalid pin. Please try again.");
+						}
+						
+					}
 					out = getClient().deposit(accnum, amount, accountPin);
 				} else {
 					out = "Failed";

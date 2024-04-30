@@ -2,6 +2,7 @@ package gui.Teller;
 
 import javax.swing.*;
 
+import gui.ATM.AccountSelection;
 import main.BankAccount;
 import main.TellerGUIClient;
 
@@ -19,6 +20,7 @@ public class TellerUserAccount {
 	boolean AccIn = false;
 	TellerMainPage tellerMainPage = null;
 	TellerGUIClient tellerGUIClient = null;
+	public AccountSelection accsel;
 	int ID;
 	
 	public TellerUserAccount(TellerMainPage tellerMainPage, int ID) {
@@ -40,16 +42,18 @@ public class TellerUserAccount {
 	}
 	public TellerUserAccount getUserAcc() {
 		return this;
-
 	}
-
 	public TellerUserAccount getTellerUserAccount() {
 		return this;
 	}
+	public AccountSelection getAccSel() {
+		return this.accsel;
+	}
+	
 	public void run() {
 		frame = new JFrame("Teller(User)");
-		Container contentPane = frame.getContentPane(); 
-		contentPane.setLayout(new FlowLayout());
+		panel = new JPanel(); 
+		panel.setLayout(new FlowLayout());
 		
 		button = new JButton("Create Account");
 		button2 = new JButton("Delete Account");
@@ -63,11 +67,15 @@ public class TellerUserAccount {
 		button11 = new JButton("Transfer");
 		backButton = new JButton("Back");
 		JPanel panel = new JPanel();
-		/*
-		 * Placeholder Comment for Acc list of user to go into textArea
-		 */
-		JTextArea textArea = new JTextArea("test");
-		contentPane.add(textArea);
+		
+		if(AccIn == false){
+			getClient().getAccountsInfo();
+			AccIn = true;
+		}
+		Map<Integer, BankAccount> accounts = getClient().getAccounts();
+		String acc = "Bank Account Infomation:\n" + accounts;
+		JTextArea textArea = new JTextArea(acc);
+		panel.add(textArea);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 		JPanel panel2 = new JPanel();
@@ -84,7 +92,7 @@ public class TellerUserAccount {
 		panel2.add(button11);
 		panel2.add(backButton);
 		
-		frame.setSize(600, 300);
+		frame.setSize(600, 350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(BorderLayout.NORTH, panel);
 		frame.getContentPane().add(BorderLayout.SOUTH, panel2);

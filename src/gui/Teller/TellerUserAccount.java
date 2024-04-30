@@ -72,10 +72,18 @@ public class TellerUserAccount {
 			getClient().getAccountsInfo();
 			AccIn = true;
 		}
-		Map<Integer, BankAccount> accounts = getClient().getAccounts();
-		String acc = "Bank Account Infomation:\n" + accounts;
+		
+		tellerGUIClient.getAccountsInfo();
+		Map<Integer, BankAccount> accounts = tellerGUIClient.getAccounts();
+		
+		String acc = "Bank Account Infomation: \n" + accounts;
 		JTextArea textArea = new JTextArea(acc);
-		panel.add(textArea);
+		textArea.setEditable(false);
+		JScrollPane scroller = new JScrollPane(textArea);
+		scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		panel.add(scroller);
+		
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 		JPanel panel2 = new JPanel();

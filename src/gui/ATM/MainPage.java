@@ -53,10 +53,10 @@ public class MainPage {
 		Map<Integer, BankAccount> accounts = getClient().getAccounts();
 		String acc = "Bank Account Infomation:\n" + accounts + "\nSelect a command\n";
 		JTextArea textArea = new JTextArea(acc);
-		
+		textArea.setEditable(false);
 		JScrollPane scroller = new JScrollPane(textArea);
 		scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
 		centerPanel.add(scroller);
 		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));

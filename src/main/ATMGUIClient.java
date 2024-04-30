@@ -159,14 +159,14 @@ public class ATMGUIClient {
 				// show the confirmation msg with all the user names and amount of money
 				out = out + String.format("You are transferring $%.2f to account %d, which has users %s.\n", amount,
 						toAccountNumber, recipentNames);
-				out = out + "\nPlease enter yes to confirm. No to try again. Anything to cancel";
+				out = out + "\nPlease enter yes to confirm.";
 				return out;
-			}
+			} 
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "";
+		return null;
 	} // end method transfer
 	
 	// difference?

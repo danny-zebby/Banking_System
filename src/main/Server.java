@@ -258,12 +258,13 @@ public class Server {
 
 		}
 
-		public boolean checkTransfer(int userId, int fromAccountNumber, double amount, int pin) {
+		public boolean checkTransfer(int userId, int fromAccountNumber, int toAccountNumber, double amount, int pin) {
 			// if account number and pin matches and amount <= balance
 			return (userList.get(userId).getAccounts().contains(fromAccountNumber) 
 					&& accountList.get(fromAccountNumber).getAccountPin() == pin
 					&& accountList.get(fromAccountNumber).getBalance() >= amount
-					&& amount > 0);
+					&& amount > 0
+					&& fromAccountNumber != toAccountNumber);
 		}
 
 		private void transfer(int fromAccountNumber, int toAccountNumber, double amount, int currUserID) {
@@ -445,7 +446,7 @@ public class Server {
 
 						TransferMessage msgReceipt;
 						if (msg.getStatus() == Status.ONGOING
-								&& checkTransfer(currUserId, fromAccountNumber, transferAmount, pin)) {
+								&& checkTransfer(currUserId, fromAccountNumber, toAccountNumber, transferAmount, pin)) {
 							msgReceipt = new TransferMessage(Status.SUCCESS, fromAccountNumber, toAccountNumber,
 									transferAmount);
 							writer.writeUnshared(msgReceipt);
@@ -677,7 +678,7 @@ public class Server {
 						TransferMessage msgReceipt;
 
 						if (msg.getStatus() == Status.ONGOING
-								&& checkTransfer(userId, fromAccountNumber, transferAmount, pin)) {
+								&& checkTransfer(userId, fromAccountNumber, toAccountNumber, transferAmount, pin)) {
 							msgReceipt = new TransferMessage(Status.SUCCESS, fromAccountNumber, toAccountNumber,
 									transferAmount);
 							writer.writeUnshared(msgReceipt);

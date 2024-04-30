@@ -133,8 +133,7 @@ public class TellerGUIClient {
 		return recipentNames;
 	}
 	
-	public String transfer(int toAccountNumber, double amount, int pin) {
-		int fromAccountNumber = user.getId();
+	public String transfer(int fromAccountNumber, int toAccountNumber, double amount, int pin) {
 		List<Integer> toAccountUsers = null;
 		
 		try {

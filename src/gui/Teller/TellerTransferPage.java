@@ -106,7 +106,7 @@ public class TellerTransferPage {
 			// Extract the number part
 			String number = parts[0].substring(9);
 			// Convert the number to an integer
-			int accountNumber = Integer.parseInt(number);
+			int fromAccountNumber = Integer.parseInt(number);
 			
 			int toAccountNumber;
 			String input;
@@ -163,7 +163,7 @@ public class TellerTransferPage {
 					
 				}
 				
-				String result = tellerGUIClient.transfer(toAccountNumber, amount, pin);
+				String result = tellerGUIClient.transfer(fromAccountNumber, toAccountNumber, amount, pin);
 				JOptionPane.showMessageDialog(null, result);
 				frame.setVisible(false);
 				tellerUserAccount.run();
